@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 
+/* =========================
+   GLOBAL
+========================= */
+
+
 * {
     box-sizing: border-box;
 }
@@ -8,83 +13,52 @@
 
 body {
 
-    margin: 0;
-    min-height: 100vh;
+    margin:0;
+
+    min-height:100vh;
 
     background:
-    radial-gradient(circle at center, #151515 0%, #050505 45%, #000000 100%);
+    radial-gradient(circle at center, #171717 0%, #050505 50%, #000000 100%);
 
-    color: #d8d8d8;
+    color:#d6d6d6;
 
-    font-family: 'Share Tech Mono', monospace;
+    font-family:'Share Tech Mono', monospace;
 
-    overflow-x: hidden;
+    overflow-x:hidden;
 
 }
 
 
-/* CRT scan effect */
+
+/* CRT SCREEN EFFECT */
+
 
 .scanline {
 
-    position: fixed;
+    position:fixed;
 
-    inset: 0;
+    inset:0;
 
     background:
     repeating-linear-gradient(
         to bottom,
-        rgba(255,255,255,0.03),
-        rgba(255,255,255,0.03) 1px,
+        rgba(255,255,255,0.04),
+        rgba(255,255,255,0.04) 1px,
         transparent 2px,
         transparent 5px
     );
 
-    pointer-events: none;
+    pointer-events:none;
 
-    z-index: 10;
-
-}
-
-
-/* HEADER */
-
-header {
-
-    text-align:center;
-
-    padding:60px 20px 20px;
-
-}
-
-
-header h1 {
-
-    margin:0;
-
-    font-size:45px;
-
-    letter-spacing:10px;
-
-    color:#ffffff;
-
-    text-shadow:
-    0 0 10px rgba(255,255,255,0.3);
-
-}
-
-
-header p {
-
-    color:#777;
-
-    letter-spacing:4px;
+    z-index:20;
 
 }
 
 
 
-/* LOGIN SCREEN */
+/* =========================
+   LOGIN SCREEN
+========================= */
 
 
 .login-box {
@@ -94,12 +68,14 @@ header p {
 
     max-width:650px;
 
+
     margin:120px auto;
+
 
     padding:50px;
 
 
-    border:1px solid #333;
+    text-align:center;
 
 
     background:
@@ -107,12 +83,12 @@ header p {
     rgba(0,0,0,0.75);
 
 
+    border:1px solid #333;
+
+
     box-shadow:
 
-    0 0 40px rgba(255,255,255,0.08);
-
-
-    text-align:center;
+    0 0 50px rgba(255,255,255,0.08);
 
 
     animation:fadeIn 1.5s;
@@ -125,11 +101,13 @@ header p {
 .login-box h1 {
 
 
+    color:white;
+
     font-size:42px;
 
     letter-spacing:8px;
 
-    color:white;
+    margin-bottom:10px;
 
 
 }
@@ -156,7 +134,7 @@ header p {
 .status {
 
 
-    color:#7cff7c;
+    color:#8cff8c;
 
     margin:30px;
 
@@ -164,7 +142,9 @@ header p {
 }
 
 
-.status::first-letter {
+
+.blink {
+
 
     animation:blink 1s infinite;
 
@@ -174,26 +154,27 @@ header p {
 
 @keyframes blink {
 
-
     50% {
 
         opacity:0;
 
     }
 
-
 }
 
 
 
 
-/* INPUT */
+/* =========================
+   INPUT
+========================= */
 
 
 input {
 
 
     width:80%;
+
 
     padding:15px;
 
@@ -204,10 +185,10 @@ input {
     background:#050505;
 
 
-    border:1px solid #444;
-
-
     color:white;
+
+
+    border:1px solid #444;
 
 
     font-family:inherit;
@@ -222,20 +203,22 @@ input {
 }
 
 
-
 input:focus {
 
 
     outline:none;
 
-    border-color:#aaa;
+    border-color:white;
 
 
 }
 
 
 
-/* BUTTON */
+
+/* =========================
+   BUTTON
+========================= */
 
 
 button {
@@ -247,16 +230,13 @@ button {
     background:#111;
 
 
-    border:1px solid #666;
-
-
     color:white;
 
 
+    border:1px solid #555;
+
+
     font-family:inherit;
-
-
-    font-size:16px;
 
 
     letter-spacing:3px;
@@ -283,24 +263,49 @@ button:hover {
 
     box-shadow:
 
-    0 0 15px rgba(255,255,255,0.3);
+    0 0 20px rgba(255,255,255,0.3);
 
 
 }
 
 
 
-/* MESSAGE */
+/* =========================
+   LOADING ANIMATION
+========================= */
 
 
 #message {
 
 
-    margin-top:25px;
+    margin-top:30px;
 
-    min-height:25px;
+
+}
+
+
+
+.loading {
+
 
     color:#8cff8c;
+
+    letter-spacing:2px;
+
+
+    animation:fadeIn 0.5s;
+
+
+}
+
+
+
+.loading p:first-child {
+
+
+    font-size:24px;
+
+    letter-spacing:5px;
 
 
 }
@@ -308,13 +313,80 @@ button:hover {
 
 
 
-/* MAIN ARCHIVE TERMINAL */
+.bar {
+
+
+    width:80%;
+
+
+    height:10px;
+
+
+    margin:30px auto;
+
+
+    border:1px solid #444;
+
+
+    background:#050505;
+
+
+}
+
+
+
+.progress {
+
+
+    height:100%;
+
+
+    width:0%;
+
+
+    background:#8cff8c;
+
+
+    animation:loadingbar 5s forwards;
+
+
+}
+
+
+
+@keyframes loadingbar {
+
+
+    from {
+
+        width:0%;
+
+    }
+
+
+    to {
+
+        width:100%;
+
+    }
+
+
+}
+
+
+
+
+
+/* =========================
+   ARCHIVE TERMINAL
+========================= */
 
 
 .terminal {
 
 
     width:90%;
+
 
     max-width:900px;
 
@@ -348,9 +420,9 @@ button:hover {
 .terminal h1 {
 
 
-    letter-spacing:6px;
-
     color:white;
+
+    letter-spacing:7px;
 
 
 }
@@ -358,7 +430,9 @@ button:hover {
 
 
 
-/* MENU */
+/* =========================
+   MENU
+========================= */
 
 
 .menu {
@@ -366,7 +440,9 @@ button:hover {
 
     display:grid;
 
+
     gap:15px;
+
 
     margin-top:40px;
 
@@ -378,13 +454,13 @@ button:hover {
 .menu a {
 
 
-    display:block;
-
-
     padding:20px;
 
 
     border:1px solid #333;
+
+
+    background:#050505;
 
 
     color:white;
@@ -394,9 +470,6 @@ button:hover {
 
 
     transition:0.3s;
-
-
-    background:#050505;
 
 
 }
@@ -420,24 +493,9 @@ button:hover {
 
 
 
-/* FOOTER */
-
-
-footer {
-
-
-    text-align:center;
-
-    padding:40px;
-
-    color:#555;
-
-
-}
-
-
-
-/* ANIMATION */
+/* =========================
+   ANIMATION
+========================= */
 
 
 @keyframes fadeIn {
@@ -465,21 +523,13 @@ footer {
 
 
 
-/* MOBILE */
+
+/* =========================
+   MOBILE
+========================= */
 
 
 @media(max-width:700px){
-
-
-header h1 {
-
-
-    font-size:28px;
-
-    letter-spacing:5px;
-
-
-}
 
 
 .login-box {
@@ -493,65 +543,24 @@ header h1 {
 }
 
 
-
 .login-box h1 {
 
-    font-size:25px;
+
+    font-size:26px;
+
+    letter-spacing:5px;
+
 
 }
 
 
+input {
 
-}
-.loading {
 
-    margin-top:30px;
+    width:95%;
 
-    color:#8cff8c;
-
-    letter-spacing:2px;
 
 }
 
-
-.bar {
-
-    width:80%;
-
-    height:8px;
-
-    border:1px solid #444;
-
-    margin:30px auto;
-
-}
-
-
-.progress {
-
-    height:100%;
-
-    width:0%;
-
-    background:#8cff8c;
-
-    animation:load 5s forwards;
-
-}
-
-
-@keyframes load {
-
-    from{
-
-        width:0%;
-
-    }
-
-    to{
-
-        width:100%;
-
-    }
 
 }
