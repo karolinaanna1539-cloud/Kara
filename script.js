@@ -4,7 +4,7 @@ let password =
 document.getElementById("password").value;
 
 
-if(password === "KARA2026"){
+if(password === "|C~&Qi1;hV18"){
 
 document.getElementById("message").innerHTML =
 "ACCESS GRANTED...";
