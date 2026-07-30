@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 
-/* =========================
-   GLOBAL
-========================= */
-
-
 * {
     box-sizing: border-box;
 }
@@ -18,7 +13,7 @@ body {
     min-height:100vh;
 
     background:
-    radial-gradient(circle at center, #171717 0%, #050505 50%, #000000 100%);
+    radial-gradient(circle at center, #171717 0%, #050505 50%, #000 100%);
 
     color:#d6d6d6;
 
@@ -29,8 +24,9 @@ body {
 }
 
 
-
-/* CRT SCREEN EFFECT */
+/* =====================
+   CRT EFFECT
+===================== */
 
 
 .scanline {
@@ -50,49 +46,81 @@ body {
 
     pointer-events:none;
 
-    z-index:20;
+    z-index:10;
 
 }
 
 
 
-/* =========================
-   LOGIN SCREEN
-========================= */
+/* =====================
+   HEADER
+===================== */
+
+
+header {
+
+    text-align:center;
+
+    padding:50px 20px 20px;
+
+}
+
+
+header h1 {
+
+    color:white;
+
+    font-size:45px;
+
+    letter-spacing:10px;
+
+    text-shadow:
+
+    0 0 15px rgba(255,255,255,0.2);
+
+}
+
+
+
+header p {
+
+    color:#777;
+
+    letter-spacing:4px;
+
+}
+
+
+
+
+
+/* =====================
+   LOGIN
+===================== */
 
 
 .login-box {
-
 
     width:90%;
 
     max-width:650px;
 
-
     margin:120px auto;
-
 
     padding:50px;
 
-
     text-align:center;
 
-
     background:
-
     rgba(0,0,0,0.75);
 
-
     border:1px solid #333;
-
 
     box-shadow:
 
     0 0 50px rgba(255,255,255,0.08);
 
-
     animation:fadeIn 1.5s;
-
 
 }
 
@@ -100,15 +128,11 @@ body {
 
 .login-box h1 {
 
-
-    color:white;
-
     font-size:42px;
 
     letter-spacing:8px;
 
-    margin-bottom:10px;
-
+    color:white;
 
 }
 
@@ -116,28 +140,21 @@ body {
 
 .subtitle {
 
-
     color:#777;
 
     letter-spacing:5px;
-
-    margin-bottom:40px;
-
 
 }
 
 
 
-/* STATUS */
 
 
 .status {
 
-
     color:#8cff8c;
 
     margin:30px;
-
 
 }
 
@@ -145,141 +162,111 @@ body {
 
 .blink {
 
-
     animation:blink 1s infinite;
 
 }
 
 
-
 @keyframes blink {
 
-    50% {
+50%{
 
-        opacity:0;
+opacity:0;
 
-    }
+}
 
 }
 
 
 
 
-/* =========================
+/* =====================
    INPUT
-========================= */
+===================== */
 
 
 input {
 
-
     width:80%;
-
 
     padding:15px;
 
-
     margin:20px;
-
 
     background:#050505;
 
+    border:1px solid #444;
 
     color:white;
 
-
-    border:1px solid #444;
-
-
     font-family:inherit;
-
 
     font-size:18px;
 
-
     text-align:center;
-
 
 }
 
 
-input:focus {
 
+input:focus {
 
     outline:none;
 
     border-color:white;
 
-
 }
 
 
 
 
-/* =========================
+
+/* =====================
    BUTTON
-========================= */
+===================== */
 
 
 button {
 
-
     padding:15px 45px;
-
 
     background:#111;
 
+    border:1px solid #555;
 
     color:white;
 
-
-    border:1px solid #555;
-
-
     font-family:inherit;
-
 
     letter-spacing:3px;
 
-
     cursor:pointer;
 
-
-    transition:0.3s;
-
+    transition:.3s;
 
 }
-
 
 
 button:hover {
 
-
     background:#222;
 
-
     border-color:white;
-
-
-    box-shadow:
-
-    0 0 20px rgba(255,255,255,0.3);
-
 
 }
 
 
 
-/* =========================
-   LOADING ANIMATION
-========================= */
+
+
+/* =====================
+   LOADING
+===================== */
 
 
 #message {
 
-
     margin-top:30px;
-
 
 }
 
@@ -287,49 +274,21 @@ button:hover {
 
 .loading {
 
-
     color:#8cff8c;
 
-    letter-spacing:2px;
-
-
-    animation:fadeIn 0.5s;
-
-
 }
-
-
-
-.loading p:first-child {
-
-
-    font-size:24px;
-
-    letter-spacing:5px;
-
-
-}
-
 
 
 
 .bar {
 
-
     width:80%;
-
 
     height:10px;
 
-
     margin:30px auto;
 
-
     border:1px solid #444;
-
-
-    background:#050505;
-
 
 }
 
@@ -337,18 +296,13 @@ button:hover {
 
 .progress {
 
-
     height:100%;
-
 
     width:0%;
 
-
     background:#8cff8c;
 
-
     animation:loadingbar 5s forwards;
-
 
 }
 
@@ -356,20 +310,17 @@ button:hover {
 
 @keyframes loadingbar {
 
+from{
 
-    from {
+width:0%;
 
-        width:0%;
+}
 
-    }
+to{
 
+width:100%;
 
-    to {
-
-        width:100%;
-
-    }
-
+}
 
 }
 
@@ -377,52 +328,139 @@ button:hover {
 
 
 
-/* =========================
-   ARCHIVE TERMINAL
-========================= */
+/* =====================
+   TERMINAL
+===================== */
 
 
 .terminal {
 
-
     width:90%;
 
+    max-width:950px;
 
-    max-width:900px;
-
-
-    margin:80px auto;
-
+    margin:70px auto;
 
     padding:40px;
 
-
     background:
 
-    rgba(0,0,0,0.8);
-
+    rgba(0,0,0,.8);
 
     border:1px solid #333;
+
+    box-shadow:
+
+    0 0 50px rgba(255,255,255,.05);
+
+    animation:fadeIn 1s;
+
+}
+
+
+
+
+
+/* =====================
+   PROFILE CARD
+===================== */
+
+
+.profile-card {
+
+    display:flex;
+
+    gap:40px;
+
+    align-items:center;
+
+    padding-bottom:40px;
+
+    border-bottom:1px solid #333;
+
+    margin-bottom:40px;
+
+}
+
+
+
+
+.photo-box img {
+
+
+    width:230px;
+
+    height:280px;
+
+
+    object-fit:cover;
+
+
+    border:1px solid #555;
+
+
+    filter:grayscale(40%);
 
 
     box-shadow:
 
-    0 0 50px rgba(255,255,255,0.05);
-
-
-    animation:fadeIn 1s;
+    0 0 20px rgba(255,255,255,.1);
 
 
 }
 
 
 
-.terminal h1 {
+.photo-box img:hover {
+
+
+    filter:grayscale(0%);
+
+
+}
+
+
+
+
+
+.information h2 {
+
+
+    letter-spacing:5px;
+
+    color:white;
+
+
+}
+
+
+
+.information p {
+
+
+    color:#777;
+
+    font-size:18px;
+
+
+}
+
+
+
+.information span {
 
 
     color:white;
 
-    letter-spacing:7px;
+
+}
+
+
+
+.online {
+
+
+    color:#8cff8c !important;
 
 
 }
@@ -430,22 +468,18 @@ button:hover {
 
 
 
-/* =========================
+/* =====================
    MENU
-========================= */
+===================== */
 
 
 .menu {
 
-
     display:grid;
-
 
     gap:15px;
 
-
-    margin-top:40px;
-
+    margin-top:30px;
 
 }
 
@@ -456,20 +490,29 @@ button:hover {
 
     padding:20px;
 
+    background:#050505;
 
     border:1px solid #333;
 
-
-    background:#050505;
-
-
     color:white;
-
 
     text-decoration:none;
 
+    transition:.3s;
 
-    transition:0.3s;
+
+}
+
+
+
+.menu a small {
+
+
+    display:block;
+
+    color:#777;
+
+    margin-top:8px;
 
 
 }
@@ -481,84 +524,116 @@ button:hover {
 
     transform:translateX(15px);
 
+    background:#111;
 
     border-color:white;
 
 
-    background:#111;
+}
 
+
+
+
+
+/* =====================
+   FOOTER
+===================== */
+
+
+footer {
+
+    text-align:center;
+
+    padding:40px;
+
+    color:#555;
 
 }
 
 
 
 
-/* =========================
+
+/* =====================
    ANIMATION
-========================= */
+===================== */
 
 
 @keyframes fadeIn {
 
+from {
 
-    from {
+opacity:0;
 
-        opacity:0;
+transform:translateY(20px);
 
-        transform:translateY(20px);
-
-    }
+}
 
 
-    to {
+to {
 
-        opacity:1;
+opacity:1;
 
-        transform:translateY(0);
+transform:translateY(0);
 
-    }
-
+}
 
 }
 
 
 
 
-/* =========================
+
+/* =====================
    MOBILE
-========================= */
+===================== */
 
 
 @media(max-width:700px){
 
 
-.login-box {
+header h1 {
 
+font-size:28px;
 
-    margin:60px auto;
-
-    padding:30px;
-
+letter-spacing:5px;
 
 }
 
 
-.login-box h1 {
+
+.login-box {
+
+margin:60px auto;
+
+padding:30px;
+
+}
 
 
-    font-size:26px;
 
-    letter-spacing:5px;
+.profile-card {
 
+flex-direction:column;
+
+text-align:center;
+
+}
+
+
+
+.photo-box img {
+
+width:200px;
+
+height:250px;
 
 }
 
 
 input {
 
-
-    width:95%;
-
+width:95%;
 
 }
 
