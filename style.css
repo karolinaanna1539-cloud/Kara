@@ -1,53 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 
-* {
-    box-sizing: border-box;
+*{
+box-sizing:border-box;
 }
 
 
-body {
+body{
 
-    margin:0;
+margin:0;
 
-    min-height:100vh;
+min-height:100vh;
 
-    background:
-    radial-gradient(circle at center, #171717 0%, #050505 55%, #000000 100%);
+background:
+radial-gradient(circle,#171717,#000);
 
-    color:#d8d8d8;
+color:#ddd;
 
-    font-family:'Share Tech Mono', monospace;
-
-    overflow-x:hidden;
-
-}
-
-
-
-/* =========================
-   CRT SCAN EFFECT
-========================= */
-
-
-.scanline {
-
-    position:fixed;
-
-    inset:0;
-
-    background:
-    repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.035),
-        rgba(255,255,255,0.035) 1px,
-        transparent 2px,
-        transparent 5px
-    );
-
-    pointer-events:none;
-
-    z-index:20;
+font-family:'Share Tech Mono',monospace;
 
 }
 
@@ -55,40 +25,23 @@ body {
 
 
 
-/* =========================
-   HEADER
-========================= */
+.scanline{
 
+position:fixed;
 
-header {
+inset:0;
 
-    text-align:center;
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(255,255,255,.03),
+rgba(255,255,255,.03) 1px,
+transparent 3px
+);
 
-    padding:50px 20px 20px;
+pointer-events:none;
 
-}
-
-
-
-header h1 {
-
-    margin:0;
-
-    color:white;
-
-    font-size:45px;
-
-    letter-spacing:10px;
-
-}
-
-
-
-header p {
-
-    color:#777;
-
-    letter-spacing:5px;
+z-index:20;
 
 }
 
@@ -96,84 +49,37 @@ header p {
 
 
 
-/* =========================
-   LOGIN
-========================= */
 
 
-.login-box {
+header{
 
-    width:90%;
+text-align:center;
 
-    max-width:650px;
-
-    margin:120px auto;
-
-    padding:50px;
-
-    text-align:center;
-
-
-    background:rgba(0,0,0,.8);
-
-    border:1px solid #333;
-
-
-    box-shadow:
-
-    0 0 50px rgba(255,255,255,.08);
+padding:50px 20px;
 
 }
 
 
 
-.login-box h1 {
+header h1{
 
-    color:white;
+color:white;
 
-    font-size:42px;
+font-size:45px;
 
-    letter-spacing:8px;
+letter-spacing:10px;
 
-}
-
-
-
-.subtitle {
-
-    color:#777;
-
-    letter-spacing:4px;
+margin:0;
 
 }
 
 
 
-.status {
+header p{
 
-    color:#8cff8c;
+color:#777;
 
-    margin:30px;
-
-}
-
-
-
-.blink {
-
-    animation:blink 1s infinite;
-
-}
-
-
-
-@keyframes blink {
-
-    50% {
-
-        opacity:0;
-
-    }
+letter-spacing:5px;
 
 }
 
@@ -181,43 +87,29 @@ header p {
 
 
 
-/* =========================
-   INPUT
-========================= */
-
-
-input {
-
-    width:80%;
-
-    padding:15px;
-
-    margin:20px;
-
-
-    background:#050505;
-
-    color:white;
-
-
-    border:1px solid #444;
-
-
-    font-family:inherit;
-
-    font-size:18px;
-
-    text-align:center;
-
-}
 
 
 
-input:focus {
+.terminal{
 
-    outline:none;
 
-    border-color:white;
+width:90%;
+
+max-width:1000px;
+
+margin:40px auto;
+
+padding:40px;
+
+
+background:rgba(0,0,0,.8);
+
+
+border:1px solid #333;
+
+
+box-shadow:
+0 0 50px rgba(255,255,255,.05);
 
 }
 
@@ -225,115 +117,40 @@ input:focus {
 
 
 
-/* =========================
-   BUTTON
-========================= */
 
 
-button {
 
-    padding:15px 45px;
-
-
-    background:#111;
-
-    color:white;
+.file-header{
 
 
-    border:1px solid #555;
+padding:20px;
 
+background:#050505;
 
-    font-family:inherit;
-
-    letter-spacing:3px;
-
-    cursor:pointer;
-
+border:1px solid #333;
 
 }
 
 
 
-button:hover {
+.file-header p{
 
-    background:#222;
+color:#777;
 
-    border-color:white;
+}
+
+
+.file-header span{
+
+color:white;
 
 }
 
 
 
+.online{
 
-
-/* =========================
-   LOADING
-========================= */
-
-
-#message {
-
-    margin-top:30px;
-
-}
-
-
-
-.loading {
-
-    color:#8cff8c;
-
-}
-
-
-
-.bar {
-
-    width:80%;
-
-    height:10px;
-
-
-    margin:30px auto;
-
-
-    border:1px solid #444;
-
-}
-
-
-
-.progress {
-
-    height:100%;
-
-    width:0%;
-
-    background:#8cff8c;
-
-
-    animation:loading 5s forwards;
-
-}
-
-
-
-@keyframes loading {
-
-
-from {
-
-width:0%;
-
-}
-
-
-to {
-
-width:100%;
-
-}
-
+color:#8cff8c!important;
 
 }
 
@@ -341,35 +158,17 @@ width:100%;
 
 
 
-/* =========================
-   TERMINAL WINDOW
-========================= */
 
 
-.terminal {
 
 
-    width:90%;
+h2{
 
-    max-width:1000px;
+margin-top:40px;
 
+color:white;
 
-    margin:70px auto;
-
-
-    padding:40px;
-
-
-    background:rgba(0,0,0,.8);
-
-
-    border:1px solid #333;
-
-
-    box-shadow:
-
-    0 0 50px rgba(255,255,255,.05);
-
+letter-spacing:5px;
 
 }
 
@@ -377,55 +176,42 @@ width:100%;
 
 
 
-/* =========================
-   PROFILE CARD
-========================= */
 
 
-.profile-card {
 
 
-    display:flex;
-
-    gap:40px;
-
-    align-items:center;
+/* BODY VIEWS */
 
 
-    padding-bottom:40px;
+.body-views{
 
 
-    border-bottom:1px solid #333;
+display:flex;
 
+gap:30px;
+
+justify-content:center;
+
+margin:30px 0;
 
 }
 
 
 
-.photo-box img {
+.view-box{
 
-
-    width:230px;
-
-    height:280px;
-
-
-    object-fit:cover;
-
-
-    border:1px solid #555;
-
-
-    filter:grayscale(40%);
-
+text-align:center;
 
 }
 
 
 
-.photo-box img:hover {
+.view-box h3{
 
-    filter:grayscale(0%);
+
+color:#777;
+
+letter-spacing:3px;
 
 }
 
@@ -433,42 +219,14 @@ width:100%;
 
 
 
-.information h2 {
+.photo-frame{
 
 
-    color:white;
+padding:10px;
 
-    letter-spacing:5px;
+background:#050505;
 
-
-}
-
-
-
-.information p {
-
-
-    color:#777;
-
-
-}
-
-
-
-.information span {
-
-
-    color:white;
-
-
-}
-
-
-
-.online {
-
-
-    color:#8cff8c !important;
+border:1px solid #444;
 
 }
 
@@ -476,78 +234,18 @@ width:100%;
 
 
 
-/* =========================
-   MENU
-========================= */
+.photo-frame img{
 
 
-.menu {
+width:220px;
+
+height:320px;
 
 
-    display:grid;
+object-fit:cover;
 
 
-    gap:15px;
-
-
-    margin-top:35px;
-
-
-}
-
-
-
-.menu a {
-
-
-    padding:20px;
-
-
-    background:#050505;
-
-
-    border:1px solid #333;
-
-
-    color:white;
-
-
-    text-decoration:none;
-
-
-    transition:.3s;
-
-
-}
-
-
-
-.menu small {
-
-
-    display:block;
-
-
-    margin-top:8px;
-
-
-    color:#777;
-
-
-}
-
-
-
-.menu a:hover {
-
-
-    transform:translateX(15px);
-
-
-    background:#111;
-
-
-    border-color:white;
+filter:grayscale(60%);
 
 
 }
@@ -555,107 +253,65 @@ width:100%;
 
 
 
-
-/* =========================
-   PROFILE FILE
-========================= */
+.photo-frame img:hover{
 
 
-.file-header {
+filter:grayscale(0%);
 
-
-    padding:20px;
-
-
-    background:#050505;
-
-
-    border:1px solid #333;
-
+transition:.4s;
 
 }
 
 
 
-.file-header p {
-
-    color:#777;
-
-}
 
 
 
-.file-header span {
 
 
-    color:white;
+/* DATA GRID */
 
 
-}
+.data-grid{
 
 
+display:grid;
 
-hr {
+grid-template-columns:repeat(2,1fr);
 
-
-    border:0;
-
-
-    border-top:1px solid #333;
-
-
-    margin:30px 0;
-
+gap:15px;
 
 }
 
 
 
-.data-box,
-.text-box {
+
+.data-grid div{
 
 
-    padding:20px;
+background:#050505;
 
+border:1px solid #333;
 
-    background:#050505;
+padding:15px;
 
-
-    border-left:2px solid #555;
-
-
-}
-
-
-
-.data-box p {
-
-
-    color:#777;
-
+color:#777;
 
 }
 
 
 
-.data-box span {
+
+.data-grid span{
 
 
-    color:white;
+display:block;
 
+margin-top:8px;
 
-}
+color:white;
 
-
-
-.text-box {
-
-
-    color:#aaa;
-
-
-    line-height:1.8;
-
+font-size:18px;
 
 }
 
@@ -663,117 +319,33 @@ hr {
 
 
 
-.tags {
-
-
-    display:flex;
-
-
-    flex-wrap:wrap;
-
-
-    gap:10px;
-
-
-}
 
 
 
-.tags span {
+.data-box{
 
 
-    padding:10px 20px;
+background:#050505;
 
+border-left:2px solid #555;
 
-    border:1px solid #444;
-
-
-    color:white;
-
+padding:20px;
 
 }
 
 
 
+.data-box p{
 
-
-/* =========================
-   PHYSICAL DATABASE
-========================= */
-
-
-.physical-layout {
-
-
-    display:flex;
-
-
-    gap:40px;
-
-
-    margin-top:40px;
-
+color:#777;
 
 }
 
 
 
-.body-photo {
+.data-box span{
 
-
-    width:260px;
-
-
-    text-align:center;
-
-
-}
-
-
-
-.photo-frame {
-
-
-    padding:10px;
-
-
-    background:#050505;
-
-
-    border:1px solid #444;
-
-
-}
-
-
-
-.photo-frame img {
-
-
-    width:220px;
-
-
-    height:300px;
-
-
-    object-fit:cover;
-
-
-    filter:grayscale(50%);
-
-
-}
-
-
-
-.body-photo p {
-
-
-    color:#777;
-
-
-    letter-spacing:3px;
-
+color:white;
 
 }
 
@@ -781,68 +353,34 @@ hr {
 
 
 
-.measurements {
 
 
-    flex:1;
+.back{
 
 
-}
+display:inline-block;
+
+margin-top:40px;
+
+padding:15px 25px;
 
 
-
-.data-grid {
-
-
-    display:grid;
+border:1px solid #444;
 
 
-    grid-template-columns:repeat(2,1fr);
+color:white;
 
 
-    gap:15px;
-
-
-    margin-bottom:35px;
+text-decoration:none;
 
 
 }
 
 
 
-.data-grid div {
+.back:hover{
 
-
-    padding:15px;
-
-
-    background:#050505;
-
-
-    border:1px solid #333;
-
-
-    color:#777;
-
-
-}
-
-
-
-.data-grid span {
-
-
-    display:block;
-
-
-    margin-top:8px;
-
-
-    color:white;
-
-
-    font-size:18px;
-
+background:#111;
 
 }
 
@@ -850,41 +388,15 @@ hr {
 
 
 
-/* =========================
-   BACK BUTTON
-========================= */
+
+footer{
 
 
-.back {
+text-align:center;
 
+padding:40px;
 
-    display:inline-block;
-
-
-    margin-top:40px;
-
-
-    padding:15px 25px;
-
-
-    border:1px solid #444;
-
-
-    color:white;
-
-
-    text-decoration:none;
-
-
-}
-
-
-
-.back:hover {
-
-
-    background:#111;
-
+color:#555;
 
 }
 
@@ -892,140 +404,39 @@ hr {
 
 
 
-/* =========================
-   FOOTER
-========================= */
-
-
-footer {
-
-
-    text-align:center;
-
-
-    padding:40px;
-
-
-    color:#555;
-
-
-}
-
-
-
-
-
-/* =========================
-   ANIMATION
-========================= */
-
-
-@keyframes fadeIn {
-
-
-from {
-
-opacity:0;
-
-transform:translateY(20px);
-
-}
-
-
-to {
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-
-}
-
-
-
-
-
-/* =========================
-   MOBILE
-========================= */
 
 
 @media(max-width:800px){
 
 
-header h1 {
+header h1{
+
+font-size:28px;
+
+}
 
 
-    font-size:28px;
+.body-views{
 
-    letter-spacing:5px;
+flex-direction:column;
 
+align-items:center;
 
 }
 
 
 
-.login-box {
+.data-grid{
 
-
-    margin:60px auto;
-
-    padding:30px;
-
+grid-template-columns:1fr;
 
 }
 
 
 
-.profile-card {
+.terminal{
 
-
-    flex-direction:column;
-
-    text-align:center;
-
-
-}
-
-
-
-.physical-layout {
-
-
-    flex-direction:column;
-
-
-}
-
-
-
-.body-photo {
-
-
-    width:100%;
-
-
-}
-
-
-
-.data-grid {
-
-
-    grid-template-columns:1fr;
-
-
-}
-
-
-
-input {
-
-
-    width:95%;
-
+padding:25px;
 
 }
 
