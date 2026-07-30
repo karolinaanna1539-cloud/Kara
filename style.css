@@ -503,3 +503,55 @@ header h1 {
 
 
 }
+.loading {
+
+    margin-top:30px;
+
+    color:#8cff8c;
+
+    letter-spacing:2px;
+
+}
+
+
+.bar {
+
+    width:80%;
+
+    height:8px;
+
+    border:1px solid #444;
+
+    margin:30px auto;
+
+}
+
+
+.progress {
+
+    height:100%;
+
+    width:0%;
+
+    background:#8cff8c;
+
+    animation:load 5s forwards;
+
+}
+
+
+@keyframes load {
+
+    from{
+
+        width:0%;
+
+    }
+
+    to{
+
+        width:100%;
+
+    }
+
+}
