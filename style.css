@@ -13,7 +13,7 @@ body {
     min-height:100vh;
 
     background:
-    radial-gradient(circle at center, #161616 0%, #050505 55%, #000 100%);
+    radial-gradient(circle at center, #171717 0%, #050505 55%, #000000 100%);
 
     color:#d8d8d8;
 
@@ -25,9 +25,9 @@ body {
 
 
 
-/* =====================
+/* =========================
    CRT SCAN EFFECT
-===================== */
+========================= */
 
 
 .scanline {
@@ -55,9 +55,9 @@ body {
 
 
 
-/* =====================
+/* =========================
    HEADER
-===================== */
+========================= */
 
 
 header {
@@ -67,6 +67,7 @@ header {
     padding:50px 20px 20px;
 
 }
+
 
 
 header h1 {
@@ -79,11 +80,8 @@ header h1 {
 
     letter-spacing:10px;
 
-    text-shadow:
-
-    0 0 15px rgba(255,255,255,.2);
-
 }
+
 
 
 header p {
@@ -98,9 +96,9 @@ header p {
 
 
 
-/* =====================
-   LOGIN SCREEN
-===================== */
+/* =========================
+   LOGIN
+========================= */
 
 
 .login-box {
@@ -115,11 +113,11 @@ header p {
 
     text-align:center;
 
-    background:
 
-    rgba(0,0,0,.75);
+    background:rgba(0,0,0,.8);
 
     border:1px solid #333;
+
 
     box-shadow:
 
@@ -140,6 +138,7 @@ header p {
 }
 
 
+
 .subtitle {
 
     color:#777;
@@ -150,14 +149,14 @@ header p {
 
 
 
-
 .status {
-
-    margin:30px;
 
     color:#8cff8c;
 
+    margin:30px;
+
 }
+
 
 
 .blink {
@@ -165,6 +164,7 @@ header p {
     animation:blink 1s infinite;
 
 }
+
 
 
 @keyframes blink {
@@ -181,9 +181,9 @@ header p {
 
 
 
-/* =====================
+/* =========================
    INPUT
-===================== */
+========================= */
 
 
 input {
@@ -194,11 +194,14 @@ input {
 
     margin:20px;
 
+
     background:#050505;
 
     color:white;
 
+
     border:1px solid #444;
+
 
     font-family:inherit;
 
@@ -207,6 +210,7 @@ input {
     text-align:center;
 
 }
+
 
 
 input:focus {
@@ -221,26 +225,30 @@ input:focus {
 
 
 
-/* =====================
+/* =========================
    BUTTON
-===================== */
+========================= */
 
 
 button {
 
     padding:15px 45px;
 
+
     background:#111;
 
     color:white;
 
+
     border:1px solid #555;
 
-    cursor:pointer;
 
     font-family:inherit;
 
     letter-spacing:3px;
+
+    cursor:pointer;
+
 
 }
 
@@ -258,9 +266,9 @@ button:hover {
 
 
 
-/* =====================
+/* =========================
    LOADING
-===================== */
+========================= */
 
 
 #message {
@@ -268,6 +276,7 @@ button:hover {
     margin-top:30px;
 
 }
+
 
 
 .loading {
@@ -284,11 +293,14 @@ button:hover {
 
     height:10px;
 
+
     margin:30px auto;
+
 
     border:1px solid #444;
 
 }
+
 
 
 .progress {
@@ -299,6 +311,7 @@ button:hover {
 
     background:#8cff8c;
 
+
     animation:loading 5s forwards;
 
 }
@@ -307,18 +320,20 @@ button:hover {
 
 @keyframes loading {
 
-    from {
 
-        width:0%;
+from {
 
-    }
+width:0%;
+
+}
 
 
-    to {
+to {
 
-        width:100%;
+width:100%;
 
-    }
+}
+
 
 }
 
@@ -326,43 +341,49 @@ button:hover {
 
 
 
-/* =====================
-   MAIN TERMINAL
-===================== */
+/* =========================
+   TERMINAL WINDOW
+========================= */
 
 
 .terminal {
 
+
     width:90%;
 
-    max-width:950px;
+    max-width:1000px;
+
 
     margin:70px auto;
 
+
     padding:40px;
 
-    background:
 
-    rgba(0,0,0,.8);
+    background:rgba(0,0,0,.8);
+
 
     border:1px solid #333;
+
 
     box-shadow:
 
     0 0 50px rgba(255,255,255,.05);
 
+
 }
 
 
 
 
 
-/* =====================
+/* =========================
    PROFILE CARD
-===================== */
+========================= */
 
 
 .profile-card {
+
 
     display:flex;
 
@@ -370,9 +391,12 @@ button:hover {
 
     align-items:center;
 
+
     padding-bottom:40px;
 
+
     border-bottom:1px solid #333;
+
 
 }
 
@@ -385,15 +409,15 @@ button:hover {
 
     height:280px;
 
+
     object-fit:cover;
+
 
     border:1px solid #555;
 
+
     filter:grayscale(40%);
 
-    box-shadow:
-
-    0 0 20px rgba(255,255,255,.15);
 
 }
 
@@ -407,11 +431,15 @@ button:hover {
 
 
 
+
+
 .information h2 {
+
 
     color:white;
 
     letter-spacing:5px;
+
 
 }
 
@@ -419,7 +447,9 @@ button:hover {
 
 .information p {
 
+
     color:#777;
+
 
 }
 
@@ -427,12 +457,16 @@ button:hover {
 
 .information span {
 
+
     color:white;
+
 
 }
 
 
+
 .online {
+
 
     color:#8cff8c !important;
 
@@ -442,18 +476,22 @@ button:hover {
 
 
 
-/* =====================
+/* =========================
    MENU
-===================== */
+========================= */
 
 
 .menu {
 
+
     display:grid;
+
 
     gap:15px;
 
+
     margin-top:35px;
+
 
 }
 
@@ -461,17 +499,24 @@ button:hover {
 
 .menu a {
 
+
     padding:20px;
+
 
     background:#050505;
 
+
     border:1px solid #333;
+
 
     color:white;
 
+
     text-decoration:none;
 
+
     transition:.3s;
+
 
 }
 
@@ -479,11 +524,15 @@ button:hover {
 
 .menu small {
 
+
     display:block;
+
+
+    margin-top:8px;
+
 
     color:#777;
 
-    margin-top:8px;
 
 }
 
@@ -491,11 +540,15 @@ button:hover {
 
 .menu a:hover {
 
+
     transform:translateX(15px);
+
 
     background:#111;
 
+
     border-color:white;
+
 
 }
 
@@ -503,20 +556,25 @@ button:hover {
 
 
 
-/* =====================
+/* =========================
    PROFILE FILE
-===================== */
+========================= */
 
 
 .file-header {
 
+
     padding:20px;
 
-    border:1px solid #333;
 
     background:#050505;
 
+
+    border:1px solid #333;
+
+
 }
+
 
 
 .file-header p {
@@ -526,9 +584,12 @@ button:hover {
 }
 
 
+
 .file-header span {
 
+
     color:white;
+
 
 }
 
@@ -536,27 +597,17 @@ button:hover {
 
 hr {
 
+
     border:0;
+
 
     border-top:1px solid #333;
 
+
     margin:30px 0;
 
-}
-
-
-
-.terminal h2 {
-
-    color:white;
-
-    letter-spacing:4px;
-
-    margin-top:40px;
 
 }
-
-
 
 
 
@@ -566,9 +617,12 @@ hr {
 
     padding:20px;
 
+
     background:#050505;
 
+
     border-left:2px solid #555;
+
 
 }
 
@@ -576,7 +630,9 @@ hr {
 
 .data-box p {
 
+
     color:#777;
+
 
 }
 
@@ -584,18 +640,22 @@ hr {
 
 .data-box span {
 
+
     color:white;
+
 
 }
 
 
 
-
 .text-box {
+
 
     color:#aaa;
 
+
     line-height:1.8;
+
 
 }
 
@@ -605,11 +665,15 @@ hr {
 
 .tags {
 
+
     display:flex;
+
 
     flex-wrap:wrap;
 
+
     gap:10px;
+
 
 }
 
@@ -617,19 +681,15 @@ hr {
 
 .tags span {
 
+
     padding:10px 20px;
+
 
     border:1px solid #444;
 
+
     color:white;
 
-}
-
-
-
-.tags span:hover {
-
-    border-color:white;
 
 }
 
@@ -637,31 +697,194 @@ hr {
 
 
 
-/* =====================
+/* =========================
+   PHYSICAL DATABASE
+========================= */
+
+
+.physical-layout {
+
+
+    display:flex;
+
+
+    gap:40px;
+
+
+    margin-top:40px;
+
+
+}
+
+
+
+.body-photo {
+
+
+    width:260px;
+
+
+    text-align:center;
+
+
+}
+
+
+
+.photo-frame {
+
+
+    padding:10px;
+
+
+    background:#050505;
+
+
+    border:1px solid #444;
+
+
+}
+
+
+
+.photo-frame img {
+
+
+    width:220px;
+
+
+    height:300px;
+
+
+    object-fit:cover;
+
+
+    filter:grayscale(50%);
+
+
+}
+
+
+
+.body-photo p {
+
+
+    color:#777;
+
+
+    letter-spacing:3px;
+
+
+}
+
+
+
+
+
+.measurements {
+
+
+    flex:1;
+
+
+}
+
+
+
+.data-grid {
+
+
+    display:grid;
+
+
+    grid-template-columns:repeat(2,1fr);
+
+
+    gap:15px;
+
+
+    margin-bottom:35px;
+
+
+}
+
+
+
+.data-grid div {
+
+
+    padding:15px;
+
+
+    background:#050505;
+
+
+    border:1px solid #333;
+
+
+    color:#777;
+
+
+}
+
+
+
+.data-grid span {
+
+
+    display:block;
+
+
+    margin-top:8px;
+
+
+    color:white;
+
+
+    font-size:18px;
+
+
+}
+
+
+
+
+
+/* =========================
    BACK BUTTON
-===================== */
+========================= */
 
 
 .back {
 
+
     display:inline-block;
+
 
     margin-top:40px;
 
+
     padding:15px 25px;
 
-    color:white;
-
-    text-decoration:none;
 
     border:1px solid #444;
 
+
+    color:white;
+
+
+    text-decoration:none;
+
+
 }
+
 
 
 .back:hover {
 
+
     background:#111;
+
 
 }
 
@@ -669,18 +892,22 @@ hr {
 
 
 
-/* =====================
+/* =========================
    FOOTER
-===================== */
+========================= */
 
 
 footer {
 
+
     text-align:center;
+
 
     padding:40px;
 
+
     color:#555;
+
 
 }
 
@@ -688,29 +915,31 @@ footer {
 
 
 
-/* =====================
+/* =========================
    ANIMATION
-===================== */
+========================= */
 
 
 @keyframes fadeIn {
 
-    from {
 
-        opacity:0;
+from {
 
-        transform:translateY(20px);
+opacity:0;
 
-    }
+transform:translateY(20px);
+
+}
 
 
-    to {
+to {
 
-        opacity:1;
+opacity:1;
 
-        transform:translateY(0);
+transform:translateY(0);
 
-    }
+}
+
 
 }
 
@@ -718,19 +947,21 @@ footer {
 
 
 
-/* =====================
+/* =========================
    MOBILE
-===================== */
+========================= */
 
 
-@media(max-width:700px){
+@media(max-width:800px){
 
 
 header h1 {
 
+
     font-size:28px;
 
     letter-spacing:5px;
+
 
 }
 
@@ -738,9 +969,11 @@ header h1 {
 
 .login-box {
 
+
     margin:60px auto;
 
     padding:30px;
+
 
 }
 
@@ -748,19 +981,41 @@ header h1 {
 
 .profile-card {
 
+
     flex-direction:column;
 
     text-align:center;
+
 
 }
 
 
 
-.photo-box img {
+.physical-layout {
 
-    width:200px;
 
-    height:250px;
+    flex-direction:column;
+
+
+}
+
+
+
+.body-photo {
+
+
+    width:100%;
+
+
+}
+
+
+
+.data-grid {
+
+
+    grid-template-columns:1fr;
+
 
 }
 
@@ -768,7 +1023,9 @@ header h1 {
 
 input {
 
+
     width:95%;
+
 
 }
 
