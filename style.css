@@ -488,3 +488,147 @@ padding:25px;
     padding: 6px 12px;
     letter-spacing: 2px;
 }
+/* ========================= */
+/* Archive File Card         */
+/* ========================= */
+
+.archive-file{
+    display:block;
+    text-decoration:none;
+    color:#e6e6e6;
+
+    margin-top:25px;
+    padding:22px;
+
+    border:1px solid rgba(0,255,170,.25);
+    border-radius:10px;
+
+    background:rgba(255,255,255,.03);
+
+    transition:.3s ease;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.archive-file::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:70%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(0,255,170,.18),
+        transparent
+    );
+
+    transition:.7s;
+}
+
+.archive-file:hover::before{
+    left:150%;
+}
+
+.archive-file:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#00ffaa;
+
+    box-shadow:
+        0 0 18px rgba(0,255,170,.30),
+        inset 0 0 10px rgba(0,255,170,.08);
+
+    background:rgba(0,255,170,.05);
+}
+
+.archive-top{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.archive-id{
+
+    color:#00ffaa;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+.archive-status{
+
+    font-size:12px;
+
+    color:#00ffaa;
+
+    border:1px solid #00ffaa;
+
+    padding:4px 10px;
+
+    border-radius:30px;
+}
+
+.archive-file h3{
+
+    margin:0;
+
+    font-size:24px;
+
+    letter-spacing:2px;
+
+    color:white;
+}
+
+.archive-file p{
+
+    margin:15px 0;
+
+    color:#bdbdbd;
+
+    line-height:1.6;
+}
+
+.archive-bottom{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:20px;
+}
+
+.archive-size{
+
+    color:#888;
+
+    font-size:13px;
+}
+
+.archive-open{
+
+    color:#00ffaa;
+
+    border:1px solid #00ffaa;
+
+    padding:8px 16px;
+
+    border-radius:6px;
+
+    transition:.3s;
+}
+
+.archive-file:hover .archive-open{
+
+    background:#00ffaa;
+
+    color:#000;
+}
