@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KAROLINA ARCHIVE // ACCESS</title>
+<title>KAROLINA ARCHIVE</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -14,46 +17,40 @@
 
 <div class="scanline"></div>
 
+<header>
 
-<div class="login-box">
+<h1>KAROLINA ARCHIVE</h1>
 
-    <h1>KAROLINA ARCHIVE</h1>
+<p class="subtitle">
+PERSONAL DATABASE // RESTRICTED ACCESS
+</p>
 
-    <p class="subtitle">
-        RESTRICTED ACCESS TERMINAL
-    </p>
+</header>
 
+<section class="login-box">
 
-    <div class="status">
-        ● SYSTEM ONLINE
-    </div>
+<p class="status">
+SYSTEM STATUS:
+<span class="blink">ONLINE</span>
+</p>
 
+<input
+type="password"
+id="password"
+placeholder="ENTER ACCESS CODE">
 
-    <p>
-        ENTER ACCESS CODE
-    </p>
+<br>
 
+<button onclick="login()">
+AUTHENTICATE
+</button>
 
-    <input 
-    type="password" 
-    id="password"
-    placeholder="ACCESS CODE">
+<div id="message"></div>
 
-
-    <button onclick="login()">
-        AUTHENTICATE
-    </button>
-
-
-    <p id="message"></p>
-
-
-</div>
-
-
+</section>
 
 <script src="script.js"></script>
 
-
 </body>
+
 </html>
