@@ -2,46 +2,49 @@
 
 
 *{
-box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 
 body{
 
-margin:0;
+    margin:0;
 
-min-height:100vh;
+    min-height:100vh;
 
-background:
-radial-gradient(circle,#171717,#000);
+    background:
+    radial-gradient(circle,#171717,#000);
 
-color:#ddd;
+    color:#ddd;
 
-font-family:'Share Tech Mono',monospace;
+    font-family:'Share Tech Mono',monospace;
 
 }
 
 
 
+/* ========================= */
+/* SCAN EFFECT               */
+/* ========================= */
 
 
 .scanline{
 
-position:fixed;
+    position:fixed;
 
-inset:0;
+    inset:0;
 
-background:
-repeating-linear-gradient(
-to bottom,
-rgba(255,255,255,.03),
-rgba(255,255,255,.03) 1px,
-transparent 3px
-);
+    background:
+    repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.03),
+        rgba(255,255,255,.03) 1px,
+        transparent 3px
+    );
 
-pointer-events:none;
+    pointer-events:none;
 
-z-index:20;
+    z-index:20;
 
 }
 
@@ -49,13 +52,16 @@ z-index:20;
 
 
 
+/* ========================= */
+/* HEADER                    */
+/* ========================= */
 
 
 header{
 
-text-align:center;
+    text-align:center;
 
-padding:50px 20px;
+    padding:50px 20px;
 
 }
 
@@ -63,13 +69,16 @@ padding:50px 20px;
 
 header h1{
 
-color:white;
+    color:white;
 
-font-size:45px;
+    font-size:45px;
 
-letter-spacing:10px;
+    letter-spacing:10px;
 
-margin:0;
+    margin:0;
+
+    text-shadow:
+    0 0 15px rgba(255,255,255,.3);
 
 }
 
@@ -77,9 +86,9 @@ margin:0;
 
 header p{
 
-color:#777;
+    color:#777;
 
-letter-spacing:5px;
+    letter-spacing:5px;
 
 }
 
@@ -88,28 +97,88 @@ letter-spacing:5px;
 
 
 
+/* ========================= */
+/* MAIN TERMINAL             */
+/* ========================= */
 
 
 .terminal{
 
 
-width:90%;
+    width:90%;
 
-max-width:1000px;
+    max-width:1000px;
 
-margin:40px auto;
+    margin:40px auto;
 
-padding:40px;
-
-
-background:rgba(0,0,0,.8);
+    padding:40px;
 
 
-border:1px solid #333;
+    background:
+    rgba(0,0,0,.85);
 
 
-box-shadow:
-0 0 50px rgba(255,255,255,.05);
+    border:1px solid #333;
+
+
+    box-shadow:
+
+    0 0 50px rgba(255,255,255,.05);
+
+}
+
+
+
+
+
+/* ========================= */
+/* PROFILE CARD              */
+/* ========================= */
+
+
+.profile-card{
+
+    display:flex;
+
+    gap:40px;
+
+    align-items:center;
+
+}
+
+
+
+.photo-box{
+
+    padding:10px;
+
+    background:#050505;
+
+    border:1px solid #333;
+
+}
+
+
+
+.photo-box img{
+
+    width:220px;
+
+    height:280px;
+
+    object-fit:cover;
+
+    filter:grayscale(70%);
+
+}
+
+
+
+.photo-box img:hover{
+
+    filter:grayscale(0%);
+
+    transition:.4s;
 
 }
 
@@ -117,40 +186,41 @@ box-shadow:
 
 
 
+.information h2{
 
-
-
-.file-header{
-
-
-padding:20px;
-
-background:#050505;
-
-border:1px solid #333;
+    margin-top:0;
 
 }
 
 
 
-.file-header p{
 
-color:#777;
+
+.information p{
+
+    color:#777;
+
+}
+
+
+
+.information span{
+
+    color:white;
 
 }
 
 
-.file-header span{
-
-color:white;
-
-}
 
 
 
 .online{
 
-color:#8cff8c!important;
+    color:#00ffaa!important;
+
+    text-shadow:
+
+    0 0 8px #00ffaa;
 
 }
 
@@ -158,17 +228,18 @@ color:#8cff8c!important;
 
 
 
-
-
+/* ========================= */
+/* TITLES                    */
+/* ========================= */
 
 
 h2{
 
-margin-top:40px;
+    margin-top:40px;
 
-color:white;
+    color:white;
 
-letter-spacing:5px;
+    letter-spacing:5px;
 
 }
 
@@ -176,42 +247,328 @@ letter-spacing:5px;
 
 
 
+/* ========================= */
+/* ARCHIVE FILES             */
+/* ========================= */
+
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
 
 
 
 
-/* BODY VIEWS */
+.archive-file{
+
+
+    display:block;
+
+    text-decoration:none;
+
+    color:#ddd;
+
+
+    padding:25px;
+
+
+    background:
+
+    linear-gradient(
+
+        135deg,
+
+        rgba(0,255,170,.05),
+
+        rgba(0,0,0,.8)
+
+    );
+
+
+    border:1px solid #333;
+
+
+    position:relative;
+
+    overflow:hidden;
+
+
+    transition:.35s ease;
+
+}
+
+
+
+
+.archive-file::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:0;
+
+    width:0%;
+
+    height:2px;
+
+    background:#00ffaa;
+
+    transition:.4s;
+
+}
+
+
+
+
+.archive-file:hover::after{
+
+    width:100%;
+
+}
+
+
+
+
+.archive-file:hover{
+
+
+    transform:translateX(8px);
+
+
+    border-color:#00ffaa;
+
+
+    box-shadow:
+
+
+    0 0 20px rgba(0,255,170,.25),
+
+    inset 0 0 20px rgba(0,255,170,.05);
+
+
+}
+
+
+
+
+
+.archive-top{
+
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+
+}
+
+
+
+
+
+.archive-id{
+
+
+    color:#00ffaa;
+
+    font-size:18px;
+
+    letter-spacing:3px;
+
+
+}
+
+
+
+
+
+.archive-status{
+
+
+    font-size:11px;
+
+    color:#00ffaa;
+
+    border:1px solid #00ffaa;
+
+    padding:5px 12px;
+
+    letter-spacing:2px;
+
+
+}
+
+
+
+
+.archive-file h3{
+
+
+    margin:20px 0 10px;
+
+
+    font-size:26px;
+
+
+    color:white;
+
+
+    letter-spacing:4px;
+
+
+}
+
+
+
+
+
+.archive-file p{
+
+
+    color:#888;
+
+
+    font-size:14px;
+
+
+    line-height:1.7;
+
+
+}
+
+
+
+
+
+.archive-bottom{
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    margin-top:25px;
+
+
+}
+
+
+
+
+.archive-size{
+
+
+    font-size:12px;
+
+
+    color:#555;
+
+
+}
+
+
+
+
+
+.archive-open{
+
+
+    padding:8px 18px;
+
+
+    border:1px solid #00ffaa;
+
+
+    color:#00ffaa;
+
+
+    font-size:12px;
+
+
+    letter-spacing:2px;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+
+
+.archive-file:hover .archive-open{
+
+
+    background:#00ffaa;
+
+
+    color:#000;
+
+
+}
+
+
+
+
+
+/* ========================= */
+/* PHYSICAL DATABASE          */
+/* ========================= */
+
 
 
 .body-views{
 
 
-display:flex;
+    display:flex;
 
-gap:30px;
+    gap:30px;
 
-justify-content:center;
+    justify-content:center;
 
-margin:30px 0;
+    margin:30px 0;
+
 
 }
+
 
 
 
 .view-box{
 
-text-align:center;
+
+    text-align:center;
 
 }
+
+
 
 
 
 .view-box h3{
 
 
-color:#777;
+    color:#777;
 
-letter-spacing:3px;
+    letter-spacing:3px;
+
 
 }
 
@@ -222,11 +579,14 @@ letter-spacing:3px;
 .photo-frame{
 
 
-padding:10px;
+    padding:10px;
 
-background:#050505;
 
-border:1px solid #444;
+    background:#050505;
+
+
+    border:1px solid #444;
+
 
 }
 
@@ -237,18 +597,18 @@ border:1px solid #444;
 .photo-frame img{
 
 
-width:220px;
+    width:220px;
 
-height:320px;
+    height:320px;
+
+    object-fit:cover;
 
 
-object-fit:cover;
-
-
-filter:grayscale(60%);
+    filter:grayscale(60%);
 
 
 }
+
 
 
 
@@ -256,9 +616,11 @@ filter:grayscale(60%);
 .photo-frame img:hover{
 
 
-filter:grayscale(0%);
+    filter:grayscale(0%);
 
-transition:.4s;
+
+    transition:.4s;
+
 
 }
 
@@ -267,19 +629,22 @@ transition:.4s;
 
 
 
-
-
-/* DATA GRID */
+/* ========================= */
+/* DATA BOXES                */
+/* ========================= */
 
 
 .data-grid{
 
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(2,1fr);
 
-gap:15px;
+    grid-template-columns:repeat(2,1fr);
+
+
+    gap:15px;
+
 
 }
 
@@ -289,15 +654,20 @@ gap:15px;
 .data-grid div{
 
 
-background:#050505;
+    background:#050505;
 
-border:1px solid #333;
 
-padding:15px;
+    border:1px solid #333;
 
-color:#777;
+
+    padding:15px;
+
+
+    color:#777;
+
 
 }
+
 
 
 
@@ -305,18 +675,19 @@ color:#777;
 .data-grid span{
 
 
-display:block;
+    display:block;
 
-margin-top:8px;
 
-color:white;
+    margin-top:8px;
 
-font-size:18px;
+
+    color:white;
+
+
+    font-size:18px;
+
 
 }
-
-
-
 
 
 
@@ -325,19 +696,23 @@ font-size:18px;
 .data-box{
 
 
-background:#050505;
+    background:#050505;
 
-border-left:2px solid #555;
 
-padding:20px;
+    border-left:2px solid #555;
+
+
+    padding:20px;
+
 
 }
 
 
 
+
 .data-box p{
 
-color:#777;
+    color:#777;
 
 }
 
@@ -345,7 +720,7 @@ color:#777;
 
 .data-box span{
 
-color:white;
+    color:white;
 
 }
 
@@ -353,50 +728,72 @@ color:white;
 
 
 
+/* ========================= */
+/* BACK BUTTON               */
+/* ========================= */
 
 
 .back{
 
 
-display:inline-block;
-
-margin-top:40px;
-
-padding:15px 25px;
+    display:inline-block;
 
 
-border:1px solid #444;
+    margin-top:40px;
 
 
-color:white;
+    padding:15px 25px;
 
 
-text-decoration:none;
+    border:1px solid #444;
+
+
+    color:white;
+
+
+    text-decoration:none;
 
 
 }
+
+
 
 
 
 .back:hover{
 
-background:#111;
+
+    background:#111;
+
+
+    border-color:#00ffaa;
+
+
+    color:#00ffaa;
+
 
 }
 
 
 
 
+
+/* ========================= */
+/* FOOTER                    */
+/* ========================= */
 
 
 footer{
 
 
-text-align:center;
+    text-align:center;
 
-padding:40px;
 
-color:#555;
+    padding:40px;
+
+
+    color:#555;
+
 
 }
 
@@ -404,231 +801,57 @@ color:#555;
 
 
 
+/* ========================= */
+/* MOBILE                    */
+/* ========================= */
 
 
 @media(max-width:800px){
 
 
-header h1{
+    header h1{
 
-font-size:28px;
+        font-size:28px;
 
-}
+        letter-spacing:5px;
 
+    }
 
-.body-views{
 
-flex-direction:column;
 
-align-items:center;
+    .terminal{
 
-}
+        padding:25px;
 
+    }
 
 
-.data-grid{
 
-grid-template-columns:1fr;
+    .profile-card{
 
-}
+        flex-direction:column;
 
+        text-align:center;
 
+    }
 
-.terminal{
 
-padding:25px;
 
-}
+    .body-views{
 
+        flex-direction:column;
 
-}
-.file-button {
-    display: block;
-    text-decoration: none;
-    color: #00ff88;
-    border: 1px solid rgba(0,255,136,0.4);
-    padding: 20px;
-    margin-top: 20px;
-    background: rgba(0,0,0,0.35);
-    transition: 0.3s;
-    position: relative;
-    overflow: hidden;
-}
+        align-items:center;
 
+    }
 
-.file-button:hover {
-    border-color: #00ff88;
-    background: rgba(0,255,136,0.08);
-    box-shadow:
-        0 0 15px rgba(0,255,136,0.4),
-        inset 0 0 15px rgba(0,255,136,0.15);
-    transform: translateX(5px);
-}
 
 
-.file-header {
-    font-size: 20px;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-}
+    .data-grid{
 
+        grid-template-columns:1fr;
 
-.file-button small {
-    color: #aaa;
-    display: block;
-    font-size: 13px;
-}
+    }
 
 
-.access {
-    display: inline-block;
-    margin-top: 15px;
-    font-size: 12px;
-    border: 1px solid #00ff88;
-    padding: 6px 12px;
-    letter-spacing: 2px;
-}
-/* ========================= */
-/* Archive File Card         */
-/* ========================= */
-
-.archive-file{
-    display:block;
-    text-decoration:none;
-    color:#e6e6e6;
-
-    margin-top:25px;
-    padding:22px;
-
-    border:1px solid rgba(0,255,170,.25);
-    border-radius:10px;
-
-    background:rgba(255,255,255,.03);
-
-    transition:.3s ease;
-
-    position:relative;
-    overflow:hidden;
-}
-
-.archive-file::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:70%;
-    height:100%;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(0,255,170,.18),
-        transparent
-    );
-
-    transition:.7s;
-}
-
-.archive-file:hover::before{
-    left:150%;
-}
-
-.archive-file:hover{
-
-    transform:translateY(-4px);
-
-    border-color:#00ffaa;
-
-    box-shadow:
-        0 0 18px rgba(0,255,170,.30),
-        inset 0 0 10px rgba(0,255,170,.08);
-
-    background:rgba(0,255,170,.05);
-}
-
-.archive-top{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    margin-bottom:15px;
-}
-
-.archive-id{
-
-    color:#00ffaa;
-    font-weight:bold;
-    letter-spacing:2px;
-}
-
-.archive-status{
-
-    font-size:12px;
-
-    color:#00ffaa;
-
-    border:1px solid #00ffaa;
-
-    padding:4px 10px;
-
-    border-radius:30px;
-}
-
-.archive-file h3{
-
-    margin:0;
-
-    font-size:24px;
-
-    letter-spacing:2px;
-
-    color:white;
-}
-
-.archive-file p{
-
-    margin:15px 0;
-
-    color:#bdbdbd;
-
-    line-height:1.6;
-}
-
-.archive-bottom{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-top:20px;
-}
-
-.archive-size{
-
-    color:#888;
-
-    font-size:13px;
-}
-
-.archive-open{
-
-    color:#00ffaa;
-
-    border:1px solid #00ffaa;
-
-    padding:8px 16px;
-
-    border-radius:6px;
-
-    transition:.3s;
-}
-
-.archive-file:hover .archive-open{
-
-    background:#00ffaa;
-
-    color:#000;
 }
