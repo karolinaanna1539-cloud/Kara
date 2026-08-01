@@ -1,282 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
-
-*{
-    box-sizing:border-box;
-}
-
-
-body{
-
-    margin:0;
-
-    min-height:100vh;
-
-    background:
-    radial-gradient(circle,#171717,#000);
-
-    color:#ddd;
-
-    font-family:'Share Tech Mono',monospace;
-
-}
-
-
-
 /* ========================= */
-/* SCAN EFFECT               */
+/* BODY ARCHIVE MODULE       */
 /* ========================= */
 
 
-.scanline{
+.archive-grid{
 
-    position:fixed;
+    display:grid;
 
-    inset:0;
-
-    background:
-    repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,.03),
-        rgba(255,255,255,.03) 1px,
-        transparent 3px
-    );
-
-    pointer-events:none;
-
-    z-index:20;
-
-}
-
-
-
-
-
-/* ========================= */
-/* HEADER                    */
-/* ========================= */
-
-
-header{
-
-    text-align:center;
-
-    padding:50px 20px;
-
-}
-
-
-
-header h1{
-
-    color:white;
-
-    font-size:45px;
-
-    letter-spacing:10px;
-
-    margin:0;
-
-    text-shadow:
-    0 0 15px rgba(255,255,255,.3);
-
-}
-
-
-
-header p{
-
-    color:#777;
-
-    letter-spacing:5px;
-
-}
-
-
-
-
-
-
-/* ========================= */
-/* MAIN TERMINAL             */
-/* ========================= */
-
-
-.terminal{
-
-
-    width:90%;
-
-    max-width:1000px;
-
-    margin:40px auto;
-
-    padding:40px;
-
-
-    background:
-    rgba(0,0,0,.85);
-
-
-    border:1px solid #333;
-
-
-    box-shadow:
-
-    0 0 50px rgba(255,255,255,.05);
-
-}
-
-
-
-
-
-/* ========================= */
-/* PROFILE CARD              */
-/* ========================= */
-
-
-.profile-card{
-
-    display:flex;
-
-    gap:40px;
-
-    align-items:center;
-
-}
-
-
-
-.photo-box{
-
-    padding:10px;
-
-    background:#050505;
-
-    border:1px solid #333;
-
-}
-
-
-
-.photo-box img{
-
-    width:220px;
-
-    height:280px;
-
-    object-fit:cover;
-
-    filter:grayscale(70%);
-
-}
-
-
-
-.photo-box img:hover{
-
-    filter:grayscale(0%);
-
-    transition:.4s;
-
-}
-
-
-
-
-
-.information h2{
-
-    margin-top:0;
-
-}
-
-
-
-
-
-.information p{
-
-    color:#777;
-
-}
-
-
-
-.information span{
-
-    color:white;
-
-}
-
-
-
-
-
-.online{
-
-    color:#00ffaa!important;
-
-    text-shadow:
-
-    0 0 8px #00ffaa;
-
-}
-
-
-
-
-
-/* ========================= */
-/* TITLES                    */
-/* ========================= */
-
-
-h2{
-
-    margin-top:40px;
-
-    color:white;
-
-    letter-spacing:5px;
-
-}
-
-
-
-
-
-/* ========================= */
-/* ARCHIVE FILES             */
-/* ========================= */
-
-
-.menu{
-
-    display:flex;
-
-    flex-direction:column;
+    grid-template-columns:repeat(2,1fr);
 
     gap:20px;
 
+    margin-top:30px;
+
 }
 
 
 
-
-.archive-file{
-
+.archive-box{
 
     display:block;
+
+    padding:25px;
 
     text-decoration:none;
 
     color:#ddd;
-
-
-    padding:25px;
-
 
     background:
 
@@ -286,18 +35,16 @@ h2{
 
         rgba(0,255,170,.05),
 
-        rgba(0,0,0,.8)
+        rgba(0,0,0,.9)
 
     );
 
 
     border:1px solid #333;
 
-
     position:relative;
 
     overflow:hidden;
-
 
     transition:.35s ease;
 
@@ -306,53 +53,63 @@ h2{
 
 
 
-.archive-file::after{
+.archive-box::after{
+
 
     content:"";
 
+
     position:absolute;
+
 
     bottom:0;
 
+
     left:0;
+
 
     width:0%;
 
+
     height:2px;
+
 
     background:#00ffaa;
 
+
     transition:.4s;
+
 
 }
 
 
 
 
-.archive-file:hover::after{
+.archive-box:hover::after{
+
 
     width:100%;
 
+
 }
 
 
 
 
-.archive-file:hover{
 
-
-    transform:translateX(8px);
+.archive-box:hover{
 
 
     border-color:#00ffaa;
 
 
+    transform:translateY(-5px);
+
+
     box-shadow:
 
 
-    0 0 20px rgba(0,255,170,.25),
-
-    inset 0 0 20px rgba(0,255,170,.05);
+    0 0 20px rgba(0,255,170,.25);
 
 
 }
@@ -361,64 +118,7 @@ h2{
 
 
 
-.archive-top{
-
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-
-}
-
-
-
-
-
-.archive-id{
-
-
-    color:#00ffaa;
-
-    font-size:18px;
-
-    letter-spacing:3px;
-
-
-}
-
-
-
-
-
-.archive-status{
-
-
-    font-size:11px;
-
-    color:#00ffaa;
-
-    border:1px solid #00ffaa;
-
-    padding:5px 12px;
-
-    letter-spacing:2px;
-
-
-}
-
-
-
-
-.archive-file h3{
-
-
-    margin:20px 0 10px;
-
-
-    font-size:26px;
+.archive-box h3{
 
 
     color:white;
@@ -427,22 +127,10 @@ h2{
     letter-spacing:4px;
 
 
-}
+    font-size:24px;
 
 
-
-
-
-.archive-file p{
-
-
-    color:#888;
-
-
-    font-size:14px;
-
-
-    line-height:1.7;
+    margin:0 0 15px;
 
 
 }
@@ -451,123 +139,44 @@ h2{
 
 
 
-.archive-bottom{
-
-
-    display:flex;
-
-
-    justify-content:space-between;
-
-
-    align-items:center;
-
-
-    margin-top:25px;
-
-
-}
-
-
-
-
-.archive-size{
-
-
-    font-size:12px;
-
-
-    color:#555;
-
-
-}
-
-
-
-
-
-.archive-open{
-
-
-    padding:8px 18px;
-
-
-    border:1px solid #00ffaa;
+.archive-box p{
 
 
     color:#00ffaa;
 
 
-    font-size:12px;
-
-
     letter-spacing:2px;
 
 
-    transition:.3s;
+    font-size:13px;
 
 
 }
 
-
-
-
-
-.archive-file:hover .archive-open{
-
-
-    background:#00ffaa;
-
-
-    color:#000;
-
-
-}
 
 
 
 
 
 /* ========================= */
-/* PHYSICAL DATABASE          */
+/* DETAIL FILES              */
 /* ========================= */
 
 
 
-.body-views{
+.scar-card{
 
 
-    display:flex;
-
-    gap:30px;
-
-    justify-content:center;
-
-    margin:30px 0;
+    display:grid;
 
 
-}
+    grid-template-columns:1fr 1fr;
 
 
+    gap:40px;
 
 
-.view-box{
-
-
-    text-align:center;
-
-}
-
-
-
-
-
-.view-box h3{
-
-
-    color:#777;
-
-    letter-spacing:3px;
+    margin-top:30px;
 
 
 }
@@ -575,11 +184,7 @@ h2{
 
 
 
-
-.photo-frame{
-
-
-    padding:10px;
+.file-image{
 
 
     background:#050505;
@@ -588,18 +193,23 @@ h2{
     border:1px solid #444;
 
 
+    padding:10px;
+
+
 }
 
 
 
 
 
-.photo-frame img{
+.file-image img{
 
 
-    width:220px;
+    width:100%;
 
-    height:320px;
+
+    max-height:500px;
+
 
     object-fit:cover;
 
@@ -613,7 +223,7 @@ h2{
 
 
 
-.photo-frame img:hover{
+.file-image img:hover{
 
 
     filter:grayscale(0%);
@@ -630,76 +240,18 @@ h2{
 
 
 /* ========================= */
-/* DATA BOXES                */
+/* MEDICAL / BODY RECORD     */
 /* ========================= */
 
 
-.data-grid{
 
-
-    display:grid;
-
-
-    grid-template-columns:repeat(2,1fr);
-
-
-    gap:15px;
-
-
-}
-
-
-
-
-.data-grid div{
+.record-box{
 
 
     background:#050505;
 
 
     border:1px solid #333;
-
-
-    padding:15px;
-
-
-    color:#777;
-
-
-}
-
-
-
-
-
-.data-grid span{
-
-
-    display:block;
-
-
-    margin-top:8px;
-
-
-    color:white;
-
-
-    font-size:18px;
-
-
-}
-
-
-
-
-
-.data-box{
-
-
-    background:#050505;
-
-
-    border-left:2px solid #555;
 
 
     padding:20px;
@@ -710,17 +262,33 @@ h2{
 
 
 
-.data-box p{
+
+.record-box p{
+
 
     color:#777;
 
+
+    border-bottom:1px solid #222;
+
+
+    padding-bottom:10px;
+
+
 }
 
 
 
-.data-box span{
+
+
+.record-box span{
+
 
     color:white;
+
+
+    float:right;
+
 
 }
 
@@ -729,29 +297,24 @@ h2{
 
 
 /* ========================= */
-/* BACK BUTTON               */
+/* IMAGE DATABASE            */
 /* ========================= */
 
 
-.back{
+
+.image-database{
 
 
-    display:inline-block;
+    display:grid;
 
 
-    margin-top:40px;
+    grid-template-columns:repeat(3,1fr);
 
 
-    padding:15px 25px;
+    gap:20px;
 
 
-    border:1px solid #444;
-
-
-    color:white;
-
-
-    text-decoration:none;
+    margin-top:30px;
 
 
 }
@@ -760,16 +323,50 @@ h2{
 
 
 
-.back:hover{
+.image-entry{
 
 
-    background:#111;
+    background:#050505;
+
+
+    border:1px solid #333;
+
+
+    padding:10px;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+
+.image-entry:hover{
 
 
     border-color:#00ffaa;
 
 
-    color:#00ffaa;
+    box-shadow:0 0 15px rgba(0,255,170,.2);
+
+
+}
+
+
+
+
+.image-entry img{
+
+
+    width:100%;
+
+
+    height:220px;
+
+
+    object-fit:cover;
 
 
 }
@@ -778,21 +375,13 @@ h2{
 
 
 
-/* ========================= */
-/* FOOTER                    */
-/* ========================= */
+.image-entry h3{
 
 
-footer{
+    color:white;
 
 
-    text-align:center;
-
-
-    padding:40px;
-
-
-    color:#555;
+    letter-spacing:3px;
 
 
 }
@@ -801,55 +390,56 @@ footer{
 
 
 
+.image-entry p{
+
+
+    color:#777;
+
+
+    font-size:14px;
+
+
+}
+
+
+
+
+
+
 /* ========================= */
-/* MOBILE                    */
+/* MOBILE ADDITIONS          */
 /* ========================= */
+
 
 
 @media(max-width:800px){
 
 
-    header h1{
+    .archive-grid{
 
-        font-size:28px;
-
-        letter-spacing:5px;
-
-    }
-
-
-
-    .terminal{
-
-        padding:25px;
-
-    }
-
-
-
-    .profile-card{
-
-        flex-direction:column;
-
-        text-align:center;
-
-    }
-
-
-
-    .body-views{
-
-        flex-direction:column;
-
-        align-items:center;
-
-    }
-
-
-
-    .data-grid{
 
         grid-template-columns:1fr;
+
+
+    }
+
+
+
+    .scar-card{
+
+
+        grid-template-columns:1fr;
+
+
+    }
+
+
+
+    .image-database{
+
+
+        grid-template-columns:1fr;
+
 
     }
 
