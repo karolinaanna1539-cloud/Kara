@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,10 +21,7 @@
 
 
 
-
-
 <header>
-
 
 <h1>
 SCARS DATABASE
@@ -43,11 +39,7 @@ ANA-001 // BODY DAMAGE RECORD
 
 
 
-
-
-
 <section class="terminal">
-
 
 
 
@@ -67,16 +59,14 @@ UNLOCKED
 
 
 
-
 <p>
 FILE TYPE:
 
 <span>
-MEDICAL ARCHIVE
+BODY ARCHIVE
 </span>
 
 </p>
-
 
 
 
@@ -84,7 +74,7 @@ MEDICAL ARCHIVE
 RECORD COUNT:
 
 <span>
-002
+006
 </span>
 
 </p>
@@ -92,8 +82,6 @@ RECORD COUNT:
 
 
 </div>
-
-
 
 
 
@@ -109,14 +97,11 @@ BODY SCAR MAP
 
 
 
-
-
 <div class="body-map">
 
 
-
 <img 
-src="images/body_front_map.png" 
+src="images/body_front_map.png"
 class="body-silhouette"
 alt="Body map">
 
@@ -124,20 +109,34 @@ alt="Body map">
 
 
 
-
-<a href="#scar001" class="scar-point point-arm">
+<a href="#scar001" class="scar-point left-forearm">
 +
 </a>
 
 
-
-
-
-<a href="#scar002" class="scar-point point-leg">
+<a href="#scar002" class="scar-point right-forearm">
 +
 </a>
 
 
+<a href="#scar003" class="scar-point left-thigh">
++
+</a>
+
+
+<a href="#scar004" class="scar-point right-thigh">
++
+</a>
+
+
+<a href="#scar005" class="scar-point groin">
++
+</a>
+
+
+<a href="#scar006" class="scar-point chest">
++
+</a>
 
 
 
@@ -163,40 +162,26 @@ SCAR RECORDS
 
 
 
+<!-- SCAR 001 -->
+
+
 <div id="scar001" class="scar-record">
 
 
-
-
-
 <h2>
-SCAR FILE 001
+SCAR-001
 </h2>
-
-
-
-
 
 
 <div class="scar-card">
 
 
 
-
-
-
 <div class="file-image">
 
-
-<img 
-src="images/scar01.png"
-alt="Scar 001">
-
+<img src="images/scar001.png">
 
 </div>
-
-
-
 
 
 
@@ -204,19 +189,14 @@ alt="Scar 001">
 <div class="record-box">
 
 
-
-
-
 <p>
 LOCATION:
 
 <span>
-LEFT ARM
+LEFT FOREARM
 </span>
 
 </p>
-
-
 
 
 
@@ -231,18 +211,14 @@ SURGICAL
 
 
 
-
-
 <p>
 DATE:
 
 <span>
-2024
+----
 </span>
 
 </p>
-
-
 
 
 
@@ -257,33 +233,21 @@ HEALED
 
 
 
-
-
-<p>
-VISIBILITY:
-
-<span>
-LOW
-</span>
-
-</p>
-
-
-
-
-
 <p>
 NOTES:
 
 <span>
-Additional information
+----
 </span>
 
 </p>
 
 
 
+</div>
 
+
+</div>
 
 
 </div>
@@ -294,58 +258,28 @@ Additional information
 
 
 
-</div>
 
 
-
-
-
-</div>
-
-
-
-
-
-
-
+<!-- SCAR 002 -->
 
 
 <div id="scar002" class="scar-record">
 
 
-
-
-
-
 <h2>
-SCAR FILE 002
+SCAR-002
 </h2>
-
-
-
-
-
 
 
 <div class="scar-card">
 
 
 
-
-
-
 <div class="file-image">
 
-
-<img 
-src="images/scar02.png"
-alt="Scar 002">
-
+<img src="images/scar002.png">
 
 </div>
-
-
-
 
 
 
@@ -353,19 +287,14 @@ alt="Scar 002">
 <div class="record-box">
 
 
-
-
-
 <p>
 LOCATION:
 
 <span>
-LEFT LEG
+RIGHT FOREARM
 </span>
 
 </p>
-
-
 
 
 
@@ -373,12 +302,10 @@ LEFT LEG
 TYPE:
 
 <span>
-UNKNOWN
+----
 </span>
 
 </p>
-
-
 
 
 
@@ -393,6 +320,78 @@ DATE:
 
 
 
+<p>
+STATUS:
+
+<span>
+HEALED
+</span>
+
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- SCAR 003 -->
+
+
+<div id="scar003" class="scar-record">
+
+
+<h2>
+SCAR-003
+</h2>
+
+
+<div class="scar-card">
+
+
+<div class="file-image">
+
+<img src="images/scar003.png">
+
+</div>
+
+
+
+<div class="record-box">
+
+
+<p>
+LOCATION:
+
+<span>
+LEFT FRONT THIGH
+</span>
+
+</p>
+
+
+
+<p>
+TYPE:
+
+<span>
+----
+</span>
+
+</p>
+
 
 
 <p>
@@ -405,34 +404,10 @@ HEALED
 </p>
 
 
+</div>
 
 
-
-<p>
-VISIBILITY:
-
-<span>
-MEDIUM
-</span>
-
-</p>
-
-
-
-
-
-<p>
-NOTES:
-
-<span>
-Additional information
-</span>
-
-</p>
-
-
-
-
+</div>
 
 
 </div>
@@ -443,92 +418,218 @@ Additional information
 
 
 
-</div>
 
 
+<!-- SCAR 004 -->
 
 
-
-</div>
-
-
-
-
-
-
-
+<div id="scar004" class="scar-record">
 
 
 <h2>
-IMAGE DATABASE
+SCAR-004
 </h2>
 
 
+<div class="scar-card">
+
+
+<div class="file-image">
+
+<img src="images/scar004.png">
+
+</div>
 
 
 
-
-
-<div class="image-database">
-
-
-
-
-
-
-
-<div class="image-entry">
-
-
-<img src="images/scar01.png">
-
-
-<h3>
-REFERENCE 001
-</h3>
+<div class="record-box">
 
 
 <p>
-Primary documentation image.
+LOCATION:
+
+<span>
+RIGHT FRONT THIGH
+</span>
+
+</p>
+
+
+
+<p>
+TYPE:
+
+<span>
+----
+</span>
+
+</p>
+
+
+
+<p>
+STATUS:
+
+<span>
+HEALED
+</span>
+
 </p>
 
 
 </div>
 
 
+</div>
+
+
+</div>
 
 
 
 
 
 
-<div class="image-entry">
 
 
-<img src="images/scar02.png">
+
+<!-- SCAR 005 -->
 
 
-<h3>
-REFERENCE 002
-</h3>
+<div id="scar005" class="scar-record">
+
+
+<h2>
+SCAR-005
+</h2>
+
+
+<div class="scar-card">
+
+
+<div class="file-image">
+
+<img src="images/scar005.png">
+
+</div>
+
+
+
+<div class="record-box">
 
 
 <p>
-Secondary documentation image.
+LOCATION:
+
+<span>
+GROIN AREA
+</span>
+
+</p>
+
+
+
+<p>
+TYPE:
+
+<span>
+SURGICAL
+</span>
+
+</p>
+
+
+
+<p>
+STATUS:
+
+<span>
+HEALED
+</span>
+
 </p>
 
 
 </div>
 
 
-
-
-
+</div>
 
 
 </div>
 
 
+
+
+
+
+
+
+
+<!-- SCAR 006 -->
+
+
+<div id="scar006" class="scar-record">
+
+
+<h2>
+SCAR-006
+</h2>
+
+
+<div class="scar-card">
+
+
+<div class="file-image">
+
+<img src="images/scar006.png">
+
+</div>
+
+
+
+<div class="record-box">
+
+
+<p>
+LOCATION:
+
+<span>
+CHEST / BREAST AREA
+</span>
+
+</p>
+
+
+
+<p>
+TYPE:
+
+<span>
+----
+</span>
+
+</p>
+
+
+
+<p>
+STATUS:
+
+<span>
+HEALED
+</span>
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
 
 
 
@@ -546,13 +647,7 @@ Secondary documentation image.
 
 
 
-
-
-
 </section>
-
-
-
 
 
 
@@ -568,11 +663,6 @@ KAROLINA SYSTEM © 2026
 
 
 
-
-
-
-
 </body>
 
 </html>
-```
