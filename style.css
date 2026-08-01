@@ -1,4 +1,3 @@
-```css
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 
@@ -21,6 +20,7 @@ body{
     font-family:'Share Tech Mono',monospace;
 
 }
+
 
 
 
@@ -48,7 +48,6 @@ body{
     z-index:20;
 
 }
-
 
 
 
@@ -98,8 +97,6 @@ header p{
 
 
 
-
-
 /* ========================= */
 /* TERMINAL                  */
 /* ========================= */
@@ -125,7 +122,6 @@ header p{
     0 0 50px rgba(255,255,255,.05);
 
 }
-
 
 
 
@@ -180,10 +176,6 @@ header p{
 
 
 
-
-
-
-
 /* ========================= */
 /* TITLES                    */
 /* ========================= */
@@ -198,9 +190,6 @@ h2{
     letter-spacing:5px;
 
 }
-
-
-
 
 
 
@@ -262,10 +251,18 @@ h2{
 
 
 
+.information span{
+
+    color:white;
+
+}
+
+
+
 
 
 /* ========================= */
-/* ARCHIVE FILES             */
+/* MAIN ARCHIVE FILES        */
 /* ========================= */
 
 
@@ -281,7 +278,6 @@ h2{
 
 
 
-
 .archive-file{
 
     display:block;
@@ -291,7 +287,6 @@ h2{
     color:#ddd;
 
     padding:25px;
-
 
     background:
 
@@ -305,13 +300,11 @@ h2{
 
     );
 
-
     border:1px solid #333;
 
     transition:.35s;
 
 }
-
 
 
 
@@ -349,7 +342,6 @@ h2{
 
 
 
-
 .archive-status{
 
     color:#00ffaa;
@@ -358,9 +350,9 @@ h2{
 
     padding:5px 12px;
 
+    font-size:12px;
+
 }
-
-
 
 
 
@@ -376,14 +368,11 @@ h2{
 
 
 
-
 .archive-file p{
 
     color:#888;
 
 }
-
-
 
 
 
@@ -414,7 +403,7 @@ h2{
 
 
 /* ========================= */
-/* BODY VIEWS                */
+/* PHYSICAL DATABASE         */
 /* ========================= */
 
 
@@ -426,14 +415,23 @@ h2{
 
     justify-content:center;
 
-}
+    margin:30px 0;
 
+}
 
 
 
 .view-box{
 
     text-align:center;
+
+}
+
+
+
+.view-box h3{
+
+    color:#777;
 
 }
 
@@ -465,11 +463,20 @@ h2{
 
 
 
+.photo-frame img:hover{
+
+    filter:grayscale(0%);
+
+}
+
+
+
+
 
 
 
 /* ========================= */
-/* DATA                      */
+/* DATA BOXES                */
 /* ========================= */
 
 
@@ -499,7 +506,6 @@ h2{
 
 
 
-
 .data-grid span{
 
     display:block;
@@ -509,9 +515,6 @@ h2{
     margin-top:8px;
 
 }
-
-
-
 
 
 
@@ -527,14 +530,11 @@ h2{
 
 
 
-
 .data-box span{
 
     color:white;
 
 }
-
-
 
 
 
@@ -560,15 +560,17 @@ h2{
 
 .archive-box{
 
+    display:block;
+
     padding:25px;
 
     text-decoration:none;
 
-    color:white;
-
-    border:1px solid #333;
+    color:#ddd;
 
     background:#050505;
+
+    border:1px solid #333;
 
     transition:.3s;
 
@@ -580,9 +582,13 @@ h2{
 
     border-color:#00ffaa;
 
-    box-shadow:0 0 20px rgba(0,255,170,.25);
+    box-shadow:
+
+    0 0 20px rgba(0,255,170,.25);
 
 }
+
+
 
 
 
@@ -618,6 +624,7 @@ h2{
 
 
 
+
 .scar-point{
 
     position:absolute;
@@ -628,9 +635,9 @@ h2{
 
     border-radius:50%;
 
-    border:1px solid #00ffaa;
-
     background:#000;
+
+    border:1px solid #00ffaa;
 
     color:#00ffaa;
 
@@ -642,9 +649,13 @@ h2{
 
     text-decoration:none;
 
+    font-size:20px;
+
     box-shadow:
 
     0 0 15px #00ffaa;
+
+    transition:.3s;
 
 }
 
@@ -656,25 +667,68 @@ h2{
 
     color:#000;
 
-}
-
-
-
-.point-arm{
-
-    top:35%;
-
-    left:18%;
+    transform:scale(1.3);
 
 }
 
 
 
-.point-leg{
 
-    top:75%;
+.left-forearm{
 
-    left:35%;
+    top:34%;
+
+    left:23%;
+
+}
+
+
+
+.right-forearm{
+
+    top:34%;
+
+    left:67%;
+
+}
+
+
+
+.chest{
+
+    top:25%;
+
+    left:50%;
+
+}
+
+
+
+.groin{
+
+    top:52%;
+
+    left:50%;
+
+}
+
+
+
+.left-thigh{
+
+    top:65%;
+
+    left:38%;
+
+}
+
+
+
+.right-thigh{
+
+    top:65%;
+
+    left:57%;
 
 }
 
@@ -684,8 +738,20 @@ h2{
 
 
 /* ========================= */
-/* RECORDS                   */
+/* SCAR RECORDS              */
 /* ========================= */
+
+
+.scar-record{
+
+    margin-top:60px;
+
+    padding-top:20px;
+
+    border-top:1px solid #333;
+
+}
+
 
 
 .scar-card{
@@ -697,19 +763,6 @@ h2{
     gap:40px;
 
 }
-
-
-
-.scar-record{
-
-    margin-top:50px;
-
-    padding-top:20px;
-
-    border-top:1px solid #333;
-
-}
-
 
 
 
@@ -725,15 +778,15 @@ h2{
 
 
 
-
 .file-image img{
 
     width:100%;
 
+    max-height:500px;
+
+    object-fit:cover;
+
 }
-
-
-
 
 
 
@@ -744,6 +797,14 @@ h2{
     border:1px solid #333;
 
     padding:20px;
+
+}
+
+
+
+.record-box p{
+
+    color:#777;
 
 }
 
@@ -792,11 +853,21 @@ h2{
 
 
 
+.image-entry:hover{
+
+    border-color:#00ffaa;
+
+}
+
+
+
 .image-entry img{
 
     width:100%;
 
 }
+
+
 
 
 
@@ -839,7 +910,6 @@ h2{
 
 
 
-
 /* ========================= */
 /* FOOTER                    */
 /* ========================= */
@@ -872,6 +942,8 @@ footer{
 header h1{
 
     font-size:28px;
+
+    letter-spacing:5px;
 
 }
 
@@ -932,5 +1004,12 @@ header h1{
 }
 
 
+
+.body-map{
+
+    width:280px;
+
 }
-```
+
+
+}
