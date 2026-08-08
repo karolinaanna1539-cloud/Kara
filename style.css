@@ -2,913 +2,1027 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 
-*{
-    box-sizing:border-box;
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+
+    box-sizing: border-box;
+
 }
 
 
-body{
+body {
 
-    margin:0;
+    margin: 0;
 
-    min-height:100vh;
+    min-height: 100vh;
 
     background:
-    radial-gradient(circle,#171717,#000);
+        radial-gradient(circle, #171717, #000);
 
-    color:#ddd;
+    color: #ddd;
 
-    font-family:'Share Tech Mono',monospace;
+    font-family: 'Share Tech Mono', monospace;
 
 }
 
 
-/* ========================= */
-/* SCAN EFFECT               */
-/* ========================= */
+/* =========================================
+   SCAN EFFECT
+========================================= */
 
-.scanline{
+.scanline {
 
-    position:fixed;
+    position: fixed;
 
-    inset:0;
+    inset: 0;
 
     background:
-    repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,.03),
-        rgba(255,255,255,.03) 1px,
-        transparent 3px
-    );
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,.03),
+            rgba(255,255,255,.03) 1px,
+            transparent 3px
+        );
 
-    pointer-events:none;
+    pointer-events: none;
 
-    z-index:20;
-
-}
-
-
-/* ========================= */
-/* HEADER                    */
-/* ========================= */
-
-header{
-
-    text-align:center;
-
-    padding:50px 20px;
+    z-index: 20;
 
 }
 
 
-header h1{
+/* =========================================
+   HEADER
+========================================= */
 
-    color:white;
+header {
 
-    font-size:45px;
+    text-align: center;
 
-    letter-spacing:10px;
+    padding: 50px 20px;
 
-    margin:0;
+}
+
+
+header h1 {
+
+    color: white;
+
+    font-size: 45px;
+
+    letter-spacing: 10px;
+
+    margin: 0;
 
     text-shadow:
-    0 0 15px rgba(255,255,255,.3);
+        0 0 15px rgba(255,255,255,.3);
 
 }
 
 
-header p{
+header p {
 
-    color:#777;
+    color: #777;
 
-    letter-spacing:5px;
+    letter-spacing: 5px;
 
 }
 
 
-/* ========================= */
-/* TERMINAL                  */
-/* ========================= */
+/* =========================================
+   TERMINAL
+========================================= */
 
-.terminal{
+.terminal {
 
-    width:90%;
+    width: 90%;
 
-    max-width:1000px;
+    max-width: 1200px;
 
-    margin:40px auto;
+    margin: 40px auto;
 
-    padding:40px;
+    padding: 40px;
 
     background:
-    rgba(0,0,0,.85);
+        rgba(0,0,0,.85);
 
-    border:1px solid #333;
+    border: 1px solid #333;
 
     box-shadow:
-    0 0 50px rgba(255,255,255,.05);
+        0 0 50px rgba(255,255,255,.05);
 
 }
 
 
-/* ========================= */
-/* FILE HEADER               */
-/* ========================= */
+/* =========================================
+   FILE HEADER
+========================================= */
 
-.file-header{
+.file-header {
 
-    border-bottom:1px solid #333;
+    border-bottom: 1px solid #333;
 
-    padding-bottom:20px;
+    padding-bottom: 20px;
 
-    margin-bottom:30px;
-
-}
-
-
-.file-header p{
-
-    color:#777;
+    margin-bottom: 30px;
 
 }
 
 
-.file-header span{
+.file-header p {
 
-    color:white;
+    color: #777;
 
 }
 
 
-/* ========================= */
-/* ONLINE STATUS             */
-/* ========================= */
+.file-header span {
 
-.online{
+    color: white;
 
-    color:#00ffaa!important;
+}
+
+
+/* =========================================
+   ONLINE STATUS
+========================================= */
+
+.online {
+
+    color: #00ffaa !important;
 
     text-shadow:
-
-    0 0 8px #00ffaa;
-
-}
-
-
-/* ========================= */
-/* TITLES                    */
-/* ========================= */
-
-h2{
-
-    margin-top:40px;
-
-    color:white;
-
-    letter-spacing:5px;
+        0 0 8px #00ffaa;
 
 }
 
 
-/* ========================= */
-/* MULTIPLE PROFILES         */
-/* ========================= */
+/* =========================================
+   TITLES
+========================================= */
 
-.profiles{
+h2 {
 
-    display:grid;
+    margin-top: 40px;
 
-    grid-template-columns:repeat(2,1fr);
+    color: white;
 
-    gap:30px;
-
-    width:100%;
-
-    margin-bottom:40px;
+    letter-spacing: 5px;
 
 }
 
 
-/* ========================= */
-/* PROFILE                   */
-/* ========================= */
+/* =========================================
+   PROFILE COLUMNS
+========================================= */
 
-.profile-card{
+.profile-columns {
 
-    display:flex;
+    display: grid;
 
-    gap:40px;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
-    align-items:center;
+    gap: 30px;
 
-}
-
-
-/* ========================= */
-/* PROFILE PHOTO             */
-/* ========================= */
-
-.photo-box{
-
-    padding:10px;
-
-    background:#050505;
-
-    border:1px solid #333;
+    width: 100%;
 
 }
 
 
-.photo-box img{
+.profile-column {
 
-    width:220px;
-
-    height:280px;
-
-    object-fit:cover;
-
-    filter:grayscale(70%);
+    min-width: 0;
 
 }
 
 
-.photo-box img:hover{
+/* =========================================
+   PROFILE CARD
+========================================= */
 
-    filter:grayscale(0%);
+.profile-card {
 
-    transition:.4s;
+    display: flex;
 
-}
+    flex-direction: column;
 
+    align-items: center;
 
-/* ========================= */
-/* PROFILE INFORMATION       */
-/* ========================= */
+    gap: 20px;
 
-.information span{
+    width: 100%;
 
-    color:white;
+    padding: 25px;
 
-}
+    background: #050505;
 
-
-/* ========================= */
-/* MAIN ARCHIVE FILES        */
-/* ========================= */
-
-.menu{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
+    border: 1px solid #333;
 
 }
 
 
-.archive-file{
+.profile-card .information {
 
-    display:block;
+    width: 100%;
 
-    text-decoration:none;
+}
 
-    color:#ddd;
 
-    padding:25px;
+.profile-card .information h2 {
+
+    margin-top: 0;
+
+}
+
+
+.profile-card .information span {
+
+    color: white;
+
+}
+
+
+/* =========================================
+   PROFILE PHOTO
+========================================= */
+
+.photo-box {
+
+    padding: 10px;
+
+    background: #050505;
+
+    border: 1px solid #333;
+
+}
+
+
+.photo-box img {
+
+    width: 180px;
+
+    height: 240px;
+
+    object-fit: cover;
+
+    filter: grayscale(70%);
+
+    display: block;
+
+}
+
+
+.photo-box img:hover {
+
+    filter: grayscale(0%);
+
+    transition: .4s;
+
+}
+
+
+/* =========================================
+   MAIN ARCHIVE FILES
+========================================= */
+
+.menu {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+}
+
+
+.archive-file {
+
+    display: block;
+
+    text-decoration: none;
+
+    color: #ddd;
+
+    padding: 25px;
 
     background:
 
-    linear-gradient(
+        linear-gradient(
 
-        135deg,
+            135deg,
 
-        rgba(0,255,170,.05),
+            rgba(0,255,170,.05),
 
-        rgba(0,0,0,.8)
+            rgba(0,0,0,.8)
 
-    );
+        );
 
-    border:1px solid #333;
+    border: 1px solid #333;
 
-    transition:.35s;
+    transition: .35s;
 
 }
 
 
-.archive-file:hover{
+.archive-file:hover {
 
-    transform:translateX(8px);
+    transform: translateX(8px);
 
-    border-color:#00ffaa;
+    border-color: #00ffaa;
 
     box-shadow:
 
-    0 0 20px rgba(0,255,170,.25);
+        0 0 20px rgba(0,255,170,.25);
 
 }
 
 
-.archive-top{
+.archive-top {
 
-    display:flex;
+    display: flex;
 
-    justify-content:space-between;
+    justify-content: space-between;
 
-}
+    align-items: center;
 
-
-.archive-id{
-
-    color:#00ffaa;
+    gap: 10px;
 
 }
 
 
-.archive-status{
+.archive-id {
 
-    color:#00ffaa;
-
-    border:1px solid #00ffaa;
-
-    padding:5px 12px;
-
-    font-size:12px;
+    color: #00ffaa;
 
 }
 
 
-.archive-file h3{
+.archive-status {
 
-    color:white;
+    color: #00ffaa;
 
-    letter-spacing:4px;
+    border: 1px solid #00ffaa;
 
-    font-size:26px;
+    padding: 5px 12px;
 
-}
-
-
-.archive-file p{
-
-    color:#888;
+    font-size: 12px;
 
 }
 
 
-.archive-bottom{
+.archive-file h3 {
 
-    display:flex;
+    color: white;
 
-    justify-content:space-between;
+    letter-spacing: 4px;
 
-}
-
-
-.archive-open{
-
-    color:#00ffaa;
-
-    border:1px solid #00ffaa;
-
-    padding:8px 15px;
+    font-size: 26px;
 
 }
 
 
-/* ========================= */
-/* PHYSICAL DATABASE         */
-/* ========================= */
+.archive-file p {
 
-.body-views{
-
-    display:flex;
-
-    gap:30px;
-
-    justify-content:center;
-
-    margin:30px 0;
+    color: #888;
 
 }
 
 
-.view-box{
+.archive-bottom {
 
-    text-align:center;
+    display: flex;
 
-}
+    justify-content: space-between;
 
+    align-items: center;
 
-.view-box h3{
-
-    color:#777;
-
-}
-
-
-.photo-frame{
-
-    padding:10px;
-
-    background:#050505;
-
-    border:1px solid #444;
+    gap: 15px;
 
 }
 
 
-.photo-frame img{
+.archive-size {
 
-    width:220px;
-
-    height:320px;
-
-    object-fit:cover;
-
-    filter:grayscale(60%);
+    color: #666;
 
 }
 
 
-.photo-frame img:hover{
+.archive-open {
 
-    filter:grayscale(0%);
+    color: #00ffaa;
 
-}
+    border: 1px solid #00ffaa;
 
-
-/* ========================= */
-/* DATA BOXES                */
-/* ========================= */
-
-.data-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:15px;
+    padding: 8px 15px;
 
 }
 
 
-.data-grid div{
+/* =========================================
+   PHYSICAL DATABASE
+========================================= */
 
-    background:#050505;
+.body-views {
 
-    border:1px solid #333;
+    display: flex;
 
-    padding:15px;
+    gap: 30px;
 
-    color:#777;
+    justify-content: center;
 
-}
-
-
-.data-grid span{
-
-    display:block;
-
-    color:white;
-
-    margin-top:8px;
+    margin: 30px 0;
 
 }
 
 
-.data-box{
+.view-box {
 
-    background:#050505;
-
-    border-left:2px solid #555;
-
-    padding:20px;
+    text-align: center;
 
 }
 
 
-.data-box span{
+.view-box h3 {
 
-    color:white;
-
-}
-
-
-/* ========================= */
-/* BODY ARCHIVE              */
-/* ========================= */
-
-.archive-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:20px;
+    color: #777;
 
 }
 
 
-.archive-box{
+.photo-frame {
 
-    display:block;
+    padding: 10px;
 
-    padding:25px;
+    background: #050505;
 
-    text-decoration:none;
-
-    color:#ddd;
-
-    background:#050505;
-
-    border:1px solid #333;
-
-    transition:.3s;
+    border: 1px solid #444;
 
 }
 
 
-.archive-box:hover{
+.photo-frame img {
 
-    border-color:#00ffaa;
+    width: 220px;
+
+    height: 320px;
+
+    object-fit: cover;
+
+    display: block;
+
+    filter: grayscale(60%);
+
+}
+
+
+.photo-frame img:hover {
+
+    filter: grayscale(0%);
+
+}
+
+
+/* =========================================
+   DATA BOXES
+========================================= */
+
+.data-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+}
+
+
+.data-grid div {
+
+    background: #050505;
+
+    border: 1px solid #333;
+
+    padding: 15px;
+
+    color: #777;
+
+}
+
+
+.data-grid span {
+
+    display: block;
+
+    color: white;
+
+    margin-top: 8px;
+
+}
+
+
+.data-box {
+
+    background: #050505;
+
+    border-left: 2px solid #555;
+
+    padding: 20px;
+
+}
+
+
+.data-box span {
+
+    color: white;
+
+}
+
+
+/* =========================================
+   BODY ARCHIVE
+========================================= */
+
+.archive-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 20px;
+
+}
+
+
+.archive-box {
+
+    display: block;
+
+    padding: 25px;
+
+    text-decoration: none;
+
+    color: #ddd;
+
+    background: #050505;
+
+    border: 1px solid #333;
+
+    transition: .3s;
+
+}
+
+
+.archive-box:hover {
+
+    border-color: #00ffaa;
 
     box-shadow:
 
-    0 0 20px rgba(0,255,170,.25);
+        0 0 20px rgba(0,255,170,.25);
 
 }
 
 
-/* ========================= */
-/* SCAR MAP                  */
-/* ========================= */
+/* =========================================
+   SCAR MAP
+========================================= */
 
-.body-map{
+.body-map {
 
-    position:relative;
+    position: relative;
 
-    width:350px;
+    width: 350px;
 
-    margin:40px auto;
-
-}
-
-
-.body-silhouette{
-
-    width:100%;
-
-    filter:grayscale(100%);
-
-    opacity:.7;
+    margin: 40px auto;
 
 }
 
 
-.scar-point{
+.body-silhouette {
 
-    position:absolute;
+    width: 100%;
 
-    width:35px;
+    filter: grayscale(100%);
 
-    height:35px;
+    opacity: .7;
 
-    border-radius:50%;
+}
 
-    background:#000;
 
-    border:1px solid #00ffaa;
+.scar-point {
 
-    color:#00ffaa;
+    position: absolute;
 
-    display:flex;
+    width: 35px;
 
-    align-items:center;
+    height: 35px;
 
-    justify-content:center;
+    border-radius: 50%;
 
-    text-decoration:none;
+    background: #000;
 
-    font-size:20px;
+    border: 1px solid #00ffaa;
+
+    color: #00ffaa;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-decoration: none;
+
+    font-size: 20px;
 
     box-shadow:
 
-    0 0 15px #00ffaa;
+        0 0 15px #00ffaa;
 
-    transition:.3s;
-
-}
-
-
-.scar-point:hover{
-
-    background:#00ffaa;
-
-    color:#000;
-
-    transform:scale(1.3);
+    transition: .3s;
 
 }
 
 
-/* ========================= */
-/* SCAR POSITIONS            */
-/* ========================= */
+.scar-point:hover {
 
-.left-forearm{
+    background: #00ffaa;
 
-    top:34%;
+    color: #000;
 
-    left:23%;
+    transform: scale(1.3);
 
 }
 
 
-.right-forearm{
+/* =========================================
+   SCAR POSITIONS
+========================================= */
 
-    top:34%;
+.left-forearm {
 
-    left:67%;
+    top: 34%;
 
-}
-
-
-.chest{
-
-    top:25%;
-
-    left:50%;
+    left: 23%;
 
 }
 
 
-.groin{
+.right-forearm {
 
-    top:52%;
+    top: 34%;
 
-    left:50%;
-
-}
-
-
-.left-thigh{
-
-    top:65%;
-
-    left:38%;
+    left: 67%;
 
 }
 
 
-.right-thigh{
+.chest {
 
-    top:65%;
+    top: 25%;
 
-    left:57%;
-
-}
-
-
-/* ========================= */
-/* SCAR RECORDS              */
-/* ========================= */
-
-.scar-record{
-
-    margin-top:60px;
-
-    padding-top:20px;
-
-    border-top:1px solid #333;
+    left: 50%;
 
 }
 
 
-.scar-card{
+.groin {
 
-    display:grid;
+    top: 52%;
 
-    grid-template-columns:1fr 1fr;
-
-    gap:40px;
+    left: 50%;
 
 }
 
 
-.file-image{
+.left-thigh {
 
-    background:#050505;
+    top: 65%;
 
-    border:1px solid #444;
-
-    padding:10px;
+    left: 38%;
 
 }
 
 
-.file-image img{
+.right-thigh {
 
-    width:100%;
+    top: 65%;
 
-    max-height:500px;
-
-    object-fit:cover;
+    left: 57%;
 
 }
 
 
-.record-box{
+/* =========================================
+   SCAR RECORDS
+========================================= */
 
-    background:#050505;
+.scar-record {
 
-    border:1px solid #333;
+    margin-top: 60px;
 
-    padding:20px;
+    padding-top: 20px;
 
-}
-
-
-.record-box p{
-
-    color:#777;
+    border-top: 1px solid #333;
 
 }
 
 
-.record-box span{
+.scar-card {
 
-    float:right;
+    display: grid;
 
-    color:white;
+    grid-template-columns:
+        1fr 1fr;
 
-}
-
-
-/* ========================= */
-/* IMAGE DATABASE             */
-/* ========================= */
-
-.image-database{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:20px;
+    gap: 40px;
 
 }
 
 
-.image-entry{
+.file-image {
 
-    background:#050505;
+    background: #050505;
 
-    border:1px solid #333;
+    border: 1px solid #444;
 
-    padding:10px;
-
-}
-
-
-.image-entry:hover{
-
-    border-color:#00ffaa;
+    padding: 10px;
 
 }
 
 
-.image-entry img{
+.file-image img {
 
-    width:100%;
+    width: 100%;
 
-}
+    max-height: 500px;
 
-
-/* ========================= */
-/* BACK BUTTON               */
-/* ========================= */
-
-.back{
-
-    display:inline-block;
-
-    margin-top:40px;
-
-    padding:15px 25px;
-
-    border:1px solid #444;
-
-    color:white;
-
-    text-decoration:none;
+    object-fit: cover;
 
 }
 
 
-.back:hover{
+.record-box {
 
-    border-color:#00ffaa;
+    background: #050505;
 
-    color:#00ffaa;
+    border: 1px solid #333;
 
-}
-
-
-/* ========================= */
-/* FOOTER                    */
-/* ========================= */
-
-footer{
-
-    text-align:center;
-
-    padding:40px;
-
-    color:#555;
+    padding: 20px;
 
 }
 
 
-/* ========================= */
-/* MOBILE                    */
-/* ========================= */
+.record-box p {
 
-@media(max-width:800px){
+    color: #777;
+
+}
 
 
-    header h1{
+.record-box span {
 
-        font-size:28px;
+    float: right;
 
-        letter-spacing:5px;
+    color: white;
+
+}
+
+
+/* =========================================
+   IMAGE DATABASE
+========================================= */
+
+.image-database {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+
+}
+
+
+.image-entry {
+
+    background: #050505;
+
+    border: 1px solid #333;
+
+    padding: 10px;
+
+}
+
+
+.image-entry:hover {
+
+    border-color: #00ffaa;
+
+}
+
+
+.image-entry img {
+
+    width: 100%;
+
+    display: block;
+
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back {
+
+    display: inline-block;
+
+    margin-top: 40px;
+
+    padding: 15px 25px;
+
+    border: 1px solid #444;
+
+    color: white;
+
+    text-decoration: none;
+
+}
+
+
+.back:hover {
+
+    border-color: #00ffaa;
+
+    color: #00ffaa;
+
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+
+    text-align: center;
+
+    padding: 40px;
+
+    color: #555;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width: 800px) {
+
+
+    header h1 {
+
+        font-size: 28px;
+
+        letter-spacing: 5px;
 
     }
 
 
-    .terminal{
+    header p {
 
-        padding:25px;
-
-    }
-
-
-    /* TWO PROFILES BECOME ONE COLUMN */
-
-    .profiles{
-
-        grid-template-columns:1fr;
+        letter-spacing: 2px;
 
     }
 
 
-    .profile-card{
+    .terminal {
 
-        flex-direction:column;
+        width: 94%;
 
-    }
-
-
-    .body-views{
-
-        flex-direction:column;
+        padding: 25px;
 
     }
 
 
-    .data-grid{
+    /* PROFILES */
 
-        grid-template-columns:1fr;
+    .profile-columns {
 
-    }
-
-
-    .archive-grid{
-
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
 
     }
 
 
-    .scar-card{
+    .profile-card {
 
-        grid-template-columns:1fr;
-
-    }
-
-
-    .image-database{
-
-        grid-template-columns:1fr;
+        flex-direction: column;
 
     }
 
 
-    .body-map{
+    .profile-card .information {
 
-        width:280px;
+        width: 100%;
 
     }
+
+
+    /* BODY VIEWS */
+
+    .body-views {
+
+        flex-direction: column;
+
+        align-items: center;
+
+    }
+
+
+    /* DATA */
+
+    .data-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    /* BODY ARCHIVE */
+
+    .archive-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    /* SCAR RECORD */
+
+    .scar-card {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    /* IMAGE DATABASE */
+
+    .image-database {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    /* BODY MAP */
+
+    .body-map {
+
+        width: 280px;
+
+    }
+
+
+    /* ARCHIVE FILE */
+
+    .archive-file {
+
+        padding: 20px;
+
+    }
+
+
+    .archive-file h3 {
+
+        font-size: 20px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .archive-bottom {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
 
 }
 ```
