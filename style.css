@@ -1,3 +1,4 @@
+```css
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 
@@ -22,12 +23,9 @@ body{
 }
 
 
-
-
 /* ========================= */
 /* SCAN EFFECT               */
 /* ========================= */
-
 
 .scanline{
 
@@ -50,13 +48,9 @@ body{
 }
 
 
-
-
-
 /* ========================= */
 /* HEADER                    */
 /* ========================= */
-
 
 header{
 
@@ -65,7 +59,6 @@ header{
     padding:50px 20px;
 
 }
-
 
 
 header h1{
@@ -84,7 +77,6 @@ header h1{
 }
 
 
-
 header p{
 
     color:#777;
@@ -94,13 +86,9 @@ header p{
 }
 
 
-
-
-
 /* ========================= */
 /* TERMINAL                  */
 /* ========================= */
-
 
 .terminal{
 
@@ -118,21 +106,14 @@ header p{
     border:1px solid #333;
 
     box-shadow:
-
     0 0 50px rgba(255,255,255,.05);
 
 }
 
 
-
-
-
-
-
 /* ========================= */
 /* FILE HEADER               */
 /* ========================= */
-
 
 .file-header{
 
@@ -159,8 +140,9 @@ header p{
 }
 
 
-
-
+/* ========================= */
+/* ONLINE STATUS             */
+/* ========================= */
 
 .online{
 
@@ -173,13 +155,9 @@ header p{
 }
 
 
-
-
-
 /* ========================= */
 /* TITLES                    */
 /* ========================= */
-
 
 h2{
 
@@ -192,14 +170,28 @@ h2{
 }
 
 
+/* ========================= */
+/* MULTIPLE PROFILES         */
+/* ========================= */
 
+.profiles{
 
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:30px;
+
+    width:100%;
+
+    margin-bottom:40px;
+
+}
 
 
 /* ========================= */
 /* PROFILE                   */
 /* ========================= */
-
 
 .profile-card{
 
@@ -212,6 +204,9 @@ h2{
 }
 
 
+/* ========================= */
+/* PROFILE PHOTO             */
+/* ========================= */
 
 .photo-box{
 
@@ -222,7 +217,6 @@ h2{
     border:1px solid #333;
 
 }
-
 
 
 .photo-box img{
@@ -238,7 +232,6 @@ h2{
 }
 
 
-
 .photo-box img:hover{
 
     filter:grayscale(0%);
@@ -248,8 +241,9 @@ h2{
 }
 
 
-
-
+/* ========================= */
+/* PROFILE INFORMATION       */
+/* ========================= */
 
 .information span{
 
@@ -258,13 +252,9 @@ h2{
 }
 
 
-
-
-
 /* ========================= */
 /* MAIN ARCHIVE FILES        */
 /* ========================= */
-
 
 .menu{
 
@@ -275,7 +265,6 @@ h2{
     gap:20px;
 
 }
-
 
 
 .archive-file{
@@ -307,7 +296,6 @@ h2{
 }
 
 
-
 .archive-file:hover{
 
     transform:translateX(8px);
@@ -321,9 +309,6 @@ h2{
 }
 
 
-
-
-
 .archive-top{
 
     display:flex;
@@ -333,13 +318,11 @@ h2{
 }
 
 
-
 .archive-id{
 
     color:#00ffaa;
 
 }
-
 
 
 .archive-status{
@@ -355,7 +338,6 @@ h2{
 }
 
 
-
 .archive-file h3{
 
     color:white;
@@ -367,13 +349,11 @@ h2{
 }
 
 
-
 .archive-file p{
 
     color:#888;
 
 }
-
 
 
 .archive-bottom{
@@ -383,7 +363,6 @@ h2{
     justify-content:space-between;
 
 }
-
 
 
 .archive-open{
@@ -397,15 +376,9 @@ h2{
 }
 
 
-
-
-
-
-
 /* ========================= */
 /* PHYSICAL DATABASE         */
 /* ========================= */
-
 
 .body-views{
 
@@ -420,7 +393,6 @@ h2{
 }
 
 
-
 .view-box{
 
     text-align:center;
@@ -428,13 +400,11 @@ h2{
 }
 
 
-
 .view-box h3{
 
     color:#777;
 
 }
-
 
 
 .photo-frame{
@@ -446,7 +416,6 @@ h2{
     border:1px solid #444;
 
 }
-
 
 
 .photo-frame img{
@@ -462,7 +431,6 @@ h2{
 }
 
 
-
 .photo-frame img:hover{
 
     filter:grayscale(0%);
@@ -470,15 +438,9 @@ h2{
 }
 
 
-
-
-
-
-
 /* ========================= */
 /* DATA BOXES                */
 /* ========================= */
-
 
 .data-grid{
 
@@ -489,7 +451,6 @@ h2{
     gap:15px;
 
 }
-
 
 
 .data-grid div{
@@ -505,7 +466,6 @@ h2{
 }
 
 
-
 .data-grid span{
 
     display:block;
@@ -515,7 +475,6 @@ h2{
     margin-top:8px;
 
 }
-
 
 
 .data-box{
@@ -529,7 +488,6 @@ h2{
 }
 
 
-
 .data-box span{
 
     color:white;
@@ -537,14 +495,9 @@ h2{
 }
 
 
-
-
-
-
 /* ========================= */
 /* BODY ARCHIVE              */
 /* ========================= */
-
 
 .archive-grid{
 
@@ -555,7 +508,6 @@ h2{
     gap:20px;
 
 }
-
 
 
 .archive-box{
@@ -577,7 +529,6 @@ h2{
 }
 
 
-
 .archive-box:hover{
 
     border-color:#00ffaa;
@@ -589,16 +540,9 @@ h2{
 }
 
 
-
-
-
-
-
-
 /* ========================= */
 /* SCAR MAP                  */
 /* ========================= */
-
 
 .body-map{
 
@@ -611,7 +555,6 @@ h2{
 }
 
 
-
 .body-silhouette{
 
     width:100%;
@@ -621,8 +564,6 @@ h2{
     opacity:.7;
 
 }
-
-
 
 
 .scar-point{
@@ -660,7 +601,6 @@ h2{
 }
 
 
-
 .scar-point:hover{
 
     background:#00ffaa;
@@ -672,7 +612,9 @@ h2{
 }
 
 
-
+/* ========================= */
+/* SCAR POSITIONS            */
+/* ========================= */
 
 .left-forearm{
 
@@ -681,7 +623,6 @@ h2{
     left:23%;
 
 }
-
 
 
 .right-forearm{
@@ -693,7 +634,6 @@ h2{
 }
 
 
-
 .chest{
 
     top:25%;
@@ -701,7 +641,6 @@ h2{
     left:50%;
 
 }
-
 
 
 .groin{
@@ -713,7 +652,6 @@ h2{
 }
 
 
-
 .left-thigh{
 
     top:65%;
@@ -721,7 +659,6 @@ h2{
     left:38%;
 
 }
-
 
 
 .right-thigh{
@@ -733,14 +670,9 @@ h2{
 }
 
 
-
-
-
-
 /* ========================= */
 /* SCAR RECORDS              */
 /* ========================= */
-
 
 .scar-record{
 
@@ -751,7 +683,6 @@ h2{
     border-top:1px solid #333;
 
 }
-
 
 
 .scar-card{
@@ -765,7 +696,6 @@ h2{
 }
 
 
-
 .file-image{
 
     background:#050505;
@@ -775,7 +705,6 @@ h2{
     padding:10px;
 
 }
-
 
 
 .file-image img{
@@ -789,7 +718,6 @@ h2{
 }
 
 
-
 .record-box{
 
     background:#050505;
@@ -801,13 +729,11 @@ h2{
 }
 
 
-
 .record-box p{
 
     color:#777;
 
 }
-
 
 
 .record-box span{
@@ -819,15 +745,9 @@ h2{
 }
 
 
-
-
-
-
-
 /* ========================= */
 /* IMAGE DATABASE             */
 /* ========================= */
-
 
 .image-database{
 
@@ -838,7 +758,6 @@ h2{
     gap:20px;
 
 }
-
 
 
 .image-entry{
@@ -852,13 +771,11 @@ h2{
 }
 
 
-
 .image-entry:hover{
 
     border-color:#00ffaa;
 
 }
-
 
 
 .image-entry img{
@@ -868,16 +785,9 @@ h2{
 }
 
 
-
-
-
-
-
-
 /* ========================= */
 /* BACK BUTTON               */
 /* ========================= */
-
 
 .back{
 
@@ -896,7 +806,6 @@ h2{
 }
 
 
-
 .back:hover{
 
     border-color:#00ffaa;
@@ -906,14 +815,9 @@ h2{
 }
 
 
-
-
-
-
 /* ========================= */
 /* FOOTER                    */
 /* ========================= */
-
 
 footer{
 
@@ -926,90 +830,85 @@ footer{
 }
 
 
-
-
-
-
-
 /* ========================= */
 /* MOBILE                    */
 /* ========================= */
 
-
 @media(max-width:800px){
 
 
-header h1{
+    header h1{
 
-    font-size:28px;
+        font-size:28px;
 
-    letter-spacing:5px;
+        letter-spacing:5px;
+
+    }
+
+
+    .terminal{
+
+        padding:25px;
+
+    }
+
+
+    /* TWO PROFILES BECOME ONE COLUMN */
+
+    .profiles{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .profile-card{
+
+        flex-direction:column;
+
+    }
+
+
+    .body-views{
+
+        flex-direction:column;
+
+    }
+
+
+    .data-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .archive-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .scar-card{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .image-database{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .body-map{
+
+        width:280px;
+
+    }
 
 }
-
-
-
-.terminal{
-
-    padding:25px;
-
-}
-
-
-
-.profile-card{
-
-    flex-direction:column;
-
-}
-
-
-
-.body-views{
-
-    flex-direction:column;
-
-}
-
-
-
-.data-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.archive-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.scar-card{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.image-database{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.body-map{
-
-    width:280px;
-
-}
-
-
-}
+```
