@@ -1,22 +1,23 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+/* =========================================
+   KAROLINA ARCHIVE
+   COMPLETE MAIN STYLESHEET
+   DARK GREEN CYBER TERMINAL
+========================================= */
 
-/* ==================================================
-   KAROLINA ARCHIVE // GLOBAL CONFIGURATION
-================================================== */
+/* ---------- GLOBAL ---------- */
 
 :root {
-    --green: #00ffaa;
-    --green-soft: #00ffaa55;
-    --green-dark: #07130d;
-    --background: #050806;
-    --panel: #090e0b;
-    --panel-light: #0d1711;
-    --border: #263a2e;
-    --text: #dddddd;
-    --muted: #758078;
-    --red: #ff4444;
-    --yellow: #d6b65b;
+    --bg: #070d09;
+    --panel: #0c1710;
+    --panel-light: #102017;
+    --green: #79bd8d;
+    --green-bright: #a6e0b3;
+    --green-dark: #315d3e;
+    --text: #d7e8dc;
+    --muted: #829889;
+    --border: rgba(100, 180, 120, 0.25);
+    --red: #e58c8c;
 }
 
 * {
@@ -30,64 +31,66 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    background:
-        radial-gradient(circle at 50% 30%, #142019, #050806 65%, #000);
+    background: var(--bg);
     color: var(--text);
-    font-family: 'Share Tech Mono', monospace;
+    font-family: "Courier New", monospace;
+    line-height: 1.6;
 }
 
 a {
-    color: inherit;
+    color: var(--green);
     text-decoration: none;
 }
 
 button,
 input,
-textarea,
-select {
+select,
+textarea {
     font-family: inherit;
 }
 
-button,
-a,
-input,
-textarea,
-select {
-    -webkit-tap-highlight-color: transparent;
+button {
+    cursor: pointer;
 }
 
+::selection {
+    background: var(--green-dark);
+    color: white;
+}
 
-/* ==================================================
-   GLOBAL SCREEN EFFECTS
-================================================== */
+/* ---------- BACKGROUND EFFECTS ---------- */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        linear-gradient(rgba(90, 160, 110, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(90, 160, 110, 0.025) 1px, transparent 1px);
+    background-size: 35px 35px;
+}
 
 .scanline {
     position: fixed;
     inset: 0;
-
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.08;
     background: repeating-linear-gradient(
         to bottom,
-        rgba(255,255,255,.025),
-        rgba(255,255,255,.025) 1px,
-        transparent 2px,
-        transparent 4px
+        transparent 0px,
+        transparent 3px,
+        rgba(120, 200, 140, 0.15) 4px
     );
-
-    pointer-events: none;
-    z-index: 100;
 }
 
 .background-grid {
     position: fixed;
     inset: 0;
-
-    background-image:
-        linear-gradient(#00ffaa18 1px, transparent 1px),
-        linear-gradient(90deg, #00ffaa18 1px, transparent 1px);
-
-    background-size: 50px 50px;
-    opacity: .12;
     pointer-events: none;
+    z-index: -1;
 }
 
 .ambient {
@@ -95,1509 +98,582 @@ select {
     width: 350px;
     height: 350px;
     border-radius: 50%;
-    filter: blur(120px);
-    opacity: .09;
+    background: rgba(35, 100, 55, 0.08);
+    filter: blur(100px);
     pointer-events: none;
 }
 
-.ambient-one {
-    background: var(--green);
-    top: 20%;
-    left: -180px;
-}
-
-.ambient-two {
-    background: #00aa77;
-    bottom: 5%;
-    right: -180px;
-}
-
-
-/* ==================================================
-   ANIMATIONS
-================================================== */
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .35; }
-}
-
-@keyframes glow {
-    0%, 100% {
-        box-shadow: 0 0 15px #00ffaa10;
-    }
-    50% {
-        box-shadow: 0 0 30px #00ffaa40;
-    }
-}
-
-@keyframes errorFlash {
-    0% {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.blink {
-    animation: blink 2s infinite;
-}
-
-.online {
-    color: var(--green) !important;
-    text-shadow: 0 0 8px var(--green);
-}
-
-
-/* ==================================================
-   GLOBAL HEADER
-================================================== */
+/* ---------- GENERAL HEADERS ---------- */
 
 header {
-    text-align: center;
-    padding: 50px 20px;
+    border-bottom: 1px solid var(--border);
 }
 
 header h1 {
-    color: white;
-    font-size: 45px;
-    letter-spacing: 10px;
-    margin: 0;
-    text-shadow: 0 0 15px #ffffff30;
-}
-
-header p {
-    color: var(--muted);
-    letter-spacing: 5px;
-}
-
-.system-label {
-    color: var(--green);
-    font-size: 11px;
+    color: var(--green-bright);
     letter-spacing: 4px;
-    margin-bottom: 22px;
 }
 
-.system-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    background: var(--green);
-    border-radius: 50%;
-    margin-right: 8px;
-    box-shadow: 0 0 12px var(--green);
+.subtitle {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 3px;
 }
 
-
-/* ==================================================
-   LOGIN PAGE
-================================================== */
+/* ---------- LOGIN PAGE ---------- */
 
 .login-page {
-    min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    position: relative;
-
-    background:
-        radial-gradient(
-            ellipse at 50% 45%,
-            #101b17 0%,
-            #080b09 45%,
-            #000 100%
-        );
-}
-
-.login-page .login-header {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 55px 20px 25px;
-}
-
-.login-page .login-header h1 {
-    font-size: clamp(28px, 5vw, 48px);
-    letter-spacing: 9px;
-    color: white;
-    margin: 0;
-    text-shadow: 0 0 25px #00ffaa30;
-}
-
-.login-page .subtitle {
-    color: #64746d;
-    font-size: 12px;
-    letter-spacing: 4px;
-    margin-top: 15px;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
 }
 
 .login-container {
-    position: relative;
-    z-index: 2;
     width: 100%;
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 0 20px;
+    max-width: 440px;
+    padding: 40px;
+    background: rgba(10, 23, 15, 0.95);
+    border: 1px solid var(--border);
+    box-shadow: 0 0 45px rgba(40, 120, 65, 0.08);
 }
 
-
-/* ==================================================
-   LOGIN BOX
-================================================== */
-
-.login-page .login-box {
-    width: 100%;
-    padding: 30px;
-
-    background: linear-gradient(
-        145deg,
-        rgba(13,23,18,.97),
-        rgba(3,6,4,.98)
-    );
-
-    border: 1px solid #234a38;
-
-    box-shadow:
-        0 0 40px #00ffaa0b,
-        inset 0 0 35px #00ffaa05;
-
-    position: relative;
+.login-container h1 {
+    text-align: center;
+    color: var(--green-bright);
+    letter-spacing: 4px;
 }
 
-.login-page .login-box::before,
-.login-page .login-box::after {
-    content: "";
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    border-color: var(--green);
-    border-style: solid;
-    pointer-events: none;
-}
-
-.login-page .login-box::before {
-    top: -1px;
-    left: -1px;
-    border-width: 2px 0 0 2px;
-}
-
-.login-page .login-box::after {
-    bottom: -1px;
-    right: -1px;
-    border-width: 0 2px 2px 0;
-}
-
-
-/* ==================================================
-   LOGIN PANEL
-================================================== */
-
-.panel-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border);
-
+.login-container p {
     color: var(--muted);
-    font-size: 10px;
+    text-align: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-page label {
+    color: var(--green);
+    font-size: 11px;
     letter-spacing: 2px;
 }
 
-.access-icon {
-    display: flex;
-    justify-content: center;
-    margin: 35px 0 20px;
-}
-
-.icon-circle {
-    width: 75px;
-    height: 75px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 1px solid #00ffaa60;
-    border-radius: 50%;
-
-    box-shadow: 0 0 25px #00ffaa15;
-
-    color: var(--green);
-    font-size: 38px;
-
-    animation: glow 3s infinite ease-in-out;
-}
-
-.login-title {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.login-title h2 {
-    color: white;
-    font-size: 19px;
-    letter-spacing: 3px;
-    margin: 0 0 12px;
-}
-
-.login-title p {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.8;
-}
-
-
-/* ==================================================
-   LOGIN SYSTEM STATUS
-================================================== */
-
-.system-status {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-
-    padding: 15px 0;
-
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-
-    color: var(--muted);
-    font-size: 10px;
-}
-
-.system-status div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-
-/* ==================================================
-   INPUTS
-================================================== */
-
-.input-section {
-    margin-top: 30px;
-}
-
-.input-section label {
-    display: block;
-
-    color: #a4b2aa;
-    font-size: 11px;
-    letter-spacing: 3px;
-
-    margin-bottom: 12px;
-}
-
-.input-wrapper {
-    display: flex;
-    align-items: center;
-
-    background: #020604;
-    border: 1px solid #34473c;
-
-    padding: 0 15px;
-    transition: .3s;
-}
-
-.input-wrapper:focus-within {
-    border-color: var(--green);
-    box-shadow: 0 0 15px #00ffaa20;
-}
-
-.input-icon {
-    color: var(--green);
-    margin-right: 12px;
-}
-
-.input-wrapper input {
+.login-page input {
     width: 100%;
-    min-width: 0;
-
-    padding: 17px 0;
-
-    border: none;
+    padding: 14px;
+    color: var(--text);
+    background: #08120b;
+    border: 1px solid var(--border);
     outline: none;
-
-    background: transparent;
-
-    color: var(--green);
-
-    font-size: 14px;
-    letter-spacing: 3px;
 }
 
-.input-wrapper input::placeholder {
-    color: #46554b;
-    font-size: 11px;
+.login-page input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 12px rgba(100, 190, 120, 0.12);
 }
-
-
-/* ==================================================
-   BUTTONS
-================================================== */
 
 .authenticate-button {
-    width: 100%;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-top: 22px;
-    padding: 17px 20px;
-
-    background: #00ffaa0b;
-    border: 1px solid var(--green);
-
-    color: var(--green);
-
-    font-size: 13px;
-    letter-spacing: 4px;
-
-    cursor: pointer;
-    transition: .3s;
+    padding: 14px;
+    margin-top: 12px;
+    color: #07100a;
+    background: var(--green);
+    border: none;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transition: 0.2s;
 }
 
 .authenticate-button:hover {
-    background: var(--green);
-    color: #00130b;
-    box-shadow: 0 0 25px #00ffaa45;
+    background: var(--green-bright);
+    box-shadow: 0 0 20px rgba(100, 190, 120, 0.2);
 }
 
-.authenticate-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-.authenticate-button:disabled:hover {
-    background: #00ffaa0b;
-    color: var(--green);
-    box-shadow: none;
-}
-
-.button-arrow {
-    font-size: 20px;
-    transition: .3s;
-}
-
-.authenticate-button:hover .button-arrow {
-    transform: translateX(5px);
-}
-
-
-/* ==================================================
-   LOGIN MESSAGES
-================================================== */
-
-.login-page .login-message {
+#message {
     min-height: 20px;
-    margin-top: 18px;
-
-    text-align: center;
-
+    color: var(--red);
     font-size: 12px;
-    letter-spacing: 2px;
-
-    color: var(--green);
-}
-
-.login-error {
-    color: var(--red);
-    text-align: center;
-    animation: errorFlash .4s ease;
-}
-
-.login-error p {
-    color: var(--red);
-    letter-spacing: 2px;
-    font-size: 11px;
-}
-
-
-/* ==================================================
-   LOADING BAR
-================================================== */
-
-.loading {
-    margin-top: 15px;
     text-align: center;
 }
 
-.loading p {
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--green);
-}
-
-.bar {
-    width: 100%;
-    height: 5px;
-    margin-top: 15px;
-    background: #17251d;
-    overflow: hidden;
-}
-
-.progress {
-    width: 0%;
-    height: 100%;
-    background: var(--green);
-    box-shadow: 0 0 15px var(--green);
-    transition: width .1s linear;
-}
-
-#progressText {
-    color: var(--muted);
-    font-size: 10px;
-}
-
-
-/* ==================================================
-   LOGIN FOOTER ELEMENTS
-================================================== */
-
-.security-note {
-    text-align: center;
-    margin-top: 20px;
-
-    color: #66756c;
-    font-size: 10px;
-    letter-spacing: 2px;
-}
-
-.security-symbol {
-    color: var(--green);
-    margin-right: 7px;
-}
-
-.panel-bottom {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-
-    margin-top: 25px;
-    padding-top: 15px;
-
-    border-top: 1px solid var(--border);
-
-    color: #526158;
-    font-size: 9px;
-    letter-spacing: 1px;
-}
-
-.terminal-info {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px 25px;
-    margin-top: 25px;
-
-    color: #53645a;
-    font-size: 9px;
-    letter-spacing: 1px;
-}
-
-.login-page .login-footer {
-    position: relative;
-    z-index: 2;
-
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-
-    margin-top: auto;
-    padding: 30px 15px;
-
-    color: #46534b;
-    font-size: 10px;
-    letter-spacing: 2px;
-}
-
-
-/* ==================================================
-   ARCHIVE PAGE HEADER
-================================================== */
+/* ---------- ARCHIVE MAIN PAGE ---------- */
 
 .archive-header {
+    padding: 35px 5%;
     text-align: center;
-    padding: 45px 20px 30px;
 }
 
 .archive-header h1 {
-    font-size: clamp(30px, 5vw, 48px);
-    letter-spacing: 10px;
+    font-size: clamp(25px, 5vw, 42px);
 }
 
-.archive-header p {
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 4px;
+.archive-main {
+    width: min(1150px, 90%);
+    margin: 45px auto;
 }
 
-
-/* ==================================================
-   MAIN TERMINAL
-================================================== */
-
-.terminal {
-    width: 90%;
-    max-width: 1200px;
-
-    margin: 30px auto;
-    padding: 40px;
-
-    background: rgba(0,0,0,.85);
-    border: 1px solid #333;
-
-    box-shadow: 0 0 50px rgba(255,255,255,.05);
-}
-
-
-/* ==================================================
-   DASHBOARD TOP BAR
-================================================== */
-
-.dashboard-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    flex-wrap: wrap;
-
-    padding: 15px 0;
-    margin-bottom: 35px;
-
-    border-bottom: 1px solid var(--border);
-
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 2px;
-}
-
-
-/* ==================================================
-   PROFILE SECTION
-================================================== */
-
-.profile-columns {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 30px;
-    width: 100%;
-}
-
-.profile-column {
-    min-width: 0;
+.profile-card,
+.overview-card,
+.module-card,
+.database-card {
+    background: rgba(10, 25, 16, 0.85);
+    border: 1px solid var(--border);
+    padding: 25px;
 }
 
 .profile-card {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 30px;
-
-    width: 100%;
-    padding: 25px;
-
-    background: #050505;
-    border: 1px solid #333;
-}
-
-.profile-card .information {
-    width: 100%;
-}
-
-.profile-card .information h2 {
-    margin-top: 0;
-}
-
-.profile-card .information span {
-    color: white;
-}
-
-
-/* ==================================================
-   PROFILE PHOTOGRAPH
-================================================== */
-
-.photo-box {
-    padding: 10px;
-    background: #050505;
-    border: 1px solid #333;
-    flex-shrink: 0;
-}
-
-.photo-box img {
-    width: 180px;
-    height: 240px;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(70%);
-    transition: .4s;
-}
-
-.photo-box img:hover {
-    filter: grayscale(0%);
-}
-
-
-/* ==================================================
-   GENERAL HEADINGS
-================================================== */
-
-h2 {
-    margin-top: 40px;
-    color: white;
-    letter-spacing: 5px;
-    font-size: 19px;
-}
-
-
-/* ==================================================
-   SYSTEM OVERVIEW
-================================================== */
-
-.overview-section,
-.files-section,
-.quick-status {
-    margin-top: 55px;
-}
-
-.section-description {
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .overview-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
+    margin-bottom: 35px;
 }
 
-.overview-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    padding: 22px;
-
-    background: #050b07;
-    border: 1px solid var(--border);
-
-    transition: .3s;
-}
-
-.overview-card:hover {
-    border-color: var(--green);
-    box-shadow: 0 0 15px #00ffaa15;
-}
-
-.overview-number {
-    font-size: 30px;
-    color: white;
-}
-
-.overview-label {
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 2px;
-}
-
-
-/* ==================================================
-   ARCHIVE FILE MENU
-================================================== */
-
-.menu {
-    display: flex;
-    flex-direction: column;
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-.archive-file {
-    display: block;
-
-    text-decoration: none;
-    color: #ddd;
-
-    padding: 25px;
-
-    background: linear-gradient(
-        135deg,
-        rgba(0,255,170,.05),
-        rgba(0,0,0,.8)
-    );
-
-    border: 1px solid #333;
-    transition: .35s;
+.module-card {
+    transition: 0.25s;
 }
 
-.archive-file:hover {
-    transform: translateX(8px);
+.module-card:hover {
     border-color: var(--green);
-
-    box-shadow: 0 0 20px rgba(0,255,170,.25);
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(80, 170, 100, 0.08);
 }
 
-.archive-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+.module-card h3 {
+    color: var(--green-bright);
+    letter-spacing: 2px;
 }
 
-.archive-id {
-    color: var(--green);
-}
-
-.archive-status {
-    color: var(--green);
-    border: 1px solid var(--green);
-    padding: 5px 12px;
-    font-size: 12px;
-}
-
-.archive-file h3 {
-    color: white;
-    letter-spacing: 4px;
-    font-size: 26px;
-}
-
-.archive-file p {
-    color: #888;
-    line-height: 1.6;
-}
-
-.archive-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.archive-size {
-    color: #666;
-}
-
-.archive-open {
-    color: var(--green);
-    border: 1px solid var(--green);
-    padding: 8px 15px;
-}
-
-
-/* ==================================================
-   FEATURED MODULE
-================================================== */
-
-.featured-file {
-    border-color: #00ffaa75;
-
-    background: linear-gradient(
-        135deg,
-        #00ffaa12,
-        #050806
-    );
-}
-
-.featured-file:hover {
-    box-shadow: 0 0 25px #00ffaa30;
-}
-
-.locked-status {
-    color: var(--yellow);
-    border-color: var(--yellow);
-}
-
-
-/* ==================================================
-   DATABASE CONNECTIONS
-================================================== */
-
-.quick-status {
-    padding: 25px;
-
-    background: #050806;
-    border: 1px solid var(--border);
-}
-
-.quick-status h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-}
-
-.connection-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-
-    padding: 14px 0;
-
-    border-bottom: 1px solid #1b2920;
-
+.module-card p {
     color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 1px;
+    font-size: 13px;
 }
 
-.connection-row:last-child {
-    border-bottom: none;
-}
-
-
-/* ==================================================
-   PHYSICAL REPORT
-================================================== */
-
-.body-views {
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    margin: 30px 0;
-}
-
-.view-box {
-    text-align: center;
-}
-
-.view-box h3 {
-    color: #777;
-}
-
-.photo-frame {
-    padding: 10px;
-    background: #050505;
-    border: 1px solid #444;
-}
-
-.photo-frame img {
-    width: 220px;
-    height: 320px;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(60%);
-    transition: .4s;
-}
-
-.photo-frame img:hover {
-    filter: grayscale(0%);
-}
-
-.data-grid {
+.database-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
 }
 
-.data-grid div {
-    background: #050505;
-    border: 1px solid #333;
-    padding: 15px;
-    color: #777;
+/* ---------- PHYSICAL REPORT ---------- */
+
+.physical-main {
+    width: min(1000px, 90%);
+    margin: 50px auto;
 }
 
-.data-grid span {
-    display: block;
-    color: white;
-    margin-top: 8px;
+.physical-card {
+    padding: 25px;
+    margin-bottom: 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
 }
 
-.data-box {
-    background: #050505;
-    border-left: 2px solid #555;
-    padding: 20px;
+.physical-card h2,
+.physical-card h3 {
+    color: var(--green-bright);
 }
 
-.data-box span {
-    color: white;
+/* =========================================
+   INVENTORY MODULE
+========================================= */
+
+body.protected-page {
+    visibility: hidden;
 }
 
-
-/* ==================================================
-   PHYSICAL BODY MAP
-================================================== */
-
-.body-map {
-    position: relative;
-    width: 350px;
-    margin: 40px auto;
-}
-
-.body-silhouette {
-    width: 100%;
-    filter: grayscale(100%);
-    opacity: .7;
-}
-
-.scar-point {
-    position: absolute;
-
-    width: 35px;
-    height: 35px;
-
-    border-radius: 50%;
-    background: #000;
-
-    border: 1px solid var(--green);
-    color: var(--green);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-    font-size: 20px;
-
-    box-shadow: 0 0 15px var(--green);
-    transition: .3s;
-}
-
-.scar-point:hover {
-    background: var(--green);
-    color: #000;
-    transform: scale(1.3);
-}
-
-.left-forearm {
-    top: 34%;
-    left: 23%;
-}
-
-.right-forearm {
-    top: 34%;
-    left: 67%;
-}
-
-.chest {
-    top: 25%;
-    left: 50%;
-}
-
-.groin {
-    top: 52%;
-    left: 50%;
-}
-
-.left-thigh {
-    top: 65%;
-    left: 38%;
-}
-
-.right-thigh {
-    top: 65%;
-    left: 57%;
-}
-
-
-/* ==================================================
-   SCAR RECORDS
-================================================== */
-
-.scar-record {
-    margin-top: 60px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
-}
-
-.scar-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-}
-
-.file-image {
-    background: #050505;
-    border: 1px solid #444;
-    padding: 10px;
-}
-
-.file-image img {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-}
-
-.record-box {
-    background: #050505;
-    border: 1px solid #333;
-    padding: 20px;
-}
-
-.record-box p {
-    color: #777;
-}
-
-.record-box span {
-    float: right;
-    color: white;
-}
-
-
-/* ==================================================
-   TOYS & TOOLS // INVENTORY MODULE
-================================================== */
-
-.inventory-header {
+.inventory-topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-
-    padding-bottom: 20px;
+    gap: 20px;
+    padding: 25px 5%;
     border-bottom: 1px solid var(--border);
 }
 
-.inventory-header h2 {
+.inventory-topbar h1 {
     margin: 0;
+    letter-spacing: 3px;
+    color: var(--green-bright);
+}
+
+.inventory-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.inventory-back,
+.inventory-logout {
+    color: var(--green-bright);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: rgba(20, 50, 35, 0.35);
+    padding: 10px 15px;
+    cursor: pointer;
+    font: inherit;
+}
+
+.inventory-main {
+    width: min(1100px, 90%);
+    margin: 50px auto;
+}
+
+.inventory-heading {
+    margin-bottom: 35px;
+}
+
+.inventory-heading h2 {
+    font-size: clamp(30px, 5vw, 48px);
+    letter-spacing: 5px;
+    margin: 10px 0;
+    color: var(--green-bright);
+}
+
+.system-label {
+    color: var(--green);
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.connection-status {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    color: var(--green-bright);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.connection-status.error,
+.inventory-message.error {
+    color: var(--red);
 }
 
 .inventory-summary {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin: 25px 0;
+    margin-bottom: 35px;
+}
+
+.inventory-stat,
+.inventory-panel,
+.inventory-card {
+    background: rgba(10, 25, 18, 0.9);
+    border: 1px solid var(--border);
 }
 
 .inventory-stat {
     padding: 20px;
-    background: #050b07;
-    border: 1px solid var(--border);
+}
+
+.inventory-stat span {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 2px;
 }
 
 .inventory-stat strong {
     display: block;
-    color: var(--green);
-    font-size: 25px;
-    margin-bottom: 8px;
+    color: var(--green-bright);
+    font-size: 30px;
+    margin-top: 10px;
 }
 
-.inventory-stat span {
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 1px;
+.inventory-panel {
+    padding: 25px;
+    margin-bottom: 45px;
 }
 
-.inventory-controls {
+.inventory-panel h3,
+.inventory-list-heading h3 {
+    letter-spacing: 2px;
+    color: var(--green-bright);
+}
+
+.inventory-form {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin: 25px 0;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.inventory-controls input,
-.inventory-controls select,
-.inventory-form input,
-.inventory-form textarea,
-.inventory-form select {
-    background: #020604;
-    border: 1px solid #34473c;
+.inventory-form label {
     color: var(--green);
-    padding: 13px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+.inventory-form input,
+.inventory-form select,
+.inventory-form textarea,
+.inventory-controls input,
+.inventory-controls select {
+    width: 100%;
+    box-sizing: border-box;
+    background: #101d16;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+    font: inherit;
+}
+
+.inventory-form input:focus,
+.inventory-form select:focus,
+.inventory-form textarea:focus,
+.inventory-controls input:focus,
+.inventory-controls select:focus {
     outline: none;
+    border-color: var(--green);
+}
+
+.inventory-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.inventory-form-grid > div {
+    min-width: 0;
+}
+
+.inventory-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.inventory-form-actions button,
+.inventory-action button {
+    background: rgba(45, 105, 65, 0.25);
+    border: 1px solid rgba(100, 190, 130, 0.4);
+    color: var(--green-bright);
+    padding: 11px 16px;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.inventory-form-actions button:hover,
+.inventory-action button:hover,
+.inventory-back:hover,
+.inventory-logout:hover {
+    background: rgba(70, 150, 90, 0.3);
+}
+
+.inventory-form-actions button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.inventory-help {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.inventory-message {
+    min-height: 18px;
+    color: var(--green-bright);
     font-size: 12px;
 }
 
-.inventory-controls input:focus,
-.inventory-controls select:focus,
-.inventory-form input:focus,
-.inventory-form textarea:focus,
-.inventory-form select:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 12px #00ffaa20;
+.current-image-preview {
+    margin-top: 10px;
 }
+
+.inventory-preview-image {
+    max-width: 180px;
+    max-height: 150px;
+    object-fit: contain;
+    border: 1px solid var(--border);
+}
+
+/* ---------- INVENTORY FILTERS ---------- */
+
+.inventory-controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+/* ---------- INVENTORY CARDS ---------- */
 
 .inventory-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
 .inventory-card {
-    background: #050806;
-    border: 1px solid var(--border);
     overflow: hidden;
-    transition: .3s;
+    min-width: 0;
 }
 
-.inventory-card:hover {
-    border-color: var(--green);
-    transform: translateY(-4px);
-    box-shadow: 0 0 20px #00ffaa20;
-}
+/* IMPORTANT:
+   Entire image visible, no cropping. */
 
 .inventory-image {
-    width: 100%;
-    height: 190px;
-    object-fit: cover;
     display: block;
-    background: #0a100c;
-    border-bottom: 1px solid var(--border);
+    width: 100%;
+    height: 260px;
+    object-fit: contain;
+    object-position: center;
+    background: #080f0b;
+    padding: 8px;
+    box-sizing: border-box;
 }
 
 .inventory-content {
-    padding: 18px;
-}
-
-.inventory-content h3 {
-    color: white;
-    font-size: 16px;
-    letter-spacing: 2px;
-}
-
-.inventory-content p {
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.7;
+    padding: 20px;
 }
 
 .inventory-category {
     color: var(--green);
     font-size: 10px;
     letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.inventory-item-name {
+    color: var(--text);
+    margin: 8px 0 12px;
+    overflow-wrap: anywhere;
 }
 
 .inventory-status {
     display: inline-block;
-    padding: 6px 10px;
-    border: 1px solid var(--green);
-    color: var(--green);
+    color: var(--green-bright);
+    border: 1px solid var(--border);
+    padding: 5px 9px;
     font-size: 10px;
     letter-spacing: 1px;
 }
 
-.inventory-status.in-use {
-    color: var(--yellow);
-    border-color: var(--yellow);
-}
-
-.inventory-status.unavailable {
-    color: var(--red);
-    border-color: var(--red);
-}
-
-.inventory-status.storage {
-    color: #8bb8ff;
-    border-color: #8bb8ff;
-}
-
-.inventory-details {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding-top: 12px;
-    margin-top: 12px;
-    border-top: 1px solid #1b2920;
-    color: var(--muted);
-    font-size: 10px;
-}
-
-
-/* ==================================================
-   INVENTORY FORM
-================================================== */
-
-.inventory-form {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 15px;
-    padding: 25px;
-    background: #050806;
-    border: 1px solid var(--border);
-}
-
-.inventory-form label {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.inventory-form textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.inventory-form .full-width {
-    grid-column: 1 / -1;
+.inventory-detail,
+.inventory-description {
+    color: #a2b5a8;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
 }
 
 .inventory-action {
-    padding: 12px 18px;
-    background: #00ffaa0b;
-    border: 1px solid var(--green);
-    color: var(--green);
-    cursor: pointer;
-    transition: .3s;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
 }
 
-.inventory-action:hover {
-    background: var(--green);
-    color: #00130b;
+.inventory-action .delete-action {
+    color: var(--red);
+    border-color: rgba(210, 90, 90, 0.4);
 }
 
-
-/* ==================================================
-   IMAGE DATABASE
-================================================== */
-
-.image-database {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.image-entry {
-    background: #050505;
-    border: 1px solid #333;
-    padding: 10px;
-    transition: .3s;
-}
-
-.image-entry:hover {
-    border-color: var(--green);
-}
-
-.image-entry img {
-    width: 100%;
-    display: block;
-}
-
-
-/* ==================================================
-   GENERAL ARCHIVE BOXES
-================================================== */
-
-.archive-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-.archive-box {
-    display: block;
-    padding: 25px;
-
-    text-decoration: none;
-    color: #ddd;
-
-    background: #050505;
-    border: 1px solid #333;
-
-    transition: .3s;
-}
-
-.archive-box:hover {
-    border-color: var(--green);
-    box-shadow: 0 0 20px rgba(0,255,170,.25);
-}
-
-
-/* ==================================================
-   BACK BUTTON
-================================================== */
-
-.back {
-    display: inline-block;
-
-    margin-top: 40px;
-    padding: 15px 25px;
-
-    border: 1px solid #444;
-
-    color: white;
-    text-decoration: none;
-
-    transition: .3s;
-}
-
-.back:hover {
-    border-color: var(--green);
-    color: var(--green);
-    box-shadow: 0 0 15px #00ffaa20;
-}
-
-
-/* ==================================================
-   FOOTER
-================================================== */
-
-footer {
-    text-align: center;
-    padding: 40px;
-    color: #555;
-    font-size: 11px;
+.inventory-empty {
+    color: var(--muted);
+    padding: 25px 0;
     letter-spacing: 2px;
 }
 
-footer p {
-    color: #46534b;
-    font-size: 9px;
+.inventory-footer {
+    padding: 30px;
+    text-align: center;
+    color: #607a68;
+    font-size: 10px;
+    letter-spacing: 2px;
 }
 
-
-/* ==================================================
-   ACCESSIBILITY
-================================================== */
+/* ---------- GENERAL BUTTONS ---------- */
 
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-    outline: 2px solid var(--green);
-    outline-offset: 4px;
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--green-bright);
+    outline-offset: 3px;
 }
 
+/* ---------- RESPONSIVE ---------- */
 
-/* ==================================================
-   TABLET
-================================================== */
+@media (max-width: 700px) {
 
-@media (max-width: 900px) {
-
-    .terminal {
-        width: 94%;
-        padding: 25px;
-    }
-
-    .profile-card {
+    .inventory-topbar {
+        align-items: flex-start;
         flex-direction: column;
-        align-items: center;
-    }
-
-    .inventory-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .inventory-summary {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .image-database {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width: 600px) {
-
-    header h1 {
-        font-size: 28px;
-        letter-spacing: 5px;
-    }
-
-    header p {
-        letter-spacing: 2px;
-    }
-
-    .login-page .login-header h1 {
-        font-size: 25px;
-        letter-spacing: 3px;
-    }
-
-    .login-page .login-box {
-        padding: 20px 15px;
-    }
-
-    .panel-top,
-    .system-status,
-    .panel-bottom {
-        font-size: 8px;
-    }
-
-    .terminal {
-        width: 94%;
-        padding: 18px;
-    }
-
-    .profile-columns {
+    .inventory-grid {
         grid-template-columns: 1fr;
     }
 
-    .profile-card {
-        flex-direction: column;
-    }
-
-    .body-views {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .data-grid,
-    .archive-grid {
+    .inventory-controls {
         grid-template-columns: 1fr;
     }
 
-    .scar-card {
+    .inventory-form-grid {
         grid-template-columns: 1fr;
     }
 
-    .image-database {
+    .inventory-main {
+        width: 92%;
+    }
+
+    .module-grid,
+    .database-grid {
         grid-template-columns: 1fr;
-    }
-
-    .body-map {
-        width: 280px;
-    }
-
-    .archive-file {
-        padding: 20px;
-    }
-
-    .archive-file h3 {
-        font-size: 20px;
-        letter-spacing: 2px;
-    }
-
-    .archive-bottom {
-        flex-direction: column;
-        align-items: flex-start;
     }
 
     .overview-grid {
         grid-template-columns: 1fr;
     }
 
-    .connection-row {
-        font-size: 9px;
+    .login-container {
+        padding: 25px;
     }
+}
 
-    .inventory-grid {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: 420px) {
 
     .inventory-summary {
-        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 
-    .inventory-form {
-        grid-template-columns: 1fr;
+    .inventory-stat {
+        padding: 14px;
     }
 
-    .inventory-form .full-width {
-        grid-column: auto;
+    .inventory-stat strong {
+        font-size: 24px;
     }
 
-    .dashboard-top {
-        font-size: 9px;
+    .inventory-heading h2 {
+        letter-spacing: 2px;
     }
 
-    .login-footer {
-        font-size: 8px;
+    .inventory-panel {
+        padding: 16px;
     }
-
 }
