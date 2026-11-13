@@ -1,55 +1,209 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+    <meta name="theme-color" content="#050806">
+    <meta name="description" content="KAROLINA ARCHIVE - Personal Database">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAROLINA ARCHIVE // ACCESS TERMINAL</title>
 
-<title>KAROLINA ARCHIVE</title>
-
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
-<body>
+<body class="login-page">
 
-<div class="scanline"></div>
+    <!-- SCREEN EFFECTS -->
+    <div class="scanline"></div>
+    <div class="background-grid"></div>
 
-<header>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
 
-<h1>KAROLINA ARCHIVE</h1>
 
-<p class="subtitle">
-PERSONAL DATABASE // RESTRICTED ACCESS
-</p>
+    <!-- HEADER -->
+    <header class="login-header">
 
-</header>
+        <div class="system-label">
+            <span class="system-dot blink"></span>
+            SECURE DATABASE SYSTEM
+        </div>
 
-<section class="login-box">
+        <h1>KAROLINA ARCHIVE</h1>
 
-<p class="status">
-SYSTEM STATUS:
-<span class="blink">ONLINE</span>
-</p>
+        <p class="subtitle">
+            PERSONAL DATABASE // RESTRICTED ACCESS
+        </p>
 
-<input
-type="password"
-id="password"
-placeholder="ENTER ACCESS CODE">
+    </header>
 
-<br>
 
-<button onclick="login()">
-AUTHENTICATE
-</button>
+    <!-- LOGIN CONTAINER -->
+    <main class="login-container">
 
-<div id="message"></div>
+        <section class="login-box">
 
-</section>
+            <!-- PANEL HEADER -->
+            <div class="panel-top">
 
-<script src="script.js"></script>
+                <span>AUTHENTICATION TERMINAL</span>
+
+                <span class="online">
+                    [ SECURE ]
+                </span>
+
+            </div>
+
+
+            <!-- ICON -->
+            <div class="access-icon">
+
+                <div class="icon-circle">
+                    &#9678;
+                </div>
+
+            </div>
+
+
+            <!-- TITLE -->
+            <div class="login-title">
+
+                <h2>IDENTITY VERIFICATION</h2>
+
+                <p>
+                    Authentication required to access
+                    the personal archive.
+                </p>
+
+            </div>
+
+
+            <!-- SYSTEM STATUS -->
+            <div class="system-status">
+
+                <div>
+                    <span>SYSTEM STATUS</span>
+                    <span class="online blink">ONLINE</span>
+                </div>
+
+                <div>
+                    <span>DATABASE</span>
+                    <span class="online">ACTIVE</span>
+                </div>
+
+                <div>
+                    <span>SECURITY</span>
+                    <span class="online">ENABLED</span>
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD FORM -->
+            <div class="input-section">
+
+                <label for="password">
+                    ACCESS CODE
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        &#128274;
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="ENTER ACCESS CODE"
+                        autocomplete="current-password"
+                        onkeydown="if(event.key === 'Enter') login()"
+                    >
+
+                </div>
+
+
+                <button
+                    class="authenticate-button"
+                    onclick="login()"
+                    type="button"
+                >
+
+                    <span>AUTHENTICATE</span>
+
+                    <span class="button-arrow">
+                        &#8594;
+                    </span>
+
+                </button>
+
+
+                <!-- LOGIN MESSAGE -->
+                <div
+                    id="message"
+                    class="login-message"
+                    aria-live="polite"
+                ></div>
+
+            </div>
+
+
+            <!-- SECURITY NOTE -->
+            <div class="security-note">
+
+                <span class="security-symbol">
+                    &#9670;
+                </span>
+
+                AUTHORIZED ACCESS ONLY
+
+            </div>
+
+
+            <!-- PANEL FOOTER -->
+            <div class="panel-bottom">
+
+                <span>SESSION: PRIVATE</span>
+
+                <span>ENCRYPTION: ACTIVE</span>
+
+            </div>
+
+        </section>
+
+
+        <!-- TERMINAL INFORMATION -->
+        <div class="terminal-info">
+
+            <span>SYS.VER 2.026</span>
+
+            <span>ARCHIVE NODE: KAR-01</span>
+
+            <span class="online">CONNECTION: STABLE</span>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="login-footer">
+
+        <span>KAROLINA ARCHIVE</span>
+
+        <span>PERSONAL DIGITAL RECORDS</span>
+
+        <span>© 2026</span>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
 
 </body>
 
