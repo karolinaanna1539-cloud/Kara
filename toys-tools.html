@@ -5,240 +5,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#050806">
 
-    <title>KAROLINA // TOYS & TOOLS</title>
+    <title>KAROLINA ARCHIVE // TOYS & TOOLS</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="protected-page">
 
-<div class="scanline"></div>
+    <div class="scanline"></div>
 
-<header class="archive-header">
+    <header class="inventory-topbar">
+        <div>
+            <h1>KAROLINA ARCHIVE</h1>
+            <p class="subtitle">PERSONAL DATABASE // INVENTORY MODULE</p>
+        </div>
 
-    <div class="system-label">
-        <span class="system-dot blink"></span>
-        OWNER ACCESS // INVENTORY SYSTEM
-    </div>
+        <div class="inventory-top-actions">
+            <a href="archive.html" class="inventory-back">← ARCHIVE</a>
+            <button id="logoutButton" class="inventory-logout">
+                LOG OUT
+            </button>
+        </div>
+    </header>
 
-    <h1>TOYS &amp; TOOLS</h1>
+    <main class="inventory-main">
 
-    <p class="subtitle">
-        PERSONAL EQUIPMENT // INVENTORY DATABASE
-    </p>
+        <section class="inventory-heading">
+            <p class="system-label">DATABASE MODULE // 02</p>
+            <h2>TOYS & TOOLS</h2>
+            <p>
+                Personal inventory management system.
+                Secure storage and real-time synchronization.
+            </p>
+            <div id="connectionStatus" class="connection-status">
+                CONNECTING TO DATABASE...
+            </div>
+        </section>
 
-</header>
-
-<main class="terminal">
-
-    <!-- TOP BAR -->
-
-    <div class="dashboard-top">
-        <span>INVENTORY MANAGEMENT SYSTEM</span>
-        <span class="online">● DATABASE ONLINE</span>
-    </div>
-
-
-    <!-- INVENTORY SUMMARY -->
-
-    <section>
-
-        <h2>INVENTORY OVERVIEW</h2>
-
-        <div class="inventory-summary">
+        <section class="inventory-summary">
 
             <div class="inventory-stat">
-                <strong id="totalCount">0</strong>
                 <span>TOTAL ITEMS</span>
+                <strong id="totalCount">0</strong>
             </div>
 
             <div class="inventory-stat">
-                <strong id="availableCount">0</strong>
                 <span>AVAILABLE</span>
+                <strong id="availableCount">0</strong>
             </div>
 
             <div class="inventory-stat">
-                <strong id="inUseCount">0</strong>
                 <span>IN USE</span>
+                <strong id="inUseCount">0</strong>
             </div>
 
             <div class="inventory-stat">
+                <span>STORAGE</span>
                 <strong id="storageCount">0</strong>
-                <span>IN STORAGE</span>
             </div>
 
-        </div>
+        </section>
 
-    </section>
+        <section class="inventory-panel">
 
+            <div class="inventory-panel-heading">
+                <div>
+                    <p class="system-label">DATABASE ENTRY</p>
+                    <h3 id="formTitle">ADD NEW ITEM</h3>
+                </div>
+            </div>
 
-    <!-- ADD / EDIT ITEM -->
+            <form id="itemForm" class="inventory-form">
 
-    <section>
+                <input type="hidden" id="itemId">
 
-        <div class="inventory-header">
-            <h2 id="formTitle">ADD NEW ITEM</h2>
-            <span class="online">OWNER CONTROL</span>
-        </div>
-
-        <form id="itemForm" class="inventory-form">
-
-            <label>
-                ITEM NAME
+                <label for="itemName">ITEM NAME</label>
                 <input
                     type="text"
                     id="itemName"
                     placeholder="Enter item name"
-                    maxlength="80"
+                    maxlength="100"
                     required
                 >
-            </label>
 
-            <label>
-                CATEGORY
-                <select id="itemCategory" required>
-                    <option value="Toys">Toys</option>
-                    <option value="Tools">Tools</option>
-                    <option value="Accessories">Accessories</option>
-                    <option value="Equipment">Equipment</option>
-                    <option value="Other">Other</option>
+                <div class="inventory-form-grid">
+
+                    <div>
+                        <label for="itemCategory">CATEGORY</label>
+                        <select id="itemCategory">
+                            <option value="Toys">Toys</option>
+                            <option value="Tools">Tools</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Equipment">Equipment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="itemStatus">STATUS</label>
+                        <select id="itemStatus">
+                            <option value="AVAILABLE">AVAILABLE</option>
+                            <option value="IN USE">IN USE</option>
+                            <option value="STORAGE">STORAGE</option>
+                            <option value="UNAVAILABLE">UNAVAILABLE</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <label for="itemLocation">LOCATION</label>
+                <input
+                    type="text"
+                    id="itemLocation"
+                    placeholder="Where is the item stored?"
+                    maxlength="150"
+                >
+
+                <label for="itemDescription">DESCRIPTION</label>
+                <textarea
+                    id="itemDescription"
+                    rows="4"
+                    placeholder="Additional information..."
+                    maxlength="3000"
+                ></textarea>
+
+                <label for="itemImageFile">ITEM IMAGE</label>
+                <input
+                    type="file"
+                    id="itemImageFile"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                >
+
+                <p class="inventory-help">
+                    JPG, PNG, WEBP or GIF. Maximum file size: 10 MB.
+                    Leave empty to keep the current image when editing.
+                </p>
+
+                <div id="currentImagePreview" class="current-image-preview"></div>
+
+                <div class="inventory-form-actions">
+                    <button type="submit" id="saveButton">
+                        SAVE ITEM
+                    </button>
+
+                    <button type="button" id="cancelEditButton" hidden>
+                        CANCEL EDIT
+                    </button>
+                </div>
+
+                <p id="formMessage" class="inventory-message"></p>
+
+            </form>
+
+        </section>
+
+        <section class="inventory-list-section">
+
+            <div class="inventory-list-heading">
+                <div>
+                    <p class="system-label">DATABASE RECORDS</p>
+                    <h3>INVENTORY DATABASE</h3>
+                </div>
+            </div>
+
+            <div class="inventory-controls">
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search inventory..."
+                >
+
+                <select id="filterCategory">
+                    <option value="">ALL CATEGORIES</option>
+                    <option value="Toys">TOYS</option>
+                    <option value="Tools">TOOLS</option>
+                    <option value="Accessories">ACCESSORIES</option>
+                    <option value="Equipment">EQUIPMENT</option>
+                    <option value="Other">OTHER</option>
                 </select>
-            </label>
 
-            <label>
-                AVAILABILITY STATUS
-                <select id="itemStatus" required>
+                <select id="filterStatus">
+                    <option value="">ALL STATUSES</option>
                     <option value="AVAILABLE">AVAILABLE</option>
                     <option value="IN USE">IN USE</option>
                     <option value="STORAGE">STORAGE</option>
                     <option value="UNAVAILABLE">UNAVAILABLE</option>
                 </select>
-            </label>
-
-            <label>
-                STORAGE LOCATION
-                <input
-                    type="text"
-                    id="itemLocation"
-                    placeholder="e.g. Storage box 01"
-                    maxlength="100"
-                >
-            </label>
-
-            <label class="full-width">
-                IMAGE ADDRESS
-                <input
-                    type="url"
-                    id="itemImage"
-                    placeholder="https://example.com/image.jpg"
-                >
-            </label>
-
-            <label class="full-width">
-                DESCRIPTION / PRIVATE NOTES
-                <textarea
-                    id="itemDescription"
-                    placeholder="Add details, specifications or private notes..."
-                    maxlength="2000"
-                ></textarea>
-            </label>
-
-            <div class="full-width inventory-form-actions">
-
-                <button
-                    type="submit"
-                    class="inventory-action"
-                    id="saveButton"
-                >
-                    + SAVE ITEM
-                </button>
-
-                <button
-                    type="button"
-                    class="inventory-action"
-                    id="cancelEdit"
-                    hidden
-                >
-                    CANCEL EDIT
-                </button>
 
             </div>
 
-        </form>
+            <div id="inventoryGrid" class="inventory-grid">
+                <p class="inventory-empty">LOADING DATABASE...</p>
+            </div>
 
-    </section>
+        </section>
 
+    </main>
 
-    <!-- SEARCH AND FILTER -->
+    <footer class="inventory-footer">
+        KAROLINA ARCHIVE // PRIVATE DATABASE // 2026
+    </footer>
 
-    <section>
-
-        <h2>ITEM DATABASE</h2>
-
-        <div class="inventory-controls">
-
-            <input
-                type="search"
-                id="searchInput"
-                placeholder="SEARCH INVENTORY..."
-                aria-label="Search inventory"
-            >
-
-            <select id="categoryFilter" aria-label="Filter by category">
-                <option value="ALL">ALL CATEGORIES</option>
-                <option value="Toys">TOYS</option>
-                <option value="Tools">TOOLS</option>
-                <option value="Accessories">ACCESSORIES</option>
-                <option value="Equipment">EQUIPMENT</option>
-                <option value="Other">OTHER</option>
-            </select>
-
-            <select id="statusFilter" aria-label="Filter by status">
-                <option value="ALL">ALL STATUSES</option>
-                <option value="AVAILABLE">AVAILABLE</option>
-                <option value="IN USE">IN USE</option>
-                <option value="STORAGE">STORAGE</option>
-                <option value="UNAVAILABLE">UNAVAILABLE</option>
-            </select>
-
-        </div>
-
-        <div class="inventory-header">
-            <span class="online">REGISTERED ITEMS</span>
-            <span id="resultsCount">0 RESULTS</span>
-        </div>
-
-        <div
-            class="inventory-grid"
-            id="inventoryGrid"
-            aria-live="polite"
-        ></div>
-
-        <p id="emptyMessage" class="section-description">
-            NO ITEMS REGISTERED. ADD YOUR FIRST ITEM ABOVE.
-        </p>
-
-    </section>
-
-
-    <!-- RETURN -->
-
-    <a class="back" href="archive.html">
-        &lt; RETURN TO KAROLINA ARCHIVE
-    </a>
-
-</main>
-
-
-<footer>
-    KAROLINA SYSTEM © 2026
-    <p>TOYS &amp; TOOLS // PRIVATE INVENTORY DATABASE</p>
-</footer>
-
-
-<script src="toys-tools.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-guard.js"></script>
+    <script src="toys-tools.js"></script>
 
 </body>
 </html>
