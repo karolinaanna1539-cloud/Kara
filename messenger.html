@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAROLINA ARCHIVE // MESSENGER</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="protected-page">
+
+    <div class="scanline"></div>
+
+    <header class="inventory-topbar">
+        <div>
+            <h1>KAROLINA ARCHIVE</h1>
+            <p class="subtitle">PERSONAL DATABASE // COMMUNICATION MODULE</p>
+        </div>
+
+        <div class="inventory-top-actions">
+            <a href="archive.html" class="inventory-back">← ARCHIVE</a>
+            <button id="chatLogout" class="inventory-logout">LOG OUT</button>
+        </div>
+    </header>
+
+    <main class="messenger-main">
+
+        <section class="messenger-heading">
+            <p class="system-label">COMMUNICATION MODULE // 07</p>
+            <h2>MESSENGER</h2>
+            <p>PRIVATE ARCHIVE NETWORK // SHARED CHANNEL</p>
+            <div id="chatConnection" class="connection-status">
+                CONNECTING...
+            </div>
+        </section>
+
+        <section id="nicknamePanel" class="messenger-panel" hidden>
+            <p class="system-label">USER IDENTIFICATION</p>
+            <h3>CHOOSE YOUR NICKNAME</h3>
+            <p class="messenger-hint">
+                Your nickname will be visible to other chat users.
+                Do not use your email address.
+            </p>
+
+            <form id="nicknameForm">
+                <label for="nicknameInput">NICKNAME</label>
+                <input
+                    id="nicknameInput"
+                    type="text"
+                    minlength="3"
+                    maxlength="20"
+                    pattern="[A-Za-z0-9_]{3,20}"
+                    placeholder="Example: Karolina_01"
+                    autocomplete="nickname"
+                    required
+                >
+                <p class="messenger-hint">
+                    3–20 characters. Letters, numbers and underscore only.
+                </p>
+                <button type="submit" id="nicknameSave">
+                    CONFIRM NICKNAME
+                </button>
+                <p id="nicknameMessage" class="inventory-message"></p>
+            </form>
+        </section>
+
+        <section id="chatPanel" class="messenger-panel" hidden>
+
+            <div class="messenger-channel-heading">
+                <div>
+                    <span class="messenger-online-dot"></span>
+                    <strong>GENERAL CHANNEL</strong>
+                </div>
+                <span id="currentNickname" class="messenger-current-user"></span>
+            </div>
+
+            <div id="chatMessages" class="messenger-messages">
+                <p class="inventory-empty">LOADING MESSAGES...</p>
+            </div>
+
+            <form id="chatForm" class="messenger-compose">
+                <textarea
+                    id="chatInput"
+                    rows="2"
+                    maxlength="1000"
+                    placeholder="Write a message..."
+                    required
+                ></textarea>
+
+                <button type="submit" id="chatSend">
+                    SEND
+                </button>
+            </form>
+
+            <p id="chatMessageStatus" class="messenger-hint">
+                Press Enter to send. Shift + Enter for a new line.
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer class="inventory-footer">
+        KAROLINA ARCHIVE // MESSENGER // 2026
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-guard.js"></script>
+    <script src="messenger.js"></script>
+
+</body>
+</html>
