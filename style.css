@@ -1,10 +1,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-/* =========================================
-   KAROLINA ARCHIVE
-   GLOBAL SETTINGS
-========================================= */
+/* ==================================================
+   KAROLINA ARCHIVE // GLOBAL CONFIGURATION
+================================================== */
 
 :root {
     --green: #00ffaa;
@@ -12,10 +11,12 @@
     --green-dark: #07130d;
     --background: #050806;
     --panel: #090e0b;
+    --panel-light: #0d1711;
     --border: #263a2e;
     --text: #dddddd;
     --muted: #758078;
     --red: #ff4444;
+    --yellow: #d6b65b;
 }
 
 * {
@@ -37,21 +38,33 @@ body {
 
 a {
     color: inherit;
+    text-decoration: none;
 }
 
 button,
-input {
+input,
+textarea,
+select {
     font-family: inherit;
 }
 
+button,
+a,
+input,
+textarea,
+select {
+    -webkit-tap-highlight-color: transparent;
+}
 
-/* =========================================
-   GLOBAL SCAN EFFECT
-========================================= */
+
+/* ==================================================
+   GLOBAL SCREEN EFFECTS
+================================================== */
 
 .scanline {
     position: fixed;
     inset: 0;
+
     background: repeating-linear-gradient(
         to bottom,
         rgba(255,255,255,.025),
@@ -59,82 +72,22 @@ input {
         transparent 2px,
         transparent 4px
     );
+
     pointer-events: none;
     z-index: 100;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-header {
-    text-align: center;
-    padding: 50px 20px;
-}
-
-header h1 {
-    color: white;
-    font-size: 45px;
-    letter-spacing: 10px;
-    margin: 0;
-    text-shadow: 0 0 15px #ffffff30;
-}
-
-header p {
-    color: var(--muted);
-    letter-spacing: 5px;
-}
-
-
-/* =========================================
-   ONLINE STATUS
-========================================= */
-
-.online {
-    color: var(--green) !important;
-    text-shadow: 0 0 8px var(--green);
-}
-
-.blink {
-    animation: blink 2s infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .35; }
-}
-
-
-/* =========================================
-   LOGIN PAGE
-========================================= */
-
-.login-page {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    position: relative;
-
-    background:
-        radial-gradient(ellipse at 50% 45%,
-        #101b17 0%,
-        #080b09 45%,
-        #000 100%);
 }
 
 .background-grid {
     position: fixed;
     inset: 0;
-    pointer-events: none;
-    opacity: .12;
 
     background-image:
         linear-gradient(#00ffaa18 1px, transparent 1px),
         linear-gradient(90deg, #00ffaa18 1px, transparent 1px);
 
     background-size: 50px 50px;
+    opacity: .12;
+    pointer-events: none;
 }
 
 .ambient {
@@ -160,15 +113,65 @@ header p {
 }
 
 
-/* =========================================
-   LOGIN HEADER
-========================================= */
+/* ==================================================
+   ANIMATIONS
+================================================== */
 
-.login-page .login-header {
-    position: relative;
-    z-index: 2;
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 15px #00ffaa10;
+    }
+    50% {
+        box-shadow: 0 0 30px #00ffaa40;
+    }
+}
+
+@keyframes errorFlash {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.blink {
+    animation: blink 2s infinite;
+}
+
+.online {
+    color: var(--green) !important;
+    text-shadow: 0 0 8px var(--green);
+}
+
+
+/* ==================================================
+   GLOBAL HEADER
+================================================== */
+
+header {
     text-align: center;
-    padding: 55px 20px 25px;
+    padding: 50px 20px;
+}
+
+header h1 {
+    color: white;
+    font-size: 45px;
+    letter-spacing: 10px;
+    margin: 0;
+    text-shadow: 0 0 15px #ffffff30;
+}
+
+header p {
+    color: var(--muted);
+    letter-spacing: 5px;
 }
 
 .system-label {
@@ -188,6 +191,34 @@ header p {
     box-shadow: 0 0 12px var(--green);
 }
 
+
+/* ==================================================
+   LOGIN PAGE
+================================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            #101b17 0%,
+            #080b09 45%,
+            #000 100%
+        );
+}
+
+.login-page .login-header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 55px 20px 25px;
+}
+
 .login-page .login-header h1 {
     font-size: clamp(28px, 5vw, 48px);
     letter-spacing: 9px;
@@ -203,11 +234,6 @@ header p {
     margin-top: 15px;
 }
 
-
-/* =========================================
-   LOGIN CONTAINER
-========================================= */
-
 .login-container {
     position: relative;
     z-index: 2;
@@ -218,9 +244,9 @@ header p {
 }
 
 
-/* =========================================
-   LOGIN PANEL
-========================================= */
+/* ==================================================
+   LOGIN BOX
+================================================== */
 
 .login-page .login-box {
     width: 100%;
@@ -265,15 +291,14 @@ header p {
 }
 
 
-/* =========================================
-   LOGIN PANEL HEADER
-========================================= */
+/* ==================================================
+   LOGIN PANEL
+================================================== */
 
 .panel-top {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-
     padding-bottom: 15px;
     border-bottom: 1px solid var(--border);
 
@@ -281,11 +306,6 @@ header p {
     font-size: 10px;
     letter-spacing: 2px;
 }
-
-
-/* =========================================
-   LOGIN ICON
-========================================= */
 
 .access-icon {
     display: flex;
@@ -309,23 +329,8 @@ header p {
     color: var(--green);
     font-size: 38px;
 
-    animation: icon-glow 3s infinite ease-in-out;
+    animation: glow 3s infinite ease-in-out;
 }
-
-@keyframes icon-glow {
-    0%, 100% {
-        box-shadow: 0 0 15px #00ffaa10;
-    }
-
-    50% {
-        box-shadow: 0 0 30px #00ffaa40;
-    }
-}
-
-
-/* =========================================
-   LOGIN TITLE
-========================================= */
 
 .login-title {
     text-align: center;
@@ -346,9 +351,9 @@ header p {
 }
 
 
-/* =========================================
-   SYSTEM STATUS
-========================================= */
+/* ==================================================
+   LOGIN SYSTEM STATUS
+================================================== */
 
 .system-status {
     display: flex;
@@ -370,14 +375,10 @@ header p {
     gap: 8px;
 }
 
-.system-status .online {
-    letter-spacing: 1px;
-}
 
-
-/* =========================================
-   PASSWORD INPUT
-========================================= */
+/* ==================================================
+   INPUTS
+================================================== */
 
 .input-section {
     margin-top: 30px;
@@ -401,7 +402,6 @@ header p {
     border: 1px solid #34473c;
 
     padding: 0 15px;
-
     transition: .3s;
 }
 
@@ -428,7 +428,6 @@ header p {
 
     color: var(--green);
 
-    font-family: inherit;
     font-size: 14px;
     letter-spacing: 3px;
 }
@@ -439,9 +438,9 @@ header p {
 }
 
 
-/* =========================================
-   AUTHENTICATE BUTTON
-========================================= */
+/* ==================================================
+   BUTTONS
+================================================== */
 
 .authenticate-button {
     width: 100%;
@@ -458,7 +457,6 @@ header p {
 
     color: var(--green);
 
-    font-family: inherit;
     font-size: 13px;
     letter-spacing: 4px;
 
@@ -472,15 +470,6 @@ header p {
     box-shadow: 0 0 25px #00ffaa45;
 }
 
-.button-arrow {
-    font-size: 20px;
-    transition: .3s;
-}
-
-.authenticate-button:hover .button-arrow {
-    transform: translateX(5px);
-}
-
 .authenticate-button:disabled {
     opacity: .5;
     cursor: not-allowed;
@@ -492,10 +481,19 @@ header p {
     box-shadow: none;
 }
 
+.button-arrow {
+    font-size: 20px;
+    transition: .3s;
+}
 
-/* =========================================
-   LOGIN MESSAGE
-========================================= */
+.authenticate-button:hover .button-arrow {
+    transform: translateX(5px);
+}
+
+
+/* ==================================================
+   LOGIN MESSAGES
+================================================== */
 
 .login-page .login-message {
     min-height: 20px;
@@ -509,11 +507,6 @@ header p {
     color: var(--green);
 }
 
-
-/* =========================================
-   LOGIN ERROR
-========================================= */
-
 .login-error {
     color: var(--red);
     text-align: center;
@@ -526,22 +519,10 @@ header p {
     font-size: 11px;
 }
 
-@keyframes errorFlash {
-    0% {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================================
-   LOADING ANIMATION
-========================================= */
+/* ==================================================
+   LOADING BAR
+================================================== */
 
 .loading {
     margin-top: 15px;
@@ -557,9 +538,7 @@ header p {
 .bar {
     width: 100%;
     height: 5px;
-
     margin-top: 15px;
-
     background: #17251d;
     overflow: hidden;
 }
@@ -567,10 +546,8 @@ header p {
 .progress {
     width: 0%;
     height: 100%;
-
     background: var(--green);
     box-shadow: 0 0 15px var(--green);
-
     transition: width .1s linear;
 }
 
@@ -580,9 +557,9 @@ header p {
 }
 
 
-/* =========================================
-   SECURITY NOTE
-========================================= */
+/* ==================================================
+   LOGIN FOOTER ELEMENTS
+================================================== */
 
 .security-note {
     text-align: center;
@@ -597,11 +574,6 @@ header p {
     color: var(--green);
     margin-right: 7px;
 }
-
-
-/* =========================================
-   PANEL BOTTOM
-========================================= */
 
 .panel-bottom {
     display: flex;
@@ -618,16 +590,10 @@ header p {
     letter-spacing: 1px;
 }
 
-
-/* =========================================
-   TERMINAL INFORMATION
-========================================= */
-
 .terminal-info {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-
     gap: 15px 25px;
     margin-top: 25px;
 
@@ -635,15 +601,6 @@ header p {
     font-size: 9px;
     letter-spacing: 1px;
 }
-
-.terminal-info .online {
-    color: var(--green);
-}
-
-
-/* =========================================
-   LOGIN FOOTER
-========================================= */
 
 .login-page .login-footer {
     position: relative;
@@ -663,15 +620,36 @@ header p {
 }
 
 
-/* =========================================
-   GENERAL TERMINAL
-========================================= */
+/* ==================================================
+   ARCHIVE PAGE HEADER
+================================================== */
+
+.archive-header {
+    text-align: center;
+    padding: 45px 20px 30px;
+}
+
+.archive-header h1 {
+    font-size: clamp(30px, 5vw, 48px);
+    letter-spacing: 10px;
+}
+
+.archive-header p {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+
+/* ==================================================
+   MAIN TERMINAL
+================================================== */
 
 .terminal {
     width: 90%;
     max-width: 1200px;
 
-    margin: 40px auto;
+    margin: 30px auto;
     padding: 40px;
 
     background: rgba(0,0,0,.85);
@@ -681,39 +659,30 @@ header p {
 }
 
 
-/* =========================================
-   FILE HEADER
-========================================= */
+/* ==================================================
+   DASHBOARD TOP BAR
+================================================== */
 
-.file-header {
-    border-bottom: 1px solid #333;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
+.dashboard-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
 
-.file-header p {
-    color: #777;
-}
+    padding: 15px 0;
+    margin-bottom: 35px;
 
-.file-header span {
-    color: white;
-}
+    border-bottom: 1px solid var(--border);
 
-
-/* =========================================
-   TITLES
-========================================= */
-
-h2 {
-    margin-top: 40px;
-    color: white;
-    letter-spacing: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
 }
 
 
-/* =========================================
-   PROFILE COLUMNS
-========================================= */
+/* ==================================================
+   PROFILE SECTION
+================================================== */
 
 .profile-columns {
     display: grid;
@@ -726,16 +695,11 @@ h2 {
     min-width: 0;
 }
 
-
-/* =========================================
-   PROFILE CARD
-========================================= */
-
 .profile-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 
     width: 100%;
     padding: 25px;
@@ -757,24 +721,23 @@ h2 {
 }
 
 
-/* =========================================
-   PROFILE PHOTO
-========================================= */
+/* ==================================================
+   PROFILE PHOTOGRAPH
+================================================== */
 
 .photo-box {
     padding: 10px;
     background: #050505;
     border: 1px solid #333;
+    flex-shrink: 0;
 }
 
 .photo-box img {
     width: 180px;
     height: 240px;
     object-fit: cover;
-
-    filter: grayscale(70%);
     display: block;
-
+    filter: grayscale(70%);
     transition: .4s;
 }
 
@@ -783,9 +746,74 @@ h2 {
 }
 
 
-/* =========================================
-   MAIN ARCHIVE FILES
-========================================= */
+/* ==================================================
+   GENERAL HEADINGS
+================================================== */
+
+h2 {
+    margin-top: 40px;
+    color: white;
+    letter-spacing: 5px;
+    font-size: 19px;
+}
+
+
+/* ==================================================
+   SYSTEM OVERVIEW
+================================================== */
+
+.overview-section,
+.files-section,
+.quick-status {
+    margin-top: 55px;
+}
+
+.section-description {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.overview-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 22px;
+
+    background: #050b07;
+    border: 1px solid var(--border);
+
+    transition: .3s;
+}
+
+.overview-card:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 15px #00ffaa15;
+}
+
+.overview-number {
+    font-size: 30px;
+    color: white;
+}
+
+.overview-label {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+/* ==================================================
+   ARCHIVE FILE MENU
+================================================== */
 
 .menu {
     display: flex;
@@ -865,9 +893,68 @@ h2 {
 }
 
 
-/* =========================================
-   PHYSICAL DATABASE
-========================================= */
+/* ==================================================
+   FEATURED MODULE
+================================================== */
+
+.featured-file {
+    border-color: #00ffaa75;
+
+    background: linear-gradient(
+        135deg,
+        #00ffaa12,
+        #050806
+    );
+}
+
+.featured-file:hover {
+    box-shadow: 0 0 25px #00ffaa30;
+}
+
+.locked-status {
+    color: var(--yellow);
+    border-color: var(--yellow);
+}
+
+
+/* ==================================================
+   DATABASE CONNECTIONS
+================================================== */
+
+.quick-status {
+    padding: 25px;
+
+    background: #050806;
+    border: 1px solid var(--border);
+}
+
+.quick-status h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.connection-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #1b2920;
+
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.connection-row:last-child {
+    border-bottom: none;
+}
+
+
+/* ==================================================
+   PHYSICAL REPORT
+================================================== */
 
 .body-views {
     display: flex;
@@ -903,11 +990,6 @@ h2 {
     filter: grayscale(0%);
 }
 
-
-/* =========================================
-   DATA BOXES
-========================================= */
-
 .data-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -938,38 +1020,9 @@ h2 {
 }
 
 
-/* =========================================
-   BODY ARCHIVE
-========================================= */
-
-.archive-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-.archive-box {
-    display: block;
-    padding: 25px;
-
-    text-decoration: none;
-    color: #ddd;
-
-    background: #050505;
-    border: 1px solid #333;
-
-    transition: .3s;
-}
-
-.archive-box:hover {
-    border-color: var(--green);
-    box-shadow: 0 0 20px rgba(0,255,170,.25);
-}
-
-
-/* =========================================
-   SCAR MAP
-========================================= */
+/* ==================================================
+   PHYSICAL BODY MAP
+================================================== */
 
 .body-map {
     position: relative;
@@ -1012,11 +1065,6 @@ h2 {
     transform: scale(1.3);
 }
 
-
-/* =========================================
-   SCAR POSITIONS
-========================================= */
-
 .left-forearm {
     top: 34%;
     left: 23%;
@@ -1048,9 +1096,9 @@ h2 {
 }
 
 
-/* =========================================
+/* ==================================================
    SCAR RECORDS
-========================================= */
+================================================== */
 
 .scar-record {
     margin-top: 60px;
@@ -1092,9 +1140,214 @@ h2 {
 }
 
 
-/* =========================================
+/* ==================================================
+   TOYS & TOOLS // INVENTORY MODULE
+================================================== */
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.inventory-header h2 {
+    margin: 0;
+}
+
+.inventory-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.inventory-stat {
+    padding: 20px;
+    background: #050b07;
+    border: 1px solid var(--border);
+}
+
+.inventory-stat strong {
+    display: block;
+    color: var(--green);
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.inventory-stat span {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.inventory-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 25px 0;
+}
+
+.inventory-controls input,
+.inventory-controls select,
+.inventory-form input,
+.inventory-form textarea,
+.inventory-form select {
+    background: #020604;
+    border: 1px solid #34473c;
+    color: var(--green);
+    padding: 13px;
+    outline: none;
+    font-size: 12px;
+}
+
+.inventory-controls input:focus,
+.inventory-controls select:focus,
+.inventory-form input:focus,
+.inventory-form textarea:focus,
+.inventory-form select:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 12px #00ffaa20;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.inventory-card {
+    background: #050806;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: .3s;
+}
+
+.inventory-card:hover {
+    border-color: var(--green);
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px #00ffaa20;
+}
+
+.inventory-image {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    display: block;
+    background: #0a100c;
+    border-bottom: 1px solid var(--border);
+}
+
+.inventory-content {
+    padding: 18px;
+}
+
+.inventory-content h3 {
+    color: white;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.inventory-content p {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.inventory-category {
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.inventory-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.inventory-status.in-use {
+    color: var(--yellow);
+    border-color: var(--yellow);
+}
+
+.inventory-status.unavailable {
+    color: var(--red);
+    border-color: var(--red);
+}
+
+.inventory-status.storage {
+    color: #8bb8ff;
+    border-color: #8bb8ff;
+}
+
+.inventory-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 12px;
+    margin-top: 12px;
+    border-top: 1px solid #1b2920;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* ==================================================
+   INVENTORY FORM
+================================================== */
+
+.inventory-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    padding: 25px;
+    background: #050806;
+    border: 1px solid var(--border);
+}
+
+.inventory-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.inventory-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.inventory-form .full-width {
+    grid-column: 1 / -1;
+}
+
+.inventory-action {
+    padding: 12px 18px;
+    background: #00ffaa0b;
+    border: 1px solid var(--green);
+    color: var(--green);
+    cursor: pointer;
+    transition: .3s;
+}
+
+.inventory-action:hover {
+    background: var(--green);
+    color: #00130b;
+}
+
+
+/* ==================================================
    IMAGE DATABASE
-========================================= */
+================================================== */
 
 .image-database {
     display: grid;
@@ -1119,9 +1372,38 @@ h2 {
 }
 
 
-/* =========================================
+/* ==================================================
+   GENERAL ARCHIVE BOXES
+================================================== */
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.archive-box {
+    display: block;
+    padding: 25px;
+
+    text-decoration: none;
+    color: #ddd;
+
+    background: #050505;
+    border: 1px solid #333;
+
+    transition: .3s;
+}
+
+.archive-box:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 20px rgba(0,255,170,.25);
+}
+
+
+/* ==================================================
    BACK BUTTON
-========================================= */
+================================================== */
 
 .back {
     display: inline-block;
@@ -1140,37 +1422,78 @@ h2 {
 .back:hover {
     border-color: var(--green);
     color: var(--green);
+    box-shadow: 0 0 15px #00ffaa20;
 }
 
 
-/* =========================================
+/* ==================================================
    FOOTER
-========================================= */
+================================================== */
 
 footer {
     text-align: center;
     padding: 40px;
     color: #555;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+footer p {
+    color: #46534b;
+    font-size: 9px;
 }
 
 
-/* =========================================
+/* ==================================================
    ACCESSIBILITY
-========================================= */
+================================================== */
 
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
     outline: 2px solid var(--green);
     outline-offset: 4px;
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+/* ==================================================
+   TABLET
+================================================== */
 
-@media(max-width: 800px) {
+@media (max-width: 900px) {
+
+    .terminal {
+        width: 94%;
+        padding: 25px;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .inventory-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .inventory-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .image-database {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 600px) {
 
     header h1 {
         font-size: 28px;
@@ -1181,9 +1504,24 @@ input:focus-visible {
         letter-spacing: 2px;
     }
 
+    .login-page .login-header h1 {
+        font-size: 25px;
+        letter-spacing: 3px;
+    }
+
+    .login-page .login-box {
+        padding: 20px 15px;
+    }
+
+    .panel-top,
+    .system-status,
+    .panel-bottom {
+        font-size: 8px;
+    }
+
     .terminal {
         width: 94%;
-        padding: 25px;
+        padding: 18px;
     }
 
     .profile-columns {
@@ -1194,19 +1532,12 @@ input:focus-visible {
         flex-direction: column;
     }
 
-    .profile-card .information {
-        width: 100%;
-    }
-
     .body-views {
         flex-direction: column;
         align-items: center;
     }
 
-    .data-grid {
-        grid-template-columns: 1fr;
-    }
-
+    .data-grid,
     .archive-grid {
         grid-template-columns: 1fr;
     }
@@ -1236,45 +1567,37 @@ input:focus-visible {
         flex-direction: column;
         align-items: flex-start;
     }
-}
 
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
-@media(max-width: 480px) {
-
-    .login-page .login-header h1 {
-        font-size: 25px;
-        letter-spacing: 3px;
+    .overview-grid {
+        grid-template-columns: 1fr;
     }
 
-    .login-page .login-box {
-        padding: 20px 15px;
+    .connection-row {
+        font-size: 9px;
     }
 
-    .panel-top {
-        font-size: 8px;
+    .inventory-grid {
+        grid-template-columns: 1fr;
     }
 
-    .system-status {
-        font-size: 8px;
+    .inventory-summary {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .panel-bottom {
-        font-size: 7px;
+    .inventory-form {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-form .full-width {
+        grid-column: auto;
+    }
+
+    .dashboard-top {
+        font-size: 9px;
     }
 
     .login-footer {
         font-size: 8px;
     }
 
-    .terminal {
-        padding: 18px;
-    }
-
-    .archive-file h3 {
-        font-size: 18px;
-    }
 }
