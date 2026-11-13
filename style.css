@@ -1,56 +1,66 @@
-```css
+
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-
 /* =========================================
-   GLOBAL
+   KAROLINA ARCHIVE
+   GLOBAL SETTINGS
 ========================================= */
 
-* {
-
-    box-sizing: border-box;
-
+:root {
+    --green: #00ffaa;
+    --green-soft: #00ffaa55;
+    --green-dark: #07130d;
+    --background: #050806;
+    --panel: #090e0b;
+    --border: #263a2e;
+    --text: #dddddd;
+    --muted: #758078;
+    --red: #ff4444;
 }
 
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
 
 body {
-
     margin: 0;
-
     min-height: 100vh;
-
     background:
-        radial-gradient(circle, #171717, #000);
-
-    color: #ddd;
-
+        radial-gradient(circle at 50% 30%, #142019, #050806 65%, #000);
+    color: var(--text);
     font-family: 'Share Tech Mono', monospace;
+}
 
+a {
+    color: inherit;
+}
+
+button,
+input {
+    font-family: inherit;
 }
 
 
 /* =========================================
-   SCAN EFFECT
+   GLOBAL SCAN EFFECT
 ========================================= */
 
 .scanline {
-
     position: fixed;
-
     inset: 0;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            rgba(255,255,255,.03),
-            rgba(255,255,255,.03) 1px,
-            transparent 3px
-        );
-
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.025),
+        rgba(255,255,255,.025) 1px,
+        transparent 2px,
+        transparent 4px
+    );
     pointer-events: none;
-
-    z-index: 20;
-
+    z-index: 100;
 }
 
 
@@ -59,90 +69,21 @@ body {
 ========================================= */
 
 header {
-
     text-align: center;
-
     padding: 50px 20px;
-
 }
-
 
 header h1 {
-
     color: white;
-
     font-size: 45px;
-
     letter-spacing: 10px;
-
     margin: 0;
-
-    text-shadow:
-        0 0 15px rgba(255,255,255,.3);
-
+    text-shadow: 0 0 15px #ffffff30;
 }
-
 
 header p {
-
-    color: #777;
-
+    color: var(--muted);
     letter-spacing: 5px;
-
-}
-
-
-/* =========================================
-   TERMINAL
-========================================= */
-
-.terminal {
-
-    width: 90%;
-
-    max-width: 1200px;
-
-    margin: 40px auto;
-
-    padding: 40px;
-
-    background:
-        rgba(0,0,0,.85);
-
-    border: 1px solid #333;
-
-    box-shadow:
-        0 0 50px rgba(255,255,255,.05);
-
-}
-
-
-/* =========================================
-   FILE HEADER
-========================================= */
-
-.file-header {
-
-    border-bottom: 1px solid #333;
-
-    padding-bottom: 20px;
-
-    margin-bottom: 30px;
-
-}
-
-
-.file-header p {
-
-    color: #777;
-
-}
-
-
-.file-header span {
-
-    color: white;
-
 }
 
 
@@ -151,12 +92,611 @@ header p {
 ========================================= */
 
 .online {
+    color: var(--green) !important;
+    text-shadow: 0 0 8px var(--green);
+}
 
-    color: #00ffaa !important;
+.blink {
+    animation: blink 2s infinite;
+}
 
-    text-shadow:
-        0 0 8px #00ffaa;
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+}
 
+
+/* =========================================
+   LOGIN PAGE
+========================================= */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+
+    background:
+        radial-gradient(ellipse at 50% 45%,
+        #101b17 0%,
+        #080b09 45%,
+        #000 100%);
+}
+
+.background-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .12;
+
+    background-image:
+        linear-gradient(#00ffaa18 1px, transparent 1px),
+        linear-gradient(90deg, #00ffaa18 1px, transparent 1px);
+
+    background-size: 50px 50px;
+}
+
+.ambient {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: .09;
+    pointer-events: none;
+}
+
+.ambient-one {
+    background: var(--green);
+    top: 20%;
+    left: -180px;
+}
+
+.ambient-two {
+    background: #00aa77;
+    bottom: 5%;
+    right: -180px;
+}
+
+
+/* =========================================
+   LOGIN HEADER
+========================================= */
+
+.login-page .login-header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 55px 20px 25px;
+}
+
+.system-label {
+    color: var(--green);
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-bottom: 22px;
+}
+
+.system-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 12px var(--green);
+}
+
+.login-page .login-header h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: 9px;
+    color: white;
+    margin: 0;
+    text-shadow: 0 0 25px #00ffaa30;
+}
+
+.login-page .subtitle {
+    color: #64746d;
+    font-size: 12px;
+    letter-spacing: 4px;
+    margin-top: 15px;
+}
+
+
+/* =========================================
+   LOGIN CONTAINER
+========================================= */
+
+.login-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+
+/* =========================================
+   LOGIN PANEL
+========================================= */
+
+.login-page .login-box {
+    width: 100%;
+    padding: 30px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(13,23,18,.97),
+        rgba(3,6,4,.98)
+    );
+
+    border: 1px solid #234a38;
+
+    box-shadow:
+        0 0 40px #00ffaa0b,
+        inset 0 0 35px #00ffaa05;
+
+    position: relative;
+}
+
+.login-page .login-box::before,
+.login-page .login-box::after {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border-color: var(--green);
+    border-style: solid;
+    pointer-events: none;
+}
+
+.login-page .login-box::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+}
+
+.login-page .login-box::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 2px 2px 0;
+}
+
+
+/* =========================================
+   LOGIN PANEL HEADER
+========================================= */
+
+.panel-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   LOGIN ICON
+========================================= */
+
+.access-icon {
+    display: flex;
+    justify-content: center;
+    margin: 35px 0 20px;
+}
+
+.icon-circle {
+    width: 75px;
+    height: 75px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #00ffaa60;
+    border-radius: 50%;
+
+    box-shadow: 0 0 25px #00ffaa15;
+
+    color: var(--green);
+    font-size: 38px;
+
+    animation: icon-glow 3s infinite ease-in-out;
+}
+
+@keyframes icon-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px #00ffaa10;
+    }
+
+    50% {
+        box-shadow: 0 0 30px #00ffaa40;
+    }
+}
+
+
+/* =========================================
+   LOGIN TITLE
+========================================= */
+
+.login-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-title h2 {
+    color: white;
+    font-size: 19px;
+    letter-spacing: 3px;
+    margin: 0 0 12px;
+}
+
+.login-title p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   SYSTEM STATUS
+========================================= */
+
+.system-status {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding: 15px 0;
+
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.system-status div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.system-status .online {
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   PASSWORD INPUT
+========================================= */
+
+.input-section {
+    margin-top: 30px;
+}
+
+.input-section label {
+    display: block;
+
+    color: #a4b2aa;
+    font-size: 11px;
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+
+    background: #020604;
+    border: 1px solid #34473c;
+
+    padding: 0 15px;
+
+    transition: .3s;
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 15px #00ffaa20;
+}
+
+.input-icon {
+    color: var(--green);
+    margin-right: 12px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    min-width: 0;
+
+    padding: 17px 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--green);
+
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 3px;
+}
+
+.input-wrapper input::placeholder {
+    color: #46554b;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   AUTHENTICATE BUTTON
+========================================= */
+
+.authenticate-button {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 22px;
+    padding: 17px 20px;
+
+    background: #00ffaa0b;
+    border: 1px solid var(--green);
+
+    color: var(--green);
+
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 4px;
+
+    cursor: pointer;
+    transition: .3s;
+}
+
+.authenticate-button:hover {
+    background: var(--green);
+    color: #00130b;
+    box-shadow: 0 0 25px #00ffaa45;
+}
+
+.button-arrow {
+    font-size: 20px;
+    transition: .3s;
+}
+
+.authenticate-button:hover .button-arrow {
+    transform: translateX(5px);
+}
+
+.authenticate-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.authenticate-button:disabled:hover {
+    background: #00ffaa0b;
+    color: var(--green);
+    box-shadow: none;
+}
+
+
+/* =========================================
+   LOGIN MESSAGE
+========================================= */
+
+.login-page .login-message {
+    min-height: 20px;
+    margin-top: 18px;
+
+    text-align: center;
+
+    font-size: 12px;
+    letter-spacing: 2px;
+
+    color: var(--green);
+}
+
+
+/* =========================================
+   LOGIN ERROR
+========================================= */
+
+.login-error {
+    color: var(--red);
+    text-align: center;
+    animation: errorFlash .4s ease;
+}
+
+.login-error p {
+    color: var(--red);
+    letter-spacing: 2px;
+    font-size: 11px;
+}
+
+@keyframes errorFlash {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   LOADING ANIMATION
+========================================= */
+
+.loading {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.loading p {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--green);
+}
+
+.bar {
+    width: 100%;
+    height: 5px;
+
+    margin-top: 15px;
+
+    background: #17251d;
+    overflow: hidden;
+}
+
+.progress {
+    width: 0%;
+    height: 100%;
+
+    background: var(--green);
+    box-shadow: 0 0 15px var(--green);
+
+    transition: width .1s linear;
+}
+
+#progressText {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* =========================================
+   SECURITY NOTE
+========================================= */
+
+.security-note {
+    text-align: center;
+    margin-top: 20px;
+
+    color: #66756c;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.security-symbol {
+    color: var(--green);
+    margin-right: 7px;
+}
+
+
+/* =========================================
+   PANEL BOTTOM
+========================================= */
+
+.panel-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-top: 25px;
+    padding-top: 15px;
+
+    border-top: 1px solid var(--border);
+
+    color: #526158;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   TERMINAL INFORMATION
+========================================= */
+
+.terminal-info {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 15px 25px;
+    margin-top: 25px;
+
+    color: #53645a;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.terminal-info .online {
+    color: var(--green);
+}
+
+
+/* =========================================
+   LOGIN FOOTER
+========================================= */
+
+.login-page .login-footer {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    margin-top: auto;
+    padding: 30px 15px;
+
+    color: #46534b;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   GENERAL TERMINAL
+========================================= */
+
+.terminal {
+    width: 90%;
+    max-width: 1200px;
+
+    margin: 40px auto;
+    padding: 40px;
+
+    background: rgba(0,0,0,.85);
+    border: 1px solid #333;
+
+    box-shadow: 0 0 50px rgba(255,255,255,.05);
+}
+
+
+/* =========================================
+   FILE HEADER
+========================================= */
+
+.file-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.file-header p {
+    color: #777;
+}
+
+.file-header span {
+    color: white;
 }
 
 
@@ -165,13 +705,9 @@ header p {
 ========================================= */
 
 h2 {
-
     margin-top: 40px;
-
     color: white;
-
     letter-spacing: 5px;
-
 }
 
 
@@ -180,23 +716,14 @@ h2 {
 ========================================= */
 
 .profile-columns {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px;
-
     width: 100%;
-
 }
 
-
 .profile-column {
-
     min-width: 0;
-
 }
 
 
@@ -205,44 +732,28 @@ h2 {
 ========================================= */
 
 .profile-card {
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     gap: 20px;
 
     width: 100%;
-
     padding: 25px;
 
     background: #050505;
-
     border: 1px solid #333;
-
 }
-
 
 .profile-card .information {
-
     width: 100%;
-
 }
-
 
 .profile-card .information h2 {
-
     margin-top: 0;
-
 }
 
-
 .profile-card .information span {
-
     color: white;
-
 }
 
 
@@ -251,37 +762,24 @@ h2 {
 ========================================= */
 
 .photo-box {
-
     padding: 10px;
-
     background: #050505;
-
     border: 1px solid #333;
-
 }
 
-
 .photo-box img {
-
     width: 180px;
-
     height: 240px;
-
     object-fit: cover;
 
     filter: grayscale(70%);
-
     display: block;
 
+    transition: .4s;
 }
 
-
 .photo-box img:hover {
-
     filter: grayscale(0%);
-
-    transition: .4s;
-
 }
 
 
@@ -290,137 +788,80 @@ h2 {
 ========================================= */
 
 .menu {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 20px;
-
 }
 
-
 .archive-file {
-
     display: block;
 
     text-decoration: none;
-
     color: #ddd;
 
     padding: 25px;
 
-    background:
-
-        linear-gradient(
-
-            135deg,
-
-            rgba(0,255,170,.05),
-
-            rgba(0,0,0,.8)
-
-        );
+    background: linear-gradient(
+        135deg,
+        rgba(0,255,170,.05),
+        rgba(0,0,0,.8)
+    );
 
     border: 1px solid #333;
-
     transition: .35s;
-
 }
-
 
 .archive-file:hover {
-
     transform: translateX(8px);
+    border-color: var(--green);
 
-    border-color: #00ffaa;
-
-    box-shadow:
-
-        0 0 20px rgba(0,255,170,.25);
-
+    box-shadow: 0 0 20px rgba(0,255,170,.25);
 }
-
 
 .archive-top {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     gap: 10px;
-
 }
-
 
 .archive-id {
-
-    color: #00ffaa;
-
+    color: var(--green);
 }
-
 
 .archive-status {
-
-    color: #00ffaa;
-
-    border: 1px solid #00ffaa;
-
+    color: var(--green);
+    border: 1px solid var(--green);
     padding: 5px 12px;
-
     font-size: 12px;
-
 }
-
 
 .archive-file h3 {
-
     color: white;
-
     letter-spacing: 4px;
-
     font-size: 26px;
-
 }
-
 
 .archive-file p {
-
     color: #888;
-
+    line-height: 1.6;
 }
-
 
 .archive-bottom {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     gap: 15px;
-
 }
-
 
 .archive-size {
-
     color: #666;
-
 }
 
-
 .archive-open {
-
-    color: #00ffaa;
-
-    border: 1px solid #00ffaa;
-
+    color: var(--green);
+    border: 1px solid var(--green);
     padding: 8px 15px;
-
 }
 
 
@@ -429,62 +870,37 @@ h2 {
 ========================================= */
 
 .body-views {
-
     display: flex;
-
     gap: 30px;
-
     justify-content: center;
-
     margin: 30px 0;
-
 }
-
 
 .view-box {
-
     text-align: center;
-
 }
-
 
 .view-box h3 {
-
     color: #777;
-
 }
-
 
 .photo-frame {
-
     padding: 10px;
-
     background: #050505;
-
     border: 1px solid #444;
-
 }
-
 
 .photo-frame img {
-
     width: 220px;
-
     height: 320px;
-
     object-fit: cover;
-
     display: block;
-
     filter: grayscale(60%);
-
+    transition: .4s;
 }
 
-
 .photo-frame img:hover {
-
     filter: grayscale(0%);
-
 }
 
 
@@ -493,56 +909,32 @@ h2 {
 ========================================= */
 
 .data-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-
 }
-
 
 .data-grid div {
-
     background: #050505;
-
     border: 1px solid #333;
-
     padding: 15px;
-
     color: #777;
-
 }
-
 
 .data-grid span {
-
     display: block;
-
     color: white;
-
     margin-top: 8px;
-
 }
-
 
 .data-box {
-
     background: #050505;
-
     border-left: 2px solid #555;
-
     padding: 20px;
-
 }
 
-
 .data-box span {
-
     color: white;
-
 }
 
 
@@ -551,44 +943,27 @@ h2 {
 ========================================= */
 
 .archive-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-
 }
 
-
 .archive-box {
-
     display: block;
-
     padding: 25px;
 
     text-decoration: none;
-
     color: #ddd;
 
     background: #050505;
-
     border: 1px solid #333;
 
     transition: .3s;
-
 }
 
-
 .archive-box:hover {
-
-    border-color: #00ffaa;
-
-    box-shadow:
-
-        0 0 20px rgba(0,255,170,.25);
-
+    border-color: var(--green);
+    box-shadow: 0 0 20px rgba(0,255,170,.25);
 }
 
 
@@ -597,70 +972,44 @@ h2 {
 ========================================= */
 
 .body-map {
-
     position: relative;
-
     width: 350px;
-
     margin: 40px auto;
-
 }
-
 
 .body-silhouette {
-
     width: 100%;
-
     filter: grayscale(100%);
-
     opacity: .7;
-
 }
 
-
 .scar-point {
-
     position: absolute;
 
     width: 35px;
-
     height: 35px;
 
     border-radius: 50%;
-
     background: #000;
 
-    border: 1px solid #00ffaa;
-
-    color: #00ffaa;
+    border: 1px solid var(--green);
+    color: var(--green);
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     text-decoration: none;
-
     font-size: 20px;
 
-    box-shadow:
-
-        0 0 15px #00ffaa;
-
+    box-shadow: 0 0 15px var(--green);
     transition: .3s;
-
 }
 
-
 .scar-point:hover {
-
-    background: #00ffaa;
-
+    background: var(--green);
     color: #000;
-
     transform: scale(1.3);
-
 }
 
 
@@ -669,56 +1018,33 @@ h2 {
 ========================================= */
 
 .left-forearm {
-
     top: 34%;
-
     left: 23%;
-
 }
-
 
 .right-forearm {
-
     top: 34%;
-
     left: 67%;
-
 }
-
 
 .chest {
-
     top: 25%;
-
     left: 50%;
-
 }
-
 
 .groin {
-
     top: 52%;
-
     left: 50%;
-
 }
-
 
 .left-thigh {
-
     top: 65%;
-
     left: 38%;
-
 }
 
-
 .right-thigh {
-
     top: 65%;
-
     left: 57%;
-
 }
 
 
@@ -727,74 +1053,42 @@ h2 {
 ========================================= */
 
 .scar-record {
-
     margin-top: 60px;
-
     padding-top: 20px;
-
     border-top: 1px solid #333;
-
 }
-
 
 .scar-card {
-
     display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
-
 }
-
 
 .file-image {
-
     background: #050505;
-
     border: 1px solid #444;
-
     padding: 10px;
-
 }
-
 
 .file-image img {
-
     width: 100%;
-
     max-height: 500px;
-
     object-fit: cover;
-
 }
-
 
 .record-box {
-
     background: #050505;
-
     border: 1px solid #333;
-
     padding: 20px;
-
 }
-
 
 .record-box p {
-
     color: #777;
-
 }
 
-
 .record-box span {
-
     float: right;
-
     color: white;
-
 }
 
 
@@ -803,41 +1097,25 @@ h2 {
 ========================================= */
 
 .image-database {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-
 }
-
 
 .image-entry {
-
     background: #050505;
-
     border: 1px solid #333;
-
     padding: 10px;
-
+    transition: .3s;
 }
-
 
 .image-entry:hover {
-
-    border-color: #00ffaa;
-
+    border-color: var(--green);
 }
 
-
 .image-entry img {
-
     width: 100%;
-
     display: block;
-
 }
 
 
@@ -846,28 +1124,22 @@ h2 {
 ========================================= */
 
 .back {
-
     display: inline-block;
 
     margin-top: 40px;
-
     padding: 15px 25px;
 
     border: 1px solid #444;
 
     color: white;
-
     text-decoration: none;
 
+    transition: .3s;
 }
 
-
 .back:hover {
-
-    border-color: #00ffaa;
-
-    color: #00ffaa;
-
+    border-color: var(--green);
+    color: var(--green);
 }
 
 
@@ -876,13 +1148,21 @@ h2 {
 ========================================= */
 
 footer {
-
     text-align: center;
-
     padding: 40px;
-
     color: #555;
+}
 
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 4px;
 }
 
 
@@ -892,137 +1172,109 @@ footer {
 
 @media(max-width: 800px) {
 
-
     header h1 {
-
         font-size: 28px;
-
         letter-spacing: 5px;
-
     }
-
 
     header p {
-
         letter-spacing: 2px;
-
     }
-
 
     .terminal {
-
         width: 94%;
-
         padding: 25px;
-
     }
-
-
-    /* PROFILES */
 
     .profile-columns {
-
         grid-template-columns: 1fr;
-
     }
-
 
     .profile-card {
-
         flex-direction: column;
-
     }
-
 
     .profile-card .information {
-
         width: 100%;
-
     }
-
-
-    /* BODY VIEWS */
 
     .body-views {
-
         flex-direction: column;
-
         align-items: center;
-
     }
-
-
-    /* DATA */
 
     .data-grid {
-
         grid-template-columns: 1fr;
-
     }
-
-
-    /* BODY ARCHIVE */
 
     .archive-grid {
-
         grid-template-columns: 1fr;
-
     }
-
-
-    /* SCAR RECORD */
 
     .scar-card {
-
         grid-template-columns: 1fr;
-
     }
-
-
-    /* IMAGE DATABASE */
 
     .image-database {
-
         grid-template-columns: 1fr;
-
     }
-
-
-    /* BODY MAP */
 
     .body-map {
-
         width: 280px;
-
     }
-
-
-    /* ARCHIVE FILE */
 
     .archive-file {
-
         padding: 20px;
-
     }
-
 
     .archive-file h3 {
-
         font-size: 20px;
-
         letter-spacing: 2px;
-
     }
-
 
     .archive-bottom {
-
         flex-direction: column;
-
         align-items: flex-start;
+    }
+}
 
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media(max-width: 480px) {
+
+    .login-page .login-header h1 {
+        font-size: 25px;
+        letter-spacing: 3px;
     }
 
+    .login-page .login-box {
+        padding: 20px 15px;
+    }
 
+    .panel-top {
+        font-size: 8px;
+    }
+
+    .system-status {
+        font-size: 8px;
+    }
+
+    .panel-bottom {
+        font-size: 7px;
+    }
+
+    .login-footer {
+        font-size: 8px;
+    }
+
+    .terminal {
+        padding: 18px;
+    }
+
+    .archive-file h3 {
+        font-size: 18px;
+    }
 }
-```
