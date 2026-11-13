@@ -5,206 +5,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta name="theme-color" content="#050806">
-    <meta name="description" content="KAROLINA ARCHIVE - Personal Database">
 
-    <title>KAROLINA ARCHIVE // ACCESS TERMINAL</title>
+    <title>KAROLINA ARCHIVE</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body class="login-page">
 
-    <!-- SCREEN EFFECTS -->
     <div class="scanline"></div>
     <div class="background-grid"></div>
+    <div class="ambient"></div>
 
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
-
-
-    <!-- HEADER -->
     <header class="login-header">
 
         <div class="system-label">
             <span class="system-dot blink"></span>
-            SECURE DATABASE SYSTEM
+            PERSONAL DATABASE // RESTRICTED ACCESS
         </div>
 
         <h1>KAROLINA ARCHIVE</h1>
 
         <p class="subtitle">
-            PERSONAL DATABASE // RESTRICTED ACCESS
+            PRIVATE INFORMATION SYSTEM
         </p>
 
     </header>
 
 
-    <!-- LOGIN CONTAINER -->
     <main class="login-container">
 
         <section class="login-box">
 
-            <!-- PANEL HEADER -->
             <div class="panel-top">
-
-                <span>AUTHENTICATION TERMINAL</span>
-
-                <span class="online">
-                    [ SECURE ]
-                </span>
-
+                <span>SECURITY PROTOCOL 01</span>
+                <span>KA-2026</span>
             </div>
 
 
-            <!-- ICON -->
             <div class="access-icon">
 
                 <div class="icon-circle">
-                    &#9678;
+                    <span>KA</span>
                 </div>
 
             </div>
 
 
-            <!-- TITLE -->
-            <div class="login-title">
+            <h2 class="login-title">
+                AUTHENTICATION
+            </h2>
 
-                <h2>IDENTITY VERIFICATION</h2>
-
-                <p>
-                    Authentication required to access
-                    the personal archive.
-                </p>
-
-            </div>
+            <p class="login-description">
+                IDENTIFY YOURSELF TO CONTINUE
+            </p>
 
 
-            <!-- SYSTEM STATUS -->
             <div class="system-status">
-
-                <div>
-                    <span>SYSTEM STATUS</span>
-                    <span class="online blink">ONLINE</span>
-                </div>
-
-                <div>
-                    <span>DATABASE</span>
-                    <span class="online">ACTIVE</span>
-                </div>
-
-                <div>
-                    <span>SECURITY</span>
-                    <span class="online">ENABLED</span>
-                </div>
-
+                <span class="status-indicator"></span>
+                SECURE CONNECTION // ONLINE
             </div>
 
 
-            <!-- PASSWORD FORM -->
-            <div class="input-section">
+            <form id="loginForm">
 
-                <label for="password">
-                    ACCESS CODE
-                </label>
+                <div class="input-section">
 
-                <div class="input-wrapper">
+                    <label for="email">
+                        EMAIL ADDRESS
+                    </label>
 
-                    <span class="input-icon">
-                        &#128274;
-                    </span>
+                    <div class="input-wrapper">
 
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="ENTER ACCESS CODE"
-                        autocomplete="current-password"
-                        onkeydown="if(event.key === 'Enter') login()"
-                    >
+                        <span class="input-icon">ID</span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-section">
+
+                    <label for="password">
+                        PASSWORD
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">PW</span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                    </div>
 
                 </div>
 
 
                 <button
+                    type="submit"
                     class="authenticate-button"
-                    onclick="login()"
-                    type="button"
+                    id="loginButton"
                 >
-
                     <span>AUTHENTICATE</span>
-
-                    <span class="button-arrow">
-                        &#8594;
-                    </span>
-
+                    <span class="button-arrow">→</span>
                 </button>
 
-
-                <!-- LOGIN MESSAGE -->
-                <div
-                    id="message"
-                    class="login-message"
-                    aria-live="polite"
-                ></div>
-
-            </div>
+            </form>
 
 
-            <!-- SECURITY NOTE -->
+            <div
+                id="message"
+                class="login-message"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+
             <div class="security-note">
 
-                <span class="security-symbol">
-                    &#9670;
-                </span>
+                <span class="security-icon">◆</span>
 
-                AUTHORIZED ACCESS ONLY
+                <p>
+                    AUTHORIZED ACCESS ONLY.
+                    ALL CONNECTIONS ARE MONITORED.
+                </p>
 
             </div>
 
 
-            <!-- PANEL FOOTER -->
             <div class="panel-bottom">
 
-                <span>SESSION: PRIVATE</span>
-
-                <span>ENCRYPTION: ACTIVE</span>
+                <span>ENCRYPTED SESSION</span>
+                <span>VERSION 1.0</span>
 
             </div>
 
         </section>
 
 
-        <!-- TERMINAL INFORMATION -->
         <div class="terminal-info">
 
-            <span>SYS.VER 2.026</span>
-
-            <span>ARCHIVE NODE: KAR-01</span>
-
-            <span class="online">CONNECTION: STABLE</span>
+            <span>SYS.STATUS: OPERATIONAL</span>
+            <span>DATABASE: SUPABASE</span>
 
         </div>
 
     </main>
 
 
-    <!-- FOOTER -->
     <footer class="login-footer">
 
-        <span>KAROLINA ARCHIVE</span>
+        KAROLINA ARCHIVE © 2026
 
-        <span>PERSONAL DIGITAL RECORDS</span>
-
-        <span>© 2026</span>
+        <p>
+            PRIVATE DATABASE // PERSONAL USE
+        </p>
 
     </footer>
 
 
-    <!-- JAVASCRIPT -->
+    <!-- SUPABASE LIBRARY -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- LOGIN SCRIPT -->
+
     <script src="script.js"></script>
 
 </body>
-
 </html>
