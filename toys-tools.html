@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050806">
+
+    <title>KAROLINA // TOYS & TOOLS</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="scanline"></div>
+
+<header class="archive-header">
+
+    <div class="system-label">
+        <span class="system-dot blink"></span>
+        OWNER ACCESS // INVENTORY SYSTEM
+    </div>
+
+    <h1>TOYS &amp; TOOLS</h1>
+
+    <p class="subtitle">
+        PERSONAL EQUIPMENT // INVENTORY DATABASE
+    </p>
+
+</header>
+
+<main class="terminal">
+
+    <!-- TOP BAR -->
+
+    <div class="dashboard-top">
+        <span>INVENTORY MANAGEMENT SYSTEM</span>
+        <span class="online">● DATABASE ONLINE</span>
+    </div>
+
+
+    <!-- INVENTORY SUMMARY -->
+
+    <section>
+
+        <h2>INVENTORY OVERVIEW</h2>
+
+        <div class="inventory-summary">
+
+            <div class="inventory-stat">
+                <strong id="totalCount">0</strong>
+                <span>TOTAL ITEMS</span>
+            </div>
+
+            <div class="inventory-stat">
+                <strong id="availableCount">0</strong>
+                <span>AVAILABLE</span>
+            </div>
+
+            <div class="inventory-stat">
+                <strong id="inUseCount">0</strong>
+                <span>IN USE</span>
+            </div>
+
+            <div class="inventory-stat">
+                <strong id="storageCount">0</strong>
+                <span>IN STORAGE</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADD / EDIT ITEM -->
+
+    <section>
+
+        <div class="inventory-header">
+            <h2 id="formTitle">ADD NEW ITEM</h2>
+            <span class="online">OWNER CONTROL</span>
+        </div>
+
+        <form id="itemForm" class="inventory-form">
+
+            <label>
+                ITEM NAME
+                <input
+                    type="text"
+                    id="itemName"
+                    placeholder="Enter item name"
+                    maxlength="80"
+                    required
+                >
+            </label>
+
+            <label>
+                CATEGORY
+                <select id="itemCategory" required>
+                    <option value="Toys">Toys</option>
+                    <option value="Tools">Tools</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Equipment">Equipment</option>
+                    <option value="Other">Other</option>
+                </select>
+            </label>
+
+            <label>
+                AVAILABILITY STATUS
+                <select id="itemStatus" required>
+                    <option value="AVAILABLE">AVAILABLE</option>
+                    <option value="IN USE">IN USE</option>
+                    <option value="STORAGE">STORAGE</option>
+                    <option value="UNAVAILABLE">UNAVAILABLE</option>
+                </select>
+            </label>
+
+            <label>
+                STORAGE LOCATION
+                <input
+                    type="text"
+                    id="itemLocation"
+                    placeholder="e.g. Storage box 01"
+                    maxlength="100"
+                >
+            </label>
+
+            <label class="full-width">
+                IMAGE ADDRESS
+                <input
+                    type="url"
+                    id="itemImage"
+                    placeholder="https://example.com/image.jpg"
+                >
+            </label>
+
+            <label class="full-width">
+                DESCRIPTION / PRIVATE NOTES
+                <textarea
+                    id="itemDescription"
+                    placeholder="Add details, specifications or private notes..."
+                    maxlength="2000"
+                ></textarea>
+            </label>
+
+            <div class="full-width inventory-form-actions">
+
+                <button
+                    type="submit"
+                    class="inventory-action"
+                    id="saveButton"
+                >
+                    + SAVE ITEM
+                </button>
+
+                <button
+                    type="button"
+                    class="inventory-action"
+                    id="cancelEdit"
+                    hidden
+                >
+                    CANCEL EDIT
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- SEARCH AND FILTER -->
+
+    <section>
+
+        <h2>ITEM DATABASE</h2>
+
+        <div class="inventory-controls">
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="SEARCH INVENTORY..."
+                aria-label="Search inventory"
+            >
+
+            <select id="categoryFilter" aria-label="Filter by category">
+                <option value="ALL">ALL CATEGORIES</option>
+                <option value="Toys">TOYS</option>
+                <option value="Tools">TOOLS</option>
+                <option value="Accessories">ACCESSORIES</option>
+                <option value="Equipment">EQUIPMENT</option>
+                <option value="Other">OTHER</option>
+            </select>
+
+            <select id="statusFilter" aria-label="Filter by status">
+                <option value="ALL">ALL STATUSES</option>
+                <option value="AVAILABLE">AVAILABLE</option>
+                <option value="IN USE">IN USE</option>
+                <option value="STORAGE">STORAGE</option>
+                <option value="UNAVAILABLE">UNAVAILABLE</option>
+            </select>
+
+        </div>
+
+        <div class="inventory-header">
+            <span class="online">REGISTERED ITEMS</span>
+            <span id="resultsCount">0 RESULTS</span>
+        </div>
+
+        <div
+            class="inventory-grid"
+            id="inventoryGrid"
+            aria-live="polite"
+        ></div>
+
+        <p id="emptyMessage" class="section-description">
+            NO ITEMS REGISTERED. ADD YOUR FIRST ITEM ABOVE.
+        </p>
+
+    </section>
+
+
+    <!-- RETURN -->
+
+    <a class="back" href="archive.html">
+        &lt; RETURN TO KAROLINA ARCHIVE
+    </a>
+
+</main>
+
+
+<footer>
+    KAROLINA SYSTEM © 2026
+    <p>TOYS &amp; TOOLS // PRIVATE INVENTORY DATABASE</p>
+</footer>
+
+
+<script src="toys-tools.js"></script>
+
+</body>
+</html>
