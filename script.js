@@ -1,86 +1,105 @@
-function login(){
 
-    let password = document.getElementById("password").value;
-    let message = document.getElementById("message");
+let isLoggingIn = false;
 
+function login() {
 
-    if(password === "KARA2026"){
+    if (isLoggingIn) return;
 
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("message");
+    const button = document.querySelector(".authenticate-button");
+
+    // ACCESS DENIED
+
+    if (password !== "KARA2026") {
 
         message.innerHTML = `
+            <div class="login-error">
+                <p>⚠ ACCESS DENIED</p>
+                <p>INVALID ACCESS CODE</p>
+            </div>
+        `;
+
+        document.getElementById("password").value = "";
+
+        return;
+    }
+
+    // ACCESS GRANTED
+
+    isLoggingIn = true;
+
+    button.disabled = true;
+    button.style.opacity = "0.5";
+    button.style.cursor = "not-allowed";
+
+    message.innerHTML = `
         <div class="loading">
-            <p>ACCESS GRANTED</p>
-            <p id="loadingText">VERIFYING IDENTITY...</p>
+
+            <p class="online">ACCESS GRANTED</p>
+
+            <p id="loadingText">
+                VERIFYING IDENTITY...
+            </p>
 
             <div class="bar">
                 <div class="progress"></div>
             </div>
+
+            <p id="progressText">0%</p>
+
         </div>
-        `;
+    `;
 
+    const steps = [
+        "VERIFYING IDENTITY...",
+        "LOADING PERSONAL DATABASE...",
+        "IDENTITY CHECK....... OK",
+        "PROFILE FILE........ ONLINE",
+        "VISUAL ARCHIVE...... UNLOCKED",
+        "DATABASE ACCESS..... COMPLETE"
+    ];
 
-        setTimeout(function(){
+    const loadingText = document.getElementById("loadingText");
+    const progressText = document.getElementById("progressText");
 
-            document.getElementById("loadingText").innerHTML =
-            "LOADING PERSONAL DATABASE...";
+    let progress = 0;
 
-        },1000);
+    const interval = setInterval(() => {
 
+        progress += 2;
 
+        const bar = document.querySelector(".progress");
 
-        setTimeout(function(){
+        if (bar) {
+            bar.style.width = progress + "%";
+        }
 
-            document.getElementById("loadingText").innerHTML =
-            "IDENTITY CHECK....... OK";
+        if (progressText) {
+            progressText.textContent = progress + "%";
+        }
 
-        },2000);
+        const stepIndex = Math.min(
+            Math.floor(progress / 20),
+            steps.length - 1
+        );
 
+        if (loadingText) {
+            loadingText.textContent = steps[stepIndex];
+        }
 
+        if (progress >= 100) {
 
-        setTimeout(function(){
+            clearInterval(interval);
 
-            document.getElementById("loadingText").innerHTML =
-            "PROFILE FILE........ ONLINE";
+            setTimeout(() => {
 
-        },3000);
+                window.location.href = "archive.html";
 
+            }, 1000);
 
+        }
 
-        setTimeout(function(){
-
-            document.getElementById("loadingText").innerHTML =
-            "VISUAL ARCHIVE...... UNLOCKED";
-
-        },4000);
-
-
-
-        setTimeout(function(){
-
-            document.getElementById("loadingText").innerHTML =
-            "DATABASE ACCESS..... COMPLETE";
-
-        },5000);
-
-
-
-        setTimeout(function(){
-
-            window.location.href="archive.html";
-
-        },7000);
-
-
-    }
-
-
-    else {
-
-
-        message.innerHTML =
-        "ACCESS DENIED";
-
-
-    }
+    }, 100);
 
 }
