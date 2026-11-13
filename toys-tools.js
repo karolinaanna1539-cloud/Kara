@@ -1,540 +1,481 @@
 
-/* ==================================================
-   KAROLINA ARCHIVE
-   TOYS & TOOLS INVENTORY SYSTEM
-================================================== */
+/* KAROLINA ARCHIVE — TOYS & TOOLS
+   Supabase Database + Private Storage + Realtime
+*/
 
-const STORAGE_KEY = "karolina_toys_tools_v1";
+(async function () {
+    "use strict";
 
-const itemForm = document.getElementById("itemForm");
-const inventoryGrid = document.getElementById("inventoryGrid");
+    const supabaseClient = window.archiveSupabase;
+    const session = await window.archiveAuthReady;
 
-const searchInput = document.getElementById("searchInput");
-const categoryFilter = document.getElementById("categoryFilter");
-const statusFilter = document.getElementById("statusFilter");
+    if (!session || !supabaseClient) return;
 
-const emptyMessage = document.getElementById("emptyMessage");
-const resultsCount = document.getElementById("resultsCount");
+    const user = session.user;
+    const BUCKET = "karolina-images";
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-const formTitle = document.getElementById("formTitle");
-const saveButton = document.getElementById("saveButton");
-const cancelEditButton = document.getElementById("cancelEdit");
+    let inventory = [];
+    let editingImagePath = null;
+    let realtimeChannel = null;
 
-let items = loadItems();
-let editingId = null;
+    const elements = {
+        form: document.getElementById("itemForm"),
+        itemId: document.getElementById("itemId"),
+        name: document.getElementById("itemName"),
+        category: document.getElementById("itemCategory"),
+        status: document.getElementById("itemStatus"),
+        location: document.getElementById("itemLocation"),
+        description: document.getElementById("itemDescription"),
+        image: document.getElementById("itemImageFile"),
+        imagePreview: document.getElementById("currentImagePreview"),
+        formTitle: document.getElementById("formTitle"),
+        formMessage: document.getElementById("formMessage"),
+        saveButton: document.getElementById("saveButton"),
+        cancelButton: document.getElementById("cancelEditButton"),
+        grid: document.getElementById("inventoryGrid"),
+        search: document.getElementById("searchInput"),
+        filterCategory: document.getElementById("filterCategory"),
+        filterStatus: document.getElementById("filterStatus"),
+        connection: document.getElementById("connectionStatus"),
+        total: document.getElementById("totalCount"),
+        available: document.getElementById("availableCount"),
+        inUse: document.getElementById("inUseCount"),
+        storage: document.getElementById("storageCount"),
+        logout: document.getElementById("logoutButton")
+    };
 
+    function setMessage(message, isError = false) {
+        elements.formMessage.textContent = message;
+        elements.formMessage.classList.toggle("error", isError);
+    }
 
-/* ==================================================
-   LOAD AND SAVE DATA
-================================================== */
+    function setConnection(message, isError = false) {
+        elements.connection.textContent = message;
+        elements.connection.classList.toggle("error", isError);
+    }
 
-function loadItems() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
+    function escapeText(value) {
+        return String(value ?? "");
+    }
 
-        if (!saved) {
-            return [];
+    function resetForm() {
+        elements.form.reset();
+        elements.itemId.value = "";
+        editingImagePath = null;
+        elements.formTitle.textContent = "ADD NEW ITEM";
+        elements.saveButton.textContent = "SAVE ITEM";
+        elements.cancelButton.hidden = true;
+        elements.imagePreview.replaceChildren();
+        setMessage("");
+    }
+
+    function makeElement(tag, className, text) {
+        const element = document.createElement(tag);
+
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+
+        return element;
+    }
+
+    async function getSignedImage(path) {
+        if (!path) return null;
+
+        const { data, error } = await supabaseClient.storage
+            .from(BUCKET)
+            .createSignedUrl(path, 3600);
+
+        if (error) {
+            console.error("Image URL error:", error);
+            return null;
         }
 
-        const parsed = JSON.parse(saved);
-
-        return Array.isArray(parsed) ? parsed : [];
-
-    } catch (error) {
-        console.error("Could not load inventory:", error);
-        return [];
-    }
-}
-
-
-function saveItems() {
-    try {
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(items)
-        );
-
-        return true;
-
-    } catch (error) {
-        console.error("Could not save inventory:", error);
-
-        alert(
-            "DATABASE ERROR: Could not save your items. " +
-            "Check available browser storage."
-        );
-
-        return false;
-    }
-}
-
-
-/* ==================================================
-   CREATE UNIQUE ID
-================================================== */
-
-function createId() {
-    return (
-        Date.now().toString(36) +
-        Math.random().toString(36).slice(2, 8)
-    );
-}
-
-
-/* ==================================================
-   SAFE IMAGE URL
-================================================== */
-
-function getSafeImageUrl(value) {
-    if (!value) {
-        return "";
+        return data.signedUrl;
     }
 
-    try {
-        const url = new URL(value, window.location.href);
+    async function uploadImage(file) {
+        if (!file) return null;
 
-        if (
-            url.protocol === "https:" ||
-            url.protocol === "http:"
-        ) {
-            return url.href;
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/gif"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            throw new Error("Unsupported image format.");
         }
 
-        return "";
+        if (file.size > MAX_FILE_SIZE) {
+            throw new Error("Image is larger than 10 MB.");
+        }
 
-    } catch {
-        return "";
-    }
-}
+        const safeName = file.name
+            .toLowerCase()
+            .replace(/[^a-z0-9._-]/g, "-");
 
+        const imagePath =
+            user.id + "/" + crypto.randomUUID() + "-" + safeName;
 
-/* ==================================================
-   UPDATE STATISTICS
-================================================== */
+        const { error } = await supabaseClient.storage
+            .from(BUCKET)
+            .upload(imagePath, file, {
+                cacheControl: "3600",
+                upsert: false,
+                contentType: file.type
+            });
 
-function updateStatistics() {
+        if (error) throw error;
 
-    const total = items.length;
-
-    const available = items.filter(
-        item => item.status === "AVAILABLE"
-    ).length;
-
-    const inUse = items.filter(
-        item => item.status === "IN USE"
-    ).length;
-
-    const storage = items.filter(
-        item => item.status === "STORAGE"
-    ).length;
-
-    document.getElementById("totalCount").textContent = total;
-
-    document.getElementById("availableCount").textContent =
-        available;
-
-    document.getElementById("inUseCount").textContent =
-        inUse;
-
-    document.getElementById("storageCount").textContent =
-        storage;
-}
-
-
-/* ==================================================
-   CREATE ITEM CARD
-================================================== */
-
-function createItemCard(item) {
-
-    const card = document.createElement("article");
-    card.className = "inventory-card";
-
-    const imageUrl = getSafeImageUrl(item.image);
-
-    if (imageUrl) {
-
-        const image = document.createElement("img");
-
-        image.className = "inventory-image";
-        image.src = imageUrl;
-        image.alt = item.name || "Inventory item";
-        image.loading = "lazy";
-
-        image.addEventListener("error", () => {
-            image.remove();
-        });
-
-        card.appendChild(image);
+        return imagePath;
     }
 
-    const content = document.createElement("div");
-    content.className = "inventory-content";
+    async function removeImage(path) {
+        if (!path) return;
 
-    const category = document.createElement("span");
-    category.className = "inventory-category";
-    category.textContent = item.category || "OTHER";
+        const { error } = await supabaseClient.storage
+            .from(BUCKET)
+            .remove([path]);
 
-    const title = document.createElement("h3");
-    title.textContent = item.name || "UNNAMED ITEM";
-
-    const status = document.createElement("span");
-    status.className = "inventory-status";
-
-    if (item.status === "IN USE") {
-        status.classList.add("in-use");
+        if (error) {
+            console.error("Could not remove old image:", error);
+        }
     }
 
-    if (item.status === "UNAVAILABLE") {
-        status.classList.add("unavailable");
-    }
+    async function loadInventory() {
+        setConnection("SYNCHRONIZING...");
 
-    if (item.status === "STORAGE") {
-        status.classList.add("storage");
-    }
+        const { data, error } = await supabaseClient
+            .from("inventory_items")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-    status.textContent = item.status || "UNKNOWN";
-
-    const description = document.createElement("p");
-    description.textContent =
-        item.description || "NO DESCRIPTION AVAILABLE.";
-
-    const details = document.createElement("div");
-    details.className = "inventory-details";
-
-    const location = document.createElement("span");
-    location.textContent =
-        "LOCATION: " + (item.location || "NOT SPECIFIED");
-
-    const date = document.createElement("span");
-    date.textContent =
-        item.date || "DATE UNKNOWN";
-
-    details.append(location, date);
-
-    const actions = document.createElement("div");
-    actions.className = "inventory-card-actions";
-
-    const editButton = document.createElement("button");
-    editButton.type = "button";
-    editButton.className = "inventory-action";
-    editButton.textContent = "EDIT";
-
-    editButton.addEventListener("click", () => {
-        editItem(item.id);
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "inventory-action delete-action";
-    deleteButton.textContent = "DELETE";
-
-    deleteButton.addEventListener("click", () => {
-        deleteItem(item.id);
-    });
-
-    actions.append(editButton, deleteButton);
-
-    content.append(
-        category,
-        title,
-        status,
-        description,
-        details,
-        actions
-    );
-
-    card.appendChild(content);
-
-    return card;
-}
-
-
-/* ==================================================
-   DISPLAY INVENTORY
-================================================== */
-
-function renderInventory() {
-
-    inventoryGrid.replaceChildren();
-
-    const searchTerm = searchInput.value
-        .trim()
-        .toLowerCase();
-
-    const selectedCategory = categoryFilter.value;
-    const selectedStatus = statusFilter.value;
-
-    const filteredItems = items.filter(item => {
-
-        const searchableText = [
-            item.name,
-            item.category,
-            item.description,
-            item.location,
-            item.status
-        ].join(" ").toLowerCase();
-
-        const matchesSearch =
-            searchableText.includes(searchTerm);
-
-        const matchesCategory =
-            selectedCategory === "ALL" ||
-            item.category === selectedCategory;
-
-        const matchesStatus =
-            selectedStatus === "ALL" ||
-            item.status === selectedStatus;
-
-        return (
-            matchesSearch &&
-            matchesCategory &&
-            matchesStatus
-        );
-    });
-
-    filteredItems.forEach(item => {
-        inventoryGrid.appendChild(createItemCard(item));
-    });
-
-    resultsCount.textContent =
-        filteredItems.length + " RESULTS";
-
-    emptyMessage.hidden = filteredItems.length > 0;
-
-    if (items.length === 0) {
-        emptyMessage.textContent =
-            "NO ITEMS REGISTERED. ADD YOUR FIRST ITEM ABOVE.";
-    } else if (filteredItems.length === 0) {
-        emptyMessage.textContent =
-            "NO MATCHING ITEMS FOUND.";
-    }
-
-    updateStatistics();
-}
-
-
-/* ==================================================
-   RESET FORM
-================================================== */
-
-function resetForm() {
-
-    itemForm.reset();
-
-    editingId = null;
-
-    formTitle.textContent = "ADD NEW ITEM";
-    saveButton.textContent = "+ SAVE ITEM";
-
-    cancelEditButton.hidden = true;
-}
-
-
-/* ==================================================
-   ADD OR UPDATE ITEM
-================================================== */
-
-itemForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-    const name = document
-        .getElementById("itemName")
-        .value
-        .trim();
-
-    const category = document
-        .getElementById("itemCategory")
-        .value;
-
-    const status = document
-        .getElementById("itemStatus")
-        .value;
-
-    const location = document
-        .getElementById("itemLocation")
-        .value
-        .trim();
-
-    const image = document
-        .getElementById("itemImage")
-        .value
-        .trim();
-
-    const description = document
-        .getElementById("itemDescription")
-        .value
-        .trim();
-
-    if (!name) {
-        alert("Please enter an item name.");
-        return;
-    }
-
-    if (image && !getSafeImageUrl(image)) {
-        alert("Please enter a valid HTTP or HTTPS image address.");
-        return;
-    }
-
-    if (editingId !== null) {
-
-        const index = items.findIndex(
-            item => item.id === editingId
-        );
-
-        if (index === -1) {
-            alert("ITEM NOT FOUND.");
-            resetForm();
+        if (error) {
+            console.error(error);
+            setConnection("DATABASE ERROR", true);
+            elements.grid.textContent =
+                "Could not load inventory. Check database permissions.";
             return;
         }
 
-        const updatedItem = {
-            ...items[index],
-            name,
-            category,
-            status,
-            location,
-            image,
-            description
-        };
+        inventory = data || [];
 
-        items[index] = updatedItem;
-
-    } else {
-
-        const newItem = {
-            id: createId(),
-            name,
-            category,
-            status,
-            location,
-            image,
-            description,
-            date: new Date().toLocaleDateString()
-        };
-
-        items.unshift(newItem);
+        setConnection("DATABASE ONLINE // REALTIME ENABLED");
+        updateStatistics();
+        await renderInventory();
     }
 
-    if (saveItems()) {
+    function updateStatistics() {
+        elements.total.textContent = inventory.length;
 
-        resetForm();
-        renderInventory();
+        elements.available.textContent = inventory.filter(
+            item => item.status === "AVAILABLE"
+        ).length;
 
-    }
-});
+        elements.inUse.textContent = inventory.filter(
+            item => item.status === "IN USE"
+        ).length;
 
-
-/* ==================================================
-   EDIT ITEM
-================================================== */
-
-function editItem(id) {
-
-    const item = items.find(
-        entry => entry.id === id
-    );
-
-    if (!item) {
-        return;
+        elements.storage.textContent = inventory.filter(
+            item => item.status === "STORAGE"
+        ).length;
     }
 
-    editingId = id;
+    async function renderInventory() {
+        elements.grid.replaceChildren();
 
-    document.getElementById("itemName").value =
-        item.name || "";
+        const searchTerm = elements.search.value.toLowerCase().trim();
+        const categoryFilter = elements.filterCategory.value;
+        const statusFilter = elements.filterStatus.value;
 
-    document.getElementById("itemCategory").value =
-        item.category || "Other";
+        const filtered = inventory.filter(item => {
+            const searchable = [
+                item.name,
+                item.category,
+                item.status,
+                item.location,
+                item.description
+            ].join(" ").toLowerCase();
 
-    document.getElementById("itemStatus").value =
-        item.status || "AVAILABLE";
+            return (
+                searchable.includes(searchTerm) &&
+                (!categoryFilter || item.category === categoryFilter) &&
+                (!statusFilter || item.status === statusFilter)
+            );
+        });
 
-    document.getElementById("itemLocation").value =
-        item.location || "";
+        if (filtered.length === 0) {
+            elements.grid.appendChild(
+                makeElement("p", "inventory-empty", "NO RECORDS FOUND.")
+            );
+            return;
+        }
 
-    document.getElementById("itemImage").value =
-        item.image || "";
+        for (const item of filtered) {
+            const card = makeElement("article", "inventory-card");
 
-    document.getElementById("itemDescription").value =
-        item.description || "";
+            if (item.image_path) {
+                const imageUrl = await getSignedImage(item.image_path);
 
-    formTitle.textContent = "EDIT ITEM";
-    saveButton.textContent = "SAVE CHANGES";
+                if (imageUrl) {
+                    const image = document.createElement("img");
+                    image.className = "inventory-image";
+                    image.src = imageUrl;
+                    image.alt = escapeText(item.name);
+                    image.loading = "lazy";
+                    card.appendChild(image);
+                }
+            }
 
-    cancelEditButton.hidden = false;
+            const content = makeElement("div", "inventory-content");
 
-    itemForm.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
+            content.appendChild(
+                makeElement("p", "inventory-category", item.category)
+            );
+
+            content.appendChild(
+                makeElement("h3", "inventory-item-name", item.name)
+            );
+
+            const status = makeElement(
+                "span",
+                "inventory-status",
+                item.status
+            );
+
+            content.appendChild(status);
+
+            if (item.location) {
+                content.appendChild(
+                    makeElement("p", "inventory-detail",
+                        "LOCATION: " + item.location)
+                );
+            }
+
+            if (item.description) {
+                content.appendChild(
+                    makeElement("p", "inventory-description",
+                        item.description)
+                );
+            }
+
+            const actions = makeElement("div", "inventory-action");
+
+            const editButton = makeElement("button", "", "EDIT");
+            editButton.type = "button";
+            editButton.addEventListener("click", () => editItem(item));
+
+            const deleteButton = makeElement(
+                "button",
+                "delete-action",
+                "DELETE"
+            );
+            deleteButton.type = "button";
+            deleteButton.addEventListener(
+                "click",
+                () => deleteItem(item)
+            );
+
+            actions.append(editButton, deleteButton);
+            content.appendChild(actions);
+            card.appendChild(content);
+            elements.grid.appendChild(card);
+        }
+    }
+
+    function editItem(item) {
+        elements.itemId.value = item.id;
+        elements.name.value = item.name || "";
+        elements.category.value = item.category || "Other";
+        elements.status.value = item.status || "AVAILABLE";
+        elements.location.value = item.location || "";
+        elements.description.value = item.description || "";
+
+        editingImagePath = item.image_path || null;
+
+        elements.formTitle.textContent = "EDIT ITEM";
+        elements.saveButton.textContent = "UPDATE ITEM";
+        elements.cancelButton.hidden = false;
+
+        elements.imagePreview.replaceChildren();
+
+        if (item.image_path) {
+            getSignedImage(item.image_path).then(url => {
+                if (!url) return;
+
+                const image = document.createElement("img");
+                image.src = url;
+                image.alt = "Current item image";
+                image.className = "inventory-preview-image";
+
+                elements.imagePreview.replaceChildren(image);
+            });
+        }
+
+        setMessage("Editing selected record.");
+        elements.form.scrollIntoView({ behavior: "smooth" });
+    }
+
+    async function saveItem(event) {
+        event.preventDefault();
+
+        const name = elements.name.value.trim();
+
+        if (!name) {
+            setMessage("Item name is required.", true);
+            return;
+        }
+
+        const itemId = elements.itemId.value;
+        const selectedFile = elements.image.files[0];
+
+        elements.saveButton.disabled = true;
+        elements.saveButton.textContent = "SAVING...";
+
+        let uploadedPath = null;
+
+        try {
+            if (selectedFile) {
+                uploadedPath = await uploadImage(selectedFile);
+            }
+
+            const payload = {
+                name,
+                category: elements.category.value,
+                status: elements.status.value,
+                location: elements.location.value.trim() || null,
+                description: elements.description.value.trim() || null,
+                image_path: uploadedPath || editingImagePath,
+                updated_at: new Date().toISOString()
+            };
+
+            let result;
+
+            if (itemId) {
+                result = await supabaseClient
+                    .from("inventory_items")
+                    .update(payload)
+                    .eq("id", itemId)
+                    .select()
+                    .single();
+            } else {
+                result = await supabaseClient
+                    .from("inventory_items")
+                    .insert({
+                        ...payload,
+                        owner_id: user.id
+                    })
+                    .select()
+                    .single();
+            }
+
+            if (result.error) throw result.error;
+
+            if (uploadedPath && editingImagePath) {
+                await removeImage(editingImagePath);
+            }
+
+            resetForm();
+            setMessage("Record saved successfully.");
+
+            await loadInventory();
+
+        } catch (error) {
+            console.error("Save error:", error);
+
+            if (uploadedPath) {
+                await removeImage(uploadedPath);
+            }
+
+            setMessage(
+                error.message || "Could not save item.",
+                true
+            );
+
+        } finally {
+            elements.saveButton.disabled = false;
+            elements.saveButton.textContent =
+                elements.itemId.value ? "UPDATE ITEM" : "SAVE ITEM";
+        }
+    }
+
+    async function deleteItem(item) {
+        const confirmed = window.confirm(
+            'Delete "' + item.name + '" permanently?'
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const { error } = await supabaseClient
+                .from("inventory_items")
+                .delete()
+                .eq("id", item.id);
+
+            if (error) throw error;
+
+            await removeImage(item.image_path);
+            await loadInventory();
+
+        } catch (error) {
+            console.error("Delete error:", error);
+            window.alert("Could not delete item: " + error.message);
+        }
+    }
+
+    function subscribeToRealtime() {
+        realtimeChannel = supabaseClient
+            .channel("inventory-items-live")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "inventory_items"
+                },
+                () => {
+                    loadInventory();
+                }
+            )
+            .subscribe(status => {
+                if (status === "SUBSCRIBED") {
+                    setConnection("DATABASE ONLINE // LIVE SYNC ACTIVE");
+                }
+
+                if (status === "CHANNEL_ERROR") {
+                    setConnection("REALTIME CONNECTION ERROR", true);
+                }
+            });
+    }
+
+    elements.form.addEventListener("submit", saveItem);
+
+    elements.cancelButton.addEventListener("click", resetForm);
+
+    elements.search.addEventListener("input", renderInventory);
+    elements.filterCategory.addEventListener("change", renderInventory);
+    elements.filterStatus.addEventListener("change", renderInventory);
+
+    elements.logout.addEventListener("click", async () => {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+            window.alert("Could not log out: " + error.message);
+            return;
+        }
+
+        window.location.replace("index.html");
     });
 
-    document.getElementById("itemName").focus();
-}
+    await loadInventory();
+    subscribeToRealtime();
 
+    window.addEventListener("beforeunload", () => {
+        if (realtimeChannel) {
+            supabaseClient.removeChannel(realtimeChannel);
+        }
+    });
 
-/* ==================================================
-   DELETE ITEM
-================================================== */
-
-function deleteItem(id) {
-
-    const item = items.find(
-        entry => entry.id === id
-    );
-
-    if (!item) {
-        return;
-    }
-
-    const confirmed = confirm(
-        'DELETE "' + item.name + '" FROM INVENTORY?'
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    const previousItems = items;
-
-    items = items.filter(
-        entry => entry.id !== id
-    );
-
-    if (!saveItems()) {
-        items = previousItems;
-        return;
-    }
-
-    if (editingId === id) {
-        resetForm();
-    }
-
-    renderInventory();
-}
-
-
-/* ==================================================
-   CANCEL EDIT
-================================================== */
-
-cancelEditButton.addEventListener("click", resetForm);
-
-
-/* ==================================================
-   SEARCH AND FILTER EVENTS
-================================================== */
-
-searchInput.addEventListener("input", renderInventory);
-
-categoryFilter.addEventListener("change", renderInventory);
-
-statusFilter.addEventListener("change", renderInventory);
-
-
-/* ==================================================
-   INITIALIZE DATABASE
-================================================== */
-
-renderInventory();
+})();
