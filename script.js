@@ -1,37 +1,135 @@
 
+/* ==================================================
+   KAROLINA ARCHIVE
+   SUPABASE AUTHENTICATION SYSTEM
+================================================== */
+
+// SUPABASE CONFIGURATION
+
+const SUPABASE_URL =
+    "https://lgfvvxjevlwtthtazsll.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_tLcnBvmy9Ixd_bA77DfhDA_4jNESB_c";
+
+
+// CREATE SUPABASE CLIENT
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// LOGIN STATE
+
 let isLoggingIn = false;
 
-function login() {
+
+// ==================================================
+// LOGIN FUNCTION
+// ==================================================
+
+async function login(event) {
+
+    if (event) {
+        event.preventDefault();
+    }
 
     if (isLoggingIn) return;
 
-    const password = document.getElementById("password").value;
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
     const message = document.getElementById("message");
-    const button = document.querySelector(".authenticate-button");
 
-    // ACCESS DENIED
+    const button = document.querySelector(
+        ".authenticate-button"
+    );
 
-    if (password !== "KARA2026") {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
-        message.innerHTML = `
-            <div class="login-error">
-                <p>⚠ ACCESS DENIED</p>
-                <p>INVALID ACCESS CODE</p>
-            </div>
-        `;
+    // CHECK EMPTY FIELDS
 
-        document.getElementById("password").value = "";
+    if (!email || !password) {
+
+        message.textContent =
+            "EMAIL AND PASSWORD REQUIRED";
 
         return;
     }
 
-    // ACCESS GRANTED
+
+    // START LOGIN
 
     isLoggingIn = true;
 
     button.disabled = true;
     button.style.opacity = "0.5";
     button.style.cursor = "not-allowed";
+
+    message.textContent = "CONNECTING TO DATABASE...";
+
+
+    // AUTHENTICATE WITH SUPABASE
+
+    let data;
+    let error;
+
+    try {
+
+        const result =
+            await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+        data = result.data;
+        error = result.error;
+
+    } catch (connectionError) {
+
+        error = connectionError;
+
+    }
+
+
+    // ACCESS DENIED
+
+    if (error || !data?.session) {
+
+        message.replaceChildren();
+
+        const errorBox = document.createElement("div");
+        errorBox.className = "login-error";
+
+        const errorTitle = document.createElement("p");
+        errorTitle.textContent = "⚠ ACCESS DENIED";
+
+        const errorDescription = document.createElement("p");
+        errorDescription.textContent =
+            "INVALID CREDENTIALS OR CONNECTION ERROR";
+
+        errorBox.append(
+            errorTitle,
+            errorDescription
+        );
+
+        message.appendChild(errorBox);
+
+        passwordInput.value = "";
+
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+
+        isLoggingIn = false;
+
+        return;
+    }
+
+
+    // ACCESS GRANTED
 
     message.innerHTML = `
         <div class="loading">
@@ -51,8 +149,12 @@ function login() {
         </div>
     `;
 
+
+    // LOADING SEQUENCE
+
     const steps = [
         "VERIFYING IDENTITY...",
+        "CONNECTING TO SUPABASE...",
         "LOADING PERSONAL DATABASE...",
         "IDENTITY CHECK....... OK",
         "PROFILE FILE........ ONLINE",
@@ -60,8 +162,16 @@ function login() {
         "DATABASE ACCESS..... COMPLETE"
     ];
 
-    const loadingText = document.getElementById("loadingText");
-    const progressText = document.getElementById("progressText");
+
+    const loadingText =
+        document.getElementById("loadingText");
+
+    const progressText =
+        document.getElementById("progressText");
+
+    const progressBar =
+        document.querySelector(".progress");
+
 
     let progress = 0;
 
@@ -69,24 +179,28 @@ function login() {
 
         progress += 2;
 
-        const bar = document.querySelector(".progress");
-
-        if (bar) {
-            bar.style.width = progress + "%";
+        if (progressBar) {
+            progressBar.style.width =
+                progress + "%";
         }
 
         if (progressText) {
-            progressText.textContent = progress + "%";
+            progressText.textContent =
+                progress + "%";
         }
 
         const stepIndex = Math.min(
-            Math.floor(progress / 20),
+            Math.floor(progress / (100 / steps.length)),
             steps.length - 1
         );
 
         if (loadingText) {
-            loadingText.textContent = steps[stepIndex];
+            loadingText.textContent =
+                steps[stepIndex];
         }
+
+
+        // LOGIN COMPLETE
 
         if (progress >= 100) {
 
@@ -94,12 +208,101 @@ function login() {
 
             setTimeout(() => {
 
-                window.location.href = "archive.html";
+                window.location.href =
+                    "archive.html";
 
-            }, 1000);
+            }, 700);
 
         }
 
-    }, 100);
+    }, 45);
 
 }
+
+
+// ==================================================
+// CHECK EXISTING SESSION
+// ==================================================
+
+async function checkExistingSession() {
+
+    try {
+
+        const {
+            data: { session },
+            error
+        } = await supabaseClient.auth.getSession();
+
+        if (error) {
+            console.error(
+                "SESSION ERROR:",
+                error.message
+            );
+            return;
+        }
+
+        // Existing user goes directly to archive
+
+        if (session) {
+
+            window.location.replace(
+                "archive.html"
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "SUPABASE CONNECTION ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// INITIALIZE LOGIN PAGE
+// ==================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            login
+        );
+
+    }
+
+    if (passwordInput) {
+
+        passwordInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    login();
+
+                }
+
+            }
+        );
+
+    }
+
+    checkExistingSession();
+
+});
