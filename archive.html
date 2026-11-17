@@ -3,450 +3,266 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>KAROLINA ARCHIVE</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body class="protected-page">
 
     <div class="scanline"></div>
 
-    <!-- =====================================
-         MAIN HEADER
-    ====================================== -->
-
     <header>
-
         <h1>KAROLINA ARCHIVE</h1>
-
-        <p class="subtitle">
-            PERSONAL DATABASE // RESTRICTED ACCESS
-        </p>
-
+        <p class="subtitle">PERSONAL DATABASE // RESTRICTED ACCESS</p>
     </header>
-
-
-    <!-- =====================================
-         DASHBOARD
-    ====================================== -->
 
     <main class="terminal">
 
         <div class="dashboard-top">
-
             <div>
-
-                <p class="system-label">
-                    SYSTEM IDENTIFICATION
-                </p>
-
-                <h2>
-                    ARCHIVE DASHBOARD
-                </h2>
-
+                <p class="system-label">SYSTEM IDENTIFICATION</p>
+                <h2>ARCHIVE DASHBOARD</h2>
             </div>
-
-            <div class="online">
-                ● SYSTEM ONLINE
-            </div>
-
+            <div class="online">● SYSTEM ONLINE</div>
         </div>
 
-
-        <!-- =====================================
-             PROFILE
-        ====================================== -->
-
+        <!-- PROFILE -->
         <section class="profile-columns">
-
             <div class="profile-column">
-
                 <div class="profile-card">
-
                     <div class="photo-box">
-
-                        <img
-                            src="images/profile.png"
-                            alt="Karolina profile"
-                        >
-
+                        <img src="images/profile.png" alt="Profile">
                     </div>
 
                     <div class="information">
-
-                        <p class="system-label">
-                            PRIMARY USER
-                        </p>
-
+                        <p class="system-label">PRIMARY USER</p>
                         <h2>KAROLINA</h2>
-
-                        <p>
-                            USER ID:
-                            <span>KARA-001</span>
-                        </p>
-
-                        <p>
-                            ACCESS LEVEL:
-                            <span>AUTHORIZED</span>
-                        </p>
-
-                        <p>
-                            STATUS:
-                            <span class="online">ACTIVE</span>
-                        </p>
-
+                        <p>USER ID: <span>KARA-001</span></p>
+                        <p>ACCESS LEVEL: <span>AUTHORIZED</span></p>
+                        <p>STATUS: <span class="online">ACTIVE</span></p>
                     </div>
-
                 </div>
-
             </div>
-
         </section>
 
-
-        <!-- =====================================
-             OVERVIEW
-        ====================================== -->
-
+        <!-- OVERVIEW -->
         <section>
-
             <h2>SYSTEM OVERVIEW</h2>
 
             <div class="overview-grid">
-
                 <div class="overview-card">
-
-                    <p class="system-label">
-                        USER
-                    </p>
-
+                    <p class="system-label">USER</p>
                     <span>KAROLINA</span>
-
                 </div>
 
                 <div class="overview-card">
-
-                    <p class="system-label">
-                        DATABASE
-                    </p>
-
+                    <p class="system-label">DATABASE</p>
                     <span>ONLINE</span>
-
                 </div>
 
                 <div class="overview-card">
-
-                    <p class="system-label">
-                        SECURITY
-                    </p>
-
+                    <p class="system-label">SECURITY</p>
                     <span>ACTIVE</span>
-
                 </div>
-
             </div>
-
         </section>
 
+        <!-- ACTIVE USERS -->
+        <section class="homepage-panel">
+            <div class="homepage-section-heading">
+                <div>
+                    <p class="system-label">REALTIME PRESENCE</p>
+                    <h2>ACTIVE USERS</h2>
+                </div>
 
-        <!-- =====================================
-             FEATURED FILE
-        ====================================== -->
+                <span class="online-count" id="onlineCount">0 ONLINE</span>
+            </div>
 
-        <section class="featured-file">
+            <div id="activeUsers" class="active-users-list">
+                <p class="homepage-loading">CONNECTING TO PRESENCE...</p>
+            </div>
+        </section>
 
-            <p class="system-label">
-                FEATURED DATABASE
+        <!-- COMMUNITY GALLERY -->
+        <section class="homepage-panel" id="communityGallery">
+            <div class="homepage-section-heading">
+                <div>
+                    <p class="system-label">SHARED IMAGE DATABASE</p>
+                    <h2>COMMUNITY GALLERY</h2>
+                </div>
+                <span class="gallery-label">AUTHENTICATED USERS</span>
+            </div>
+
+            <p class="homepage-description">
+                Shared photo collection. All logged-in users can upload
+                and view photos. You can delete only your own uploads.
             </p>
 
-            <h3>PERSONAL ARCHIVE</h3>
+            <form id="galleryForm" class="gallery-form">
+                <label for="galleryImage">SELECT IMAGE</label>
+                <input
+                    type="file"
+                    id="galleryImage"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    required
+                >
 
+                <label for="galleryCaption">CAPTION (OPTIONAL)</label>
+                <input
+                    type="text"
+                    id="galleryCaption"
+                    maxlength="250"
+                    placeholder="Add a short description..."
+                >
+
+                <button type="submit" id="galleryUploadButton">
+                    UPLOAD IMAGE
+                </button>
+
+                <p class="gallery-help">
+                    JPG, PNG, WEBP or GIF. Maximum size: 10 MB.
+                </p>
+
+                <p id="galleryMessage" class="gallery-message"></p>
+            </form>
+
+            <div class="gallery-divider"></div>
+
+            <div class="gallery-heading-row">
+                <h3>SHARED PHOTOS</h3>
+                <span id="galleryCount">0 FILES</span>
+            </div>
+
+            <div id="galleryGrid" class="community-gallery-grid">
+                <p class="homepage-loading">LOADING GALLERY...</p>
+            </div>
+        </section>
+
+        <!-- FEATURED FILE -->
+        <section class="featured-file">
+            <p class="system-label">FEATURED DATABASE</p>
+            <h3>PERSONAL ARCHIVE</h3>
             <p>
                 A private collection of records,
                 projects, personal data and resources.
             </p>
-
         </section>
 
-
-        <!-- =====================================
-             MODULES
-        ====================================== -->
-
+        <!-- MODULES -->
         <section>
-
             <div class="file-header">
-
-                <p class="system-label">
-                    DATABASE DIRECTORY
-                </p>
-
+                <p class="system-label">DATABASE DIRECTORY</p>
                 <h2>AVAILABLE MODULES</h2>
-
-                <p>
-                    Select a module to access its contents.
-                </p>
-
+                <p>Select a module to access its contents.</p>
             </div>
-
 
             <div class="module-grid">
 
-
-                <!-- PHYSICAL REPORT -->
-
-                <a
-                    href="physical.html"
-                    class="module-card"
-                >
-
-                    <p class="system-label">
-                        MODULE // 01
-                    </p>
-
+                <a href="physical.html" class="module-card">
+                    <p class="system-label">MODULE // 01</p>
                     <h3>PHYSICAL REPORT</h3>
-
-                    <p>
-                        Personal physical database,
-                        records and documentation.
-                    </p>
-
-                    <span class="module-open">
-                        OPEN MODULE →
-                    </span>
-
+                    <p>Personal physical database, records and documentation.</p>
+                    <span class="module-open">OPEN MODULE →</span>
                 </a>
 
-
-                <!-- TOYS AND TOOLS -->
-
-                <a
-                    href="toys-tools.html"
-                    class="module-card"
-                >
-
-                    <p class="system-label">
-                        MODULE // 02
-                    </p>
-
+                <a href="toys-tools.html" class="module-card">
+                    <p class="system-label">MODULE // 02</p>
                     <h3>TOYS & TOOLS</h3>
-
-                    <p>
-                        Inventory database,
-                        equipment and stored items.
-                    </p>
-
-                    <span class="module-open">
-                        OPEN MODULE →
-                    </span>
-
+                    <p>Inventory database, equipment and stored items.</p>
+                    <span class="module-open">OPEN MODULE →</span>
                 </a>
 
+                <a href="toys-tools.html" class="module-card">
+                    <p class="system-label">RENTAL DATABASE</p>
+                    <h3>AVAILABLE FOR RENT</h3>
+                    <p>Browse items and check their availability.</p>
+                    <span class="module-open">OPEN RENTAL MODULE →</span>
+                </a>
 
-                <!-- MESSENGER -->
-
-                <a
-                    href="messenger.html"
-                    class="module-card"
-                >
-
-                    <p class="system-label">
-                        MODULE // 07
-                    </p>
-
+                <a href="messenger.html" class="module-card">
+                    <p class="system-label">MODULE // 07</p>
                     <h3>MESSENGER</h3>
-
-                    <p>
-                        Shared communication channel
-                        for authorized users.
-                    </p>
-
-                    <span class="module-open">
-                        OPEN MODULE →
-                    </span>
-
+                    <p>Shared communication channel for authorized users.</p>
+                    <span class="module-open">OPEN MODULE →</span>
                 </a>
 
-
-                <!-- PERSONAL LOGS -->
-
                 <div class="module-card locked">
-
-                    <p class="system-label">
-                        MODULE // 03
-                    </p>
-
+                    <p class="system-label">MODULE // 03</p>
                     <h3>PERSONAL LOGS</h3>
-
-                    <p>
-                        Private notes and personal records.
-                    </p>
-
-                    <span class="locked-status">
-                        LOCKED
-                    </span>
-
+                    <p>Private notes and personal records.</p>
+                    <span class="locked-status">LOCKED</span>
                 </div>
 
-
-                <!-- PROJECT DATABASE -->
-
                 <div class="module-card locked">
-
-                    <p class="system-label">
-                        MODULE // 04
-                    </p>
-
+                    <p class="system-label">MODULE // 04</p>
                     <h3>PROJECT DATABASE</h3>
-
-                    <p>
-                        Personal projects and development.
-                    </p>
-
-                    <span class="locked-status">
-                        LOCKED
-                    </span>
-
+                    <p>Personal projects and development.</p>
+                    <span class="locked-status">LOCKED</span>
                 </div>
 
-
-                <!-- COLLECTION -->
-
                 <div class="module-card locked">
-
-                    <p class="system-label">
-                        MODULE // 05
-                    </p>
-
+                    <p class="system-label">MODULE // 05</p>
                     <h3>COLLECTION</h3>
-
-                    <p>
-                        Stored collections and references.
-                    </p>
-
-                    <span class="locked-status">
-                        LOCKED
-                    </span>
-
+                    <p>Stored collections and references.</p>
+                    <span class="locked-status">LOCKED</span>
                 </div>
-
-
-                <!-- SYSTEM ARCHIVE -->
 
                 <div class="module-card locked">
-
-                    <p class="system-label">
-                        MODULE // 06
-                    </p>
-
+                    <p class="system-label">MODULE // 06</p>
                     <h3>SYSTEM ARCHIVE</h3>
-
-                    <p>
-                        System records and technical data.
-                    </p>
-
-                    <span class="locked-status">
-                        LOCKED
-                    </span>
-
+                    <p>System records and technical data.</p>
+                    <span class="locked-status">LOCKED</span>
                 </div>
-
 
             </div>
-
         </section>
 
-
-        <!-- =====================================
-             CONNECTION STATUS
-        ====================================== -->
-
+        <!-- CONNECTION STATUS -->
         <section class="quick-status">
-
-            <p class="system-label">
-                CONNECTION STATUS
-            </p>
-
+            <p class="system-label">CONNECTION STATUS</p>
             <h3>DATABASE CONNECTIONS</h3>
 
             <div class="connection-row">
-
                 <span>SUPABASE AUTH</span>
-
                 <span>CONNECTED</span>
-
             </div>
 
             <div class="connection-row">
-
                 <span>INVENTORY DATABASE</span>
-
                 <span>CONNECTED</span>
-
             </div>
 
             <div class="connection-row">
-
                 <span>REALTIME SERVICES</span>
-
-                <span>ENABLED</span>
-
+                <span id="presenceConnection">CONNECTING...</span>
             </div>
 
             <div class="connection-row">
-
-                <span>MESSENGER</span>
-
-                <span>AVAILABLE</span>
-
+                <span>COMMUNITY GALLERY</span>
+                <span id="galleryConnection">CONNECTING...</span>
             </div>
 
+            <div class="connection-row">
+                <span>MESSENGER</span>
+                <span>AVAILABLE</span>
+            </div>
         </section>
 
-
-        <!-- =====================================
-             RETURN
-        ====================================== -->
-
-        <a href="index.html" class="back">
-            ← RETURN TO LOGIN
-        </a>
-
+        <a href="index.html" class="back">← RETURN TO LOGIN</a>
 
     </main>
 
-
-    <!-- =====================================
-         FOOTER
-    ====================================== -->
-
     <footer>
-
         KAROLINA ARCHIVE © 2026
-
-        <p>
-            PERSONAL DATABASE // RESTRICTED ACCESS
-        </p>
-
+        <p>PERSONAL DATABASE // RESTRICTED ACCESS</p>
     </footer>
 
-
-    <!-- =====================================
-         AUTHENTICATION
-    ====================================== -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="auth-guard.js"></script>
-
+    <script src="js/homepage.js"></script>
+    <script src="js/gallery.js"></script>
 
 </body>
-
 </html>
