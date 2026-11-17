@@ -85,61 +85,6 @@
             </div>
         </section>
 
-        <!-- COMMUNITY GALLERY -->
-        <section class="homepage-panel" id="communityGallery">
-            <div class="homepage-section-heading">
-                <div>
-                    <p class="system-label">SHARED IMAGE DATABASE</p>
-                    <h2>COMMUNITY GALLERY</h2>
-                </div>
-                <span class="gallery-label">AUTHENTICATED USERS</span>
-            </div>
-
-            <p class="homepage-description">
-                Shared photo collection. All logged-in users can upload
-                and view photos. You can delete only your own uploads.
-            </p>
-
-            <form id="galleryForm" class="gallery-form">
-                <label for="galleryImage">SELECT IMAGE</label>
-                <input
-                    type="file"
-                    id="galleryImage"
-                    accept="image/jpeg,image/png,image/webp,image/gif"
-                    required
-                >
-
-                <label for="galleryCaption">CAPTION (OPTIONAL)</label>
-                <input
-                    type="text"
-                    id="galleryCaption"
-                    maxlength="250"
-                    placeholder="Add a short description..."
-                >
-
-                <button type="submit" id="galleryUploadButton">
-                    UPLOAD IMAGE
-                </button>
-
-                <p class="gallery-help">
-                    JPG, PNG, WEBP or GIF. Maximum size: 10 MB.
-                </p>
-
-                <p id="galleryMessage" class="gallery-message"></p>
-            </form>
-
-            <div class="gallery-divider"></div>
-
-            <div class="gallery-heading-row">
-                <h3>SHARED PHOTOS</h3>
-                <span id="galleryCount">0 FILES</span>
-            </div>
-
-            <div id="galleryGrid" class="community-gallery-grid">
-                <p class="homepage-loading">LOADING GALLERY...</p>
-            </div>
-        </section>
-
         <!-- FEATURED FILE -->
         <section class="featured-file">
             <p class="system-label">FEATURED DATABASE</p>
@@ -174,11 +119,11 @@
                     <span class="module-open">OPEN MODULE →</span>
                 </a>
 
-                <a href="toys-tools.html" class="module-card">
-                    <p class="system-label">RENTAL DATABASE</p>
-                    <h3>AVAILABLE FOR RENT</h3>
-                    <p>Browse items and check their availability.</p>
-                    <span class="module-open">OPEN RENTAL MODULE →</span>
+                <a href="community-gallery.html" class="module-card">
+                    <p class="system-label">MODULE // 08</p>
+                    <h3>COMMUNITY GALLERY</h3>
+                    <p>Shared image database. Upload and view photos from other users.</p>
+                    <span class="module-open">OPEN MODULE →</span>
                 </a>
 
                 <a href="messenger.html" class="module-card">
@@ -240,11 +185,6 @@
             </div>
 
             <div class="connection-row">
-                <span>COMMUNITY GALLERY</span>
-                <span id="galleryConnection">CONNECTING...</span>
-            </div>
-
-            <div class="connection-row">
                 <span>MESSENGER</span>
                 <span>AVAILABLE</span>
             </div>
@@ -262,7 +202,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth-guard.js"></script>
     <script src="js/homepage.js"></script>
-    <script src="js/gallery.js"></script>
 
 </body>
 </html>
