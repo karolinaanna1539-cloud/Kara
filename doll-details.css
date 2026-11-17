@@ -1,0 +1,342 @@
+
+/* =========================================
+   KAROLINA ARCHIVE
+   DOLL PERSONAL ARCHIVE
+========================================= */
+
+.doll-profile-terminal {
+    max-width: 1150px;
+}
+
+.profile-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.profile-topbar h2 {
+    color: white;
+    letter-spacing: 4px;
+}
+
+.profile-subtitle,
+.profile-meta {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.profile-online {
+    color: var(--green);
+    font-size: 11px;
+}
+
+.profile-message {
+    color: var(--green);
+    font-size: 12px;
+    margin: 15px 0;
+}
+
+.profile-message.error {
+    color: #ff7777;
+}
+
+.profile-hero {
+    display: grid;
+    grid-template-columns: minmax(220px, 360px) 1fr;
+    gap: 30px;
+    padding: 20px;
+    background: #050a07;
+    border: 1px solid var(--border);
+}
+
+.profile-main-image {
+    min-height: 320px;
+    background: #020503;
+    border: 1px solid #344239;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    letter-spacing: 3px;
+}
+
+.profile-main-image img {
+    width: 100%;
+    height: 380px;
+    object-fit: contain;
+}
+
+.profile-identity {
+    align-self: center;
+}
+
+.profile-identity h2 {
+    color: white;
+    font-size: 30px;
+    letter-spacing: 3px;
+    overflow-wrap: anywhere;
+}
+
+.profile-identity > p:not(.system-label):not(.profile-meta) {
+    color: var(--muted);
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.profile-status {
+    display: inline-block;
+    padding: 7px 12px;
+    color: var(--green);
+    border: 1px solid var(--green);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 12px 0;
+}
+
+.profile-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 25px 0;
+    padding: 12px;
+    background: #050a07;
+    border: 1px solid var(--border);
+}
+
+.profile-nav a {
+    color: var(--green);
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 9px 11px;
+    border: 1px solid #344239;
+}
+
+.profile-nav a:hover {
+    background: var(--green);
+    color: #00150c;
+}
+
+.profile-section {
+    margin: 35px 0;
+    padding: 24px;
+    background: #050a07;
+    border: 1px solid var(--border);
+    scroll-margin-top: 20px;
+}
+
+.profile-section h3 {
+    color: white;
+    letter-spacing: 3px;
+    margin: 5px 0 22px;
+}
+
+.profile-section h4 {
+    color: var(--green);
+    letter-spacing: 2px;
+}
+
+.profile-data-grid,
+.profile-report-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.profile-data-item,
+.profile-report-item {
+    min-width: 0;
+    padding: 14px;
+    background: #020503;
+    border: 1px solid #26352b;
+}
+
+.profile-data-item label,
+.profile-report-item label {
+    display: block;
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.profile-data-item p,
+.profile-report-item p {
+    color: white;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.profile-report-item {
+    grid-column: span 1;
+}
+
+.profile-note {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.doll-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.gallery-item {
+    min-width: 0;
+    background: #020503;
+    border: 1px solid #26352b;
+    padding: 8px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    cursor: zoom-in;
+}
+
+.gallery-item p {
+    color: var(--muted);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+.gallery-item button {
+    margin-top: 6px;
+}
+
+.gallery-admin {
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid var(--green);
+    background: #020503;
+}
+
+.gallery-admin label,
+.profile-edit-form label {
+    display: block;
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 13px 0 7px;
+}
+
+.gallery-admin input,
+.profile-edit-form input,
+.profile-edit-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    background: #020503;
+    color: white;
+    border: 1px solid #344239;
+    font-family: inherit;
+}
+
+.profile-edit-form textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+.gallery-admin input:focus,
+.profile-edit-form input:focus,
+.profile-edit-form textarea:focus {
+    outline: none;
+    border-color: var(--green);
+}
+
+.gallery-admin button,
+.profile-edit-actions button,
+.gallery-item button {
+    padding: 11px 16px;
+    margin-top: 12px;
+    color: #00150c;
+    background: var(--green);
+    border: 1px solid var(--green);
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.gallery-admin button:hover,
+.profile-edit-actions button:hover,
+.gallery-item button:hover {
+    color: var(--green);
+    background: transparent;
+}
+
+.profile-edit-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 15px;
+}
+
+.profile-edit-field {
+    min-width: 0;
+}
+
+.profile-edit-field.full {
+    grid-column: 1 / -1;
+}
+
+.profile-edit-actions {
+    margin-top: 15px;
+}
+
+.gallery-delete {
+    color: #ff7777 !important;
+    background: transparent !important;
+    border-color: #883d3d !important;
+}
+
+.gallery-delete:hover {
+    background: #441818 !important;
+}
+
+@media(max-width: 700px) {
+    .profile-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-main-image {
+        min-height: 240px;
+    }
+
+    .profile-main-image img {
+        height: 280px;
+    }
+
+    .profile-data-grid,
+    .profile-report-grid,
+    .profile-edit-form {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-edit-field.full {
+        grid-column: auto;
+    }
+
+    .doll-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gallery-item img {
+        height: 160px;
+    }
+}
+
+@media(max-width: 420px) {
+    .doll-gallery {
+        grid-template-columns: 1fr;
+    }
+}
