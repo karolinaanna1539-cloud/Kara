@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAROLINA ARCHIVE // COMMUNITY GALLERY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="protected-page">
+
+    <div class="scanline"></div>
+
+    <header>
+        <h1>KAROLINA ARCHIVE</h1>
+        <p class="subtitle">COMMUNITY IMAGE DATABASE // RESTRICTED ACCESS</p>
+    </header>
+
+    <main class="terminal">
+
+        <div class="dashboard-top">
+            <div>
+                <p class="system-label">MODULE // 08</p>
+                <h2>COMMUNITY GALLERY</h2>
+            </div>
+            <div class="online">● SYSTEM ONLINE</div>
+        </div>
+
+        <section class="homepage-panel">
+
+            <div class="homepage-section-heading">
+                <div>
+                    <p class="system-label">SHARED IMAGE DATABASE</p>
+                    <h2>UPLOAD CENTER</h2>
+                </div>
+
+                <span class="gallery-label">AUTHENTICATED USERS</span>
+            </div>
+
+            <p class="homepage-description">
+                Shared photo collection. All logged-in users can upload
+                and view photos. You can delete only your own uploads.
+            </p>
+
+            <form id="galleryForm" class="gallery-form">
+
+                <label for="galleryImage">SELECT IMAGE</label>
+
+                <input
+                    type="file"
+                    id="galleryImage"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    required
+                >
+
+                <label for="galleryCaption">CAPTION (OPTIONAL)</label>
+
+                <input
+                    type="text"
+                    id="galleryCaption"
+                    maxlength="250"
+                    placeholder="Add a short description..."
+                >
+
+                <button type="submit" id="galleryUploadButton">
+                    UPLOAD IMAGE
+                </button>
+
+                <p class="gallery-help">
+                    JPG, PNG, WEBP or GIF. Maximum size: 10 MB.
+                </p>
+
+                <p id="galleryMessage" class="gallery-message"></p>
+
+            </form>
+
+            <div class="gallery-divider"></div>
+
+            <div class="gallery-heading-row">
+                <h3>SHARED PHOTOS</h3>
+                <span id="galleryCount">0 FILES</span>
+            </div>
+
+            <div id="galleryGrid" class="community-gallery-grid">
+                <p class="homepage-loading">LOADING GALLERY...</p>
+            </div>
+
+        </section>
+
+        <section class="quick-status">
+            <p class="system-label">CONNECTION STATUS</p>
+            <h3>GALLERY DATABASE</h3>
+
+            <div class="connection-row">
+                <span>SUPABASE AUTH</span>
+                <span>CONNECTED</span>
+            </div>
+
+            <div class="connection-row">
+                <span>COMMUNITY GALLERY</span>
+                <span id="galleryConnection">CONNECTING...</span>
+            </div>
+        </section>
+
+        <a href="archive.html" class="back">← RETURN TO ARCHIVE</a>
+
+    </main>
+
+    <footer>
+        KAROLINA ARCHIVE © 2026
+        <p>COMMUNITY GALLERY // MODULE 08</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-guard.js"></script>
+    <script src="js/gallery.js"></script>
+
+</body>
+</html>
