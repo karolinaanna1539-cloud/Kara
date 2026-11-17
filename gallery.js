@@ -10,6 +10,7 @@
     if (!session || !supabaseClient) return;
 
     const user = session.user;
+
     const BUCKET = "community-gallery";
     const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -22,10 +23,22 @@
     const count = document.getElementById("galleryCount");
     const connection = document.getElementById("galleryConnection");
 
-    if (!form || !grid) return;
+    if (
+        !form ||
+        !imageInput ||
+        !captionInput ||
+        !uploadButton ||
+        !message ||
+        !grid ||
+        !count
+    ) {
+        console.error("Gallery HTML elements are missing.");
+        return;
+    }
 
     let galleryChannel = null;
     let photos = [];
+    let isUploading = false;
 
     function setMessage(text, isError = false) {
         message.textContent = text;
@@ -66,6 +79,8 @@
     }
 
     async function loadGallery() {
+        setConnection("LOADING...");
+
         const { data, error } = await supabaseClient
             .from("gallery_photos")
             .select("*")
@@ -73,13 +88,15 @@
 
         if (error) {
             console.error("Gallery load error:", error);
-            grid.textContent = "COULD NOT LOAD GALLERY.";
+            grid.textContent = "COULD NOT LOAD GALLERY: " + error.message;
             setConnection("DATABASE ERROR", true);
             return;
         }
 
         photos = data || [];
+
         await renderGallery();
+
         setConnection("ONLINE");
     }
 
@@ -101,15 +118,16 @@
 
         for (const photo of photos) {
             const card = makeElement("article", "gallery-photo-card");
-
             const imageUrl = await getImageUrl(photo.image_path);
 
             if (imageUrl) {
                 const image = document.createElement("img");
+
                 image.src = imageUrl;
                 image.alt = photo.caption || "Community photo";
                 image.loading = "lazy";
                 image.className = "gallery-photo-image";
+
                 card.appendChild(image);
             } else {
                 card.appendChild(
@@ -133,17 +151,19 @@
 
             if (photo.caption) {
                 details.appendChild(
-                    makeElement("p", "gallery-photo-caption", photo.caption)
+                    makeElement(
+                        "p",
+                        "gallery-photo-caption",
+                        photo.caption
+                    )
                 );
             }
-
-            const date = new Date(photo.created_at);
 
             details.appendChild(
                 makeElement(
                     "span",
                     "gallery-photo-date",
-                    date.toLocaleString()
+                    new Date(photo.created_at).toLocaleString()
                 )
             );
 
@@ -155,7 +175,8 @@
                 );
 
                 deleteButton.type = "button";
-                deleteButton.addEventListener("click", () => {
+
+                deleteButton.addEventListener("click", function () {
                     deletePhoto(photo);
                 });
 
@@ -169,6 +190,8 @@
 
     async function uploadPhoto(event) {
         event.preventDefault();
+
+        if (isUploading) return;
 
         const file = imageInput.files[0];
         const caption = captionInput.value.trim();
@@ -195,8 +218,10 @@
             return;
         }
 
+        isUploading = true;
         uploadButton.disabled = true;
         uploadButton.textContent = "UPLOADING...";
+        setMessage("UPLOADING IMAGE...");
 
         const safeName = file.name
             .toLowerCase()
@@ -214,7 +239,9 @@
                     contentType: file.type
                 });
 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                throw uploadError;
+            }
 
             const { error: insertError } = await supabaseClient
                 .from("gallery_photos")
@@ -233,18 +260,21 @@
             }
 
             form.reset();
+
             setMessage("IMAGE UPLOADED SUCCESSFULLY.");
 
             await loadGallery();
 
         } catch (error) {
             console.error("Gallery upload error:", error);
+
             setMessage(
-                error.message || "COULD NOT UPLOAD IMAGE.",
+                "UPLOAD ERROR: " + (error.message || "UNKNOWN ERROR"),
                 true
             );
 
         } finally {
+            isUploading = false;
             uploadButton.disabled = false;
             uploadButton.textContent = "UPLOAD IMAGE";
         }
@@ -280,15 +310,17 @@
 
         if (storageError) {
             console.error("Storage cleanup error:", storageError);
+            setMessage("PHOTO REMOVED FROM DATABASE. STORAGE CLEANUP FAILED.", true);
+        } else {
+            setMessage("PHOTO DELETED.");
         }
 
-        setMessage("PHOTO DELETED.");
         await loadGallery();
     }
 
     function subscribeToGallery() {
         galleryChannel = supabaseClient
-            .channel("community-gallery-live")
+            .channel("community-gallery-" + user.id)
             .on(
                 "postgres_changes",
                 {
@@ -296,9 +328,11 @@
                     schema: "public",
                     table: "gallery_photos"
                 },
-                () => loadGallery()
+                function () {
+                    loadGallery();
+                }
             )
-            .subscribe(status => {
+            .subscribe(function (status) {
                 if (status === "SUBSCRIBED") {
                     setConnection("ONLINE // LIVE SYNC");
                 }
@@ -315,9 +349,10 @@
     form.addEventListener("submit", uploadPhoto);
 
     await loadGallery();
+
     subscribeToGallery();
 
-    window.addEventListener("beforeunload", () => {
+    window.addEventListener("beforeunload", function () {
         if (galleryChannel) {
             supabaseClient.removeChannel(galleryChannel);
         }
