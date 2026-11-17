@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DOLL PERSONAL ARCHIVE // KAROLINA ARCHIVE</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="doll-details.css">
+</head>
+
+<body class="protected-page">
+
+    <div class="scanline"></div>
+
+    <header>
+        <h1>KAROLINA ARCHIVE</h1>
+        <p class="subtitle">PERSONAL DATABASE // RESTRICTED ACCESS</p>
+    </header>
+
+    <main class="terminal doll-profile-terminal">
+
+        <div class="profile-topbar">
+            <div>
+                <p class="system-label">MODULE // 09.01</p>
+                <h2>DOLL PERSONAL ARCHIVE</h2>
+                <p class="profile-subtitle">INDIVIDUAL CHARACTER RECORD</p>
+            </div>
+            <span class="profile-online">● DATABASE ONLINE</span>
+        </div>
+
+        <p id="profileMessage" class="profile-message">
+            LOADING PERSONAL RECORD...
+        </p>
+
+        <section id="profileContent" hidden>
+
+            <div class="profile-hero">
+                <div id="profileMainImage" class="profile-main-image">
+                    NO IMAGE
+                </div>
+
+                <div class="profile-identity">
+                    <p class="system-label">PERSONAL RECORD</p>
+                    <h2 id="profileName">DOLL NAME</h2>
+                    <p id="profileDescription"></p>
+                    <span id="profileStatus" class="profile-status">
+                        ARCHIVE RECORD
+                    </span>
+                    <p id="profileCreated" class="profile-meta"></p>
+                </div>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="#personal">PERSONAL DATA</a>
+                <a href="#physical">PHYSICAL PROFILE</a>
+                <a href="#medical">CONDITION REPORT</a>
+                <a href="#gallery">GALLERY</a>
+                <a href="#history">ARCHIVE HISTORY</a>
+            </nav>
+
+            <section id="personal" class="profile-section">
+                <p class="system-label">01 // IDENTITY</p>
+                <h3>PERSONAL DATA</h3>
+                <div id="personalData" class="profile-data-grid"></div>
+            </section>
+
+            <section id="physical" class="profile-section">
+                <p class="system-label">02 // APPEARANCE</p>
+                <h3>PHYSICAL PROFILE</h3>
+                <div id="physicalData" class="profile-data-grid"></div>
+            </section>
+
+            <section id="medical" class="profile-section">
+                <p class="system-label">03 // INSPECTION</p>
+                <h3>MEDICAL & CONDITION REPORT</h3>
+                <p class="profile-note">
+                    Character-style documentation adapted for a doll.
+                    This report describes physical condition, construction
+                    and maintenance — not human medical information.
+                </p>
+                <div id="conditionData" class="profile-report-grid"></div>
+            </section>
+
+            <section id="gallery" class="profile-section">
+                <p class="system-label">04 // VISUAL RECORD</p>
+                <h3>PHOTO GALLERY</h3>
+                <div id="dollGallery" class="doll-gallery"></div>
+
+                <div id="galleryAdmin" class="gallery-admin" hidden>
+                    <h4>ADD PHOTOGRAPHS</h4>
+                    <label for="galleryFiles">SELECT IMAGES</label>
+                    <input
+                        type="file"
+                        id="galleryFiles"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        multiple
+                    >
+                    <label for="galleryCaption">CAPTION (OPTIONAL)</label>
+                    <input
+                        type="text"
+                        id="galleryCaption"
+                        maxlength="200"
+                        placeholder="Photo description"
+                    >
+                    <button type="button" id="uploadGalleryButton">
+                        UPLOAD TO GALLERY
+                    </button>
+                    <p id="galleryMessage" class="profile-message"></p>
+                </div>
+            </section>
+
+            <section id="history" class="profile-section">
+                <p class="system-label">05 // ARCHIVE LOG</p>
+                <h3>ARCHIVE HISTORY</h3>
+                <div id="historyData" class="profile-report-grid"></div>
+            </section>
+
+            <section id="profileAdmin" class="profile-section profile-admin" hidden>
+                <p class="system-label">ADMINISTRATOR ACCESS</p>
+                <h3>EDIT PERSONAL RECORD</h3>
+                <form id="profileEditForm" class="profile-edit-form"></form>
+                <div class="profile-edit-actions">
+                    <button type="submit" form="profileEditForm" id="profileSaveButton">
+                        SAVE PROFILE
+                    </button>
+                </div>
+                <p id="profileAdminMessage" class="profile-message"></p>
+            </section>
+
+        </section>
+
+        <a href="dolls-for-rent.html" class="back">
+            ← RETURN TO DOLLS FOR RENT
+        </a>
+
+    </main>
+
+    <footer>
+        KAROLINA ARCHIVE © 2026
+        <p>PERSONAL DATABASE // RESTRICTED ACCESS</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-guard.js"></script>
+    <script src="js/doll-details.js"></script>
+
+</body>
+</html>
