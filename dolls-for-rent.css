@@ -1,0 +1,317 @@
+
+/* =========================================
+   DOLLS FOR RENT
+========================================= */
+
+.dolls-terminal {
+    max-width: 1150px;
+}
+
+.dolls-topbar,
+.dolls-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dolls-topbar {
+    margin-bottom: 35px;
+}
+
+.dolls-topbar h2 {
+    color: white;
+    letter-spacing: 5px;
+    margin: 5px 0;
+}
+
+.dolls-subtitle {
+    color: var(--muted);
+    letter-spacing: 3px;
+    font-size: 11px;
+}
+
+.dolls-intro,
+.dolls-admin {
+    background: #050a07;
+    border: 1px solid var(--border);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.dolls-intro h3,
+.dolls-section-heading h3 {
+    color: white;
+    letter-spacing: 3px;
+}
+
+.dolls-intro p:not(.system-label) {
+    color: var(--muted);
+}
+
+.dolls-message {
+    color: var(--green);
+    font-size: 12px;
+    margin: 20px 0;
+}
+
+.dolls-section-heading {
+    margin-bottom: 20px;
+}
+
+.dolls-section-heading h3 {
+    margin: 5px 0;
+}
+
+.dolls-admin-label,
+.dolls-count {
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 7px 12px;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.dolls-form {
+    display: grid;
+    gap: 12px;
+}
+
+.dolls-form label {
+    color: var(--green);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.dolls-form input,
+.dolls-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    color: white;
+    background: #020503;
+    border: 1px solid #344239;
+    font-family: inherit;
+}
+
+.dolls-form input:focus,
+.dolls-form textarea:focus {
+    outline: none;
+    border-color: var(--green);
+}
+
+.dolls-form input[type="file"] {
+    font-size: 12px;
+}
+
+.dolls-hint {
+    color: #777;
+    font-size: 11px;
+}
+
+.dolls-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dolls-form button,
+.dolls-booking-form button,
+.dolls-action-button {
+    padding: 12px 18px;
+    background: var(--green);
+    color: #00150c;
+    border: 1px solid var(--green);
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+.dolls-form button:hover,
+.dolls-booking-form button:hover,
+.dolls-action-button:hover {
+    background: transparent;
+    color: var(--green);
+}
+
+.dolls-form .dolls-secondary {
+    background: transparent;
+    color: white;
+    border-color: #555;
+}
+
+.dolls-form-message {
+    color: var(--green);
+    font-size: 12px;
+}
+
+.dolls-catalog-section {
+    margin: 35px 0;
+}
+
+.dolls-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.doll-card {
+    min-width: 0;
+    background: #050a07;
+    border: 1px solid var(--border);
+    padding: 15px;
+}
+
+.doll-card:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 18px rgba(0,255,170,.08);
+}
+
+.doll-image {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+    display: block;
+    background: #020503;
+    border: 1px solid #202d24;
+}
+
+.doll-image-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    border: 1px dashed #344239;
+    background: #020503;
+    letter-spacing: 3px;
+}
+
+.doll-card h3 {
+    color: white;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.doll-description,
+.doll-details {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.doll-status {
+    display: inline-block;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 6px 10px;
+    margin: 10px 0;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.dolls-booking-form {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #202d24;
+}
+
+.dolls-booking-form label {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.dolls-booking-form input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    background: #020503;
+    color: white;
+    border: 1px solid #344239;
+}
+
+.dolls-booking-form button {
+    margin-top: 5px;
+}
+
+.dolls-admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.dolls-action-button {
+    font-size: 10px;
+    padding: 9px 12px;
+}
+
+.dolls-action-button.dolls-delete {
+    color: #ff7777;
+    border-color: #883d3d;
+    background: transparent;
+}
+
+.dolls-action-button.dolls-delete:hover {
+    background: #441818;
+}
+
+.dolls-reservations {
+    margin: 40px 0;
+}
+
+.dolls-reservation {
+    background: #050a07;
+    border: 1px solid var(--border);
+    padding: 17px;
+    margin-bottom: 12px;
+    color: var(--muted);
+}
+
+.dolls-reservation strong {
+    color: white;
+}
+
+.dolls-reservation span {
+    color: var(--green);
+}
+
+.dolls-reservation button {
+    margin-top: 10px;
+}
+
+.dolls-empty {
+    color: #777;
+    padding: 20px;
+    border: 1px dashed #344239;
+    text-align: center;
+    font-size: 12px;
+}
+
+.dolls-form-message.error {
+    color: #ff7777;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+@media(max-width: 700px) {
+    .dolls-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dolls-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .doll-image {
+        height: 240px;
+    }
+}
