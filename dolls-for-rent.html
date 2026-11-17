@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DOLLS FOR RENT // KAROLINA ARCHIVE</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dolls-for-rent.css">
+</head>
+
+<body class="protected-page">
+
+    <div class="scanline"></div>
+
+    <header>
+        <h1>KAROLINA ARCHIVE</h1>
+        <p class="subtitle">PERSONAL DATABASE // RESTRICTED ACCESS</p>
+    </header>
+
+    <main class="terminal dolls-terminal">
+
+        <div class="dolls-topbar">
+            <div>
+                <p class="system-label">MODULE // 09</p>
+                <h2>DOLLS FOR RENT</h2>
+                <p class="dolls-subtitle">DOLL RENTAL DATABASE</p>
+            </div>
+
+            <div class="online">● SYSTEM ONLINE</div>
+        </div>
+
+        <section class="dolls-intro">
+            <p class="system-label">COLLECTION ACCESS</p>
+            <h3>AVAILABLE DOLLS</h3>
+            <p>
+                Browse the collection, check available dates
+                and reserve your selected doll.
+            </p>
+        </section>
+
+        <div id="dollsConnection" class="dolls-message">
+            CONNECTING TO DATABASE...
+        </div>
+
+        <!-- ADMIN PANEL -->
+        <section id="dollsAdminPanel" class="dolls-admin" hidden>
+
+            <div class="dolls-section-heading">
+                <div>
+                    <p class="system-label">ADMINISTRATOR ACCESS</p>
+                    <h3>DOLL MANAGEMENT</h3>
+                </div>
+                <span class="dolls-admin-label">ADMIN</span>
+            </div>
+
+            <form id="dollForm" class="dolls-form">
+
+                <input type="hidden" id="dollEditId">
+
+                <label for="dollName">DOLL NAME</label>
+                <input
+                    type="text"
+                    id="dollName"
+                    maxlength="100"
+                    placeholder="Enter doll name"
+                    required
+                >
+
+                <label for="dollDescription">DESCRIPTION</label>
+                <textarea
+                    id="dollDescription"
+                    rows="3"
+                    maxlength="2000"
+                    placeholder="Describe the doll..."
+                ></textarea>
+
+                <label for="dollDetails">ADDITIONAL DETAILS</label>
+                <textarea
+                    id="dollDetails"
+                    rows="3"
+                    maxlength="3000"
+                    placeholder="Additional information..."
+                ></textarea>
+
+                <label for="dollImage">DOLL IMAGE</label>
+                <input
+                    type="file"
+                    id="dollImage"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                >
+
+                <p class="dolls-hint">
+                    Maximum image size: 10 MB.
+                    When editing, leave the image field empty to keep the current photo.
+                </p>
+
+                <div class="dolls-form-actions">
+                    <button type="submit" id="dollSaveButton">
+                        ADD DOLL
+                    </button>
+
+                    <button
+                        type="button"
+                        id="dollCancelEdit"
+                        class="dolls-secondary"
+                        hidden
+                    >
+                        CANCEL EDIT
+                    </button>
+                </div>
+
+                <p id="dollAdminMessage" class="dolls-form-message"></p>
+
+            </form>
+
+        </section>
+
+        <!-- CATALOG -->
+        <section class="dolls-catalog-section">
+
+            <div class="dolls-section-heading">
+                <div>
+                    <p class="system-label">DATABASE DIRECTORY</p>
+                    <h3>COLLECTION</h3>
+                </div>
+
+                <span id="dollsCount" class="dolls-count">0 DOLLS</span>
+            </div>
+
+            <div id="dollsGrid" class="dolls-grid">
+                <p class="dolls-empty">LOADING COLLECTION...</p>
+            </div>
+
+        </section>
+
+        <!-- USER RESERVATIONS -->
+        <section class="dolls-reservations">
+
+            <div class="dolls-section-heading">
+                <div>
+                    <p class="system-label">PERSONAL RECORDS</p>
+                    <h3>MY RESERVATIONS</h3>
+                </div>
+            </div>
+
+            <div id="myDollReservations">
+                <p class="dolls-empty">LOADING RESERVATIONS...</p>
+            </div>
+
+        </section>
+
+        <!-- ADMIN RESERVATIONS -->
+        <section id="dollsAdminReservations" class="dolls-reservations" hidden>
+
+            <div class="dolls-section-heading">
+                <div>
+                    <p class="system-label">ADMINISTRATOR DATABASE</p>
+                    <h3>ALL RESERVATIONS</h3>
+                </div>
+            </div>
+
+            <div id="allDollReservations"></div>
+
+        </section>
+
+        <a href="archive.html" class="back">
+            ← RETURN TO ARCHIVE
+        </a>
+
+    </main>
+
+    <footer>
+        KAROLINA ARCHIVE © 2026
+        <p>PERSONAL DATABASE // RESTRICTED ACCESS</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-guard.js"></script>
+    <script src="js/dolls-for-rent.js"></script>
+
+</body>
+</html>
