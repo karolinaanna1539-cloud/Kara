@@ -3,6 +3,7 @@
    KAROLINA ARCHIVE
    DOLLS FOR RENT
    Supabase + Reservations + Admin
+   Personal Archive Integration
 ========================================= */
 
 (async function () {
@@ -20,7 +21,7 @@
 
     const BUCKET = "dolls-for-rent";
 
-    const $ = (id) => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
     const connection = $("dollsConnection");
     const grid = $("dollsGrid");
@@ -36,15 +37,31 @@
 
     let dolls = [];
     let reservations = [];
+    let realtimeChannel = null;
+
+    // =====================================
+    // DATE HELPERS
+    // =====================================
 
     function today() {
         const date = new Date();
+
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
 
         return `${year}-${month}-${day}`;
     }
+
+    function formatDate(date) {
+        if (!date) return "";
+
+        return new Date(date + "T12:00:00").toLocaleDateString();
+    }
+
+    // =====================================
+    // GENERAL HELPERS
+    // =====================================
 
     function showMessage(element, message, error = false) {
         if (!element) return;
@@ -56,25 +73,33 @@
     function makeElement(tag, className, text) {
         const element = document.createElement(tag);
 
-        if (className) element.className = className;
-        if (text !== undefined) element.textContent = text;
+        if (className) {
+            element.className = className;
+        }
+
+        if (text !== undefined) {
+            element.textContent = text;
+        }
 
         return element;
     }
 
-    function formatDate(date) {
-        if (!date) return "";
-
-        return new Date(date + "T12:00:00").toLocaleDateString();
-    }
-
     function resetForm() {
         form.reset();
+
         $("dollEditId").value = "";
+
         saveButton.textContent = "ADD DOLL";
+        saveButton.disabled = false;
+
         cancelEditButton.hidden = true;
+
         showMessage(formMessage, "");
     }
+
+    // =====================================
+    // STORAGE
+    // =====================================
 
     async function getImageUrl(path) {
         if (!path) return null;
@@ -102,8 +127,11 @@
             .order("created_at", { ascending: false });
 
         if (error) {
-            console.error(error);
-            connection.textContent = "DATABASE ERROR: " + error.message;
+            console.error("Dolls loading error:", error);
+
+            connection.textContent =
+                "DATABASE ERROR: " + error.message;
+
             return;
         }
 
@@ -129,20 +157,24 @@
                     "NO DOLLS IN THE COLLECTION YET."
                 )
             );
+
             return;
         }
 
         for (const doll of dolls) {
             const card = makeElement("article", "doll-card");
 
+            // IMAGE
             if (doll.image_path) {
                 const imageUrl = await getImageUrl(doll.image_path);
 
                 if (imageUrl) {
                     const image = makeElement("img", "doll-image");
+
                     image.src = imageUrl;
                     image.alt = doll.name || "Doll";
                     image.loading = "lazy";
+
                     card.append(image);
                 } else {
                     card.append(
@@ -163,8 +195,28 @@
                 );
             }
 
-            card.append(makeElement("h3", "", doll.name));
+            // NAME
+            card.append(
+                makeElement("h3", "", doll.name || "UNNAMED DOLL")
+            );
 
+            // PERSONAL ARCHIVE BUTTON
+            const profileButton = makeElement(
+                "button",
+                "dolls-action-button",
+                "OPEN PERSONAL ARCHIVE →"
+            );
+
+            profileButton.type = "button";
+
+            profileButton.addEventListener("click", () => {
+                window.location.href =
+                    `doll-details.html?id=${encodeURIComponent(doll.id)}`;
+            });
+
+            card.append(profileButton);
+
+            // STATUS
             card.append(
                 makeElement(
                     "span",
@@ -173,6 +225,7 @@
                 )
             );
 
+            // DESCRIPTION
             if (doll.description) {
                 card.append(
                     makeElement(
@@ -183,6 +236,7 @@
                 );
             }
 
+            // ADDITIONAL DETAILS
             if (doll.details) {
                 card.append(
                     makeElement(
@@ -193,7 +247,10 @@
                 );
             }
 
-            // Reservation form
+            // =================================
+            // RESERVATION FORM
+            // =================================
+
             const bookingForm = makeElement(
                 "form",
                 "dolls-booking-form"
@@ -206,6 +263,7 @@
             );
 
             const startInput = makeElement("input");
+
             startInput.type = "date";
             startInput.required = true;
             startInput.min = today();
@@ -217,6 +275,7 @@
             );
 
             const endInput = makeElement("input");
+
             endInput.type = "date";
             endInput.required = true;
             endInput.min = today();
@@ -224,7 +283,10 @@
             startInput.addEventListener("change", () => {
                 endInput.min = startInput.value || today();
 
-                if (endInput.value && endInput.value < startInput.value) {
+                if (
+                    endInput.value &&
+                    endInput.value < startInput.value
+                ) {
                     endInput.value = startInput.value;
                 }
             });
@@ -250,27 +312,39 @@
                 "dolls-form-message"
             );
 
-            bookingForm.addEventListener("submit", async (event) => {
+            bookingForm.addEventListener("submit", async event => {
                 event.preventDefault();
 
                 const startDate = startInput.value;
                 const endDate = endInput.value;
 
+                if (!startDate || !endDate) {
+                    showMessage(
+                        bookingMessage,
+                        "PLEASE SELECT BOTH DATES.",
+                        true
+                    );
+
+                    return;
+                }
+
                 if (startDate < today()) {
                     showMessage(
                         bookingMessage,
-                        "Start date cannot be in the past.",
+                        "START DATE CANNOT BE IN THE PAST.",
                         true
                     );
+
                     return;
                 }
 
                 if (endDate < startDate) {
                     showMessage(
                         bookingMessage,
-                        "End date must be after start date.",
+                        "END DATE MUST NOT BE BEFORE START DATE.",
                         true
                     );
+
                     return;
                 }
 
@@ -291,13 +365,15 @@
                 reserveButton.textContent = "RESERVE";
 
                 if (error) {
-                    console.error(error);
+                    console.error("Reservation error:", error);
+
+                    const errorText = error.message.toLowerCase();
 
                     showMessage(
                         bookingMessage,
-                        error.message.includes("already reserved")
-                            ? "This date range is already reserved."
-                            : "Reservation failed: " + error.message,
+                        errorText.includes("already reserved")
+                            ? "THIS DATE RANGE IS ALREADY RESERVED."
+                            : "RESERVATION FAILED: " + error.message,
                         true
                     );
 
@@ -317,13 +393,17 @@
 
             card.append(bookingForm, bookingMessage);
 
-            // Admin controls
+            // =================================
+            // ADMIN CONTROLS
+            // =================================
+
             if (isAdmin) {
                 const actions = makeElement(
                     "div",
                     "dolls-admin-actions"
                 );
 
+                // EDIT
                 const editButton = makeElement(
                     "button",
                     "dolls-action-button",
@@ -331,11 +411,15 @@
                 );
 
                 editButton.type = "button";
+
                 editButton.addEventListener("click", () => {
                     $("dollEditId").value = doll.id;
+
                     $("dollName").value = doll.name || "";
-                    $("dollDescription").value = doll.description || "";
-                    $("dollDetails").value = doll.details || "";
+                    $("dollDescription").value =
+                        doll.description || "";
+                    $("dollDetails").value =
+                        doll.details || "";
 
                     saveButton.textContent = "SAVE CHANGES";
                     cancelEditButton.hidden = false;
@@ -345,6 +429,7 @@
                     });
                 });
 
+                // DELETE
                 const deleteButton = makeElement(
                     "button",
                     "dolls-action-button dolls-delete",
@@ -352,8 +437,14 @@
                 );
 
                 deleteButton.type = "button";
+
                 deleteButton.addEventListener("click", async () => {
-                    if (!confirm(`Delete "${doll.name}"?`)) return;
+                    if (!confirm(`Delete "${doll.name}"?`)) {
+                        return;
+                    }
+
+                    deleteButton.disabled = true;
+                    deleteButton.textContent = "DELETING...";
 
                     const { error } = await supabase
                         .from("dolls")
@@ -361,17 +452,42 @@
                         .eq("id", doll.id);
 
                     if (error) {
-                        alert("Could not delete doll: " + error.message);
+                        console.error("Delete error:", error);
+
+                        alert(
+                            "Could not delete doll: " + error.message
+                        );
+
+                        deleteButton.disabled = false;
+                        deleteButton.textContent = "DELETE";
+
                         return;
                     }
 
+                    // Remove main image
                     if (doll.image_path) {
                         await supabase.storage
                             .from(BUCKET)
                             .remove([doll.image_path]);
                     }
 
+                    // Gallery records are deleted automatically
+                    // by ON DELETE CASCADE. Remove their files too.
+                    const { data: galleryFiles } = await supabase
+                        .from("doll_gallery")
+                        .select("image_path")
+                        .eq("doll_id", doll.id);
+
+                    if (galleryFiles && galleryFiles.length) {
+                        await supabase.storage
+                            .from(BUCKET)
+                            .remove(
+                                galleryFiles.map(item => item.image_path)
+                            );
+                    }
+
                     await loadDolls();
+                    await loadReservations();
                 });
 
                 actions.append(editButton, deleteButton);
@@ -387,13 +503,18 @@
     // =====================================
 
     if (isAdmin) {
-        form.addEventListener("submit", async (event) => {
+        form.addEventListener("submit", async event => {
             event.preventDefault();
 
             const editId = $("dollEditId").value;
             const name = $("dollName").value.trim();
-            const description = $("dollDescription").value.trim();
-            const details = $("dollDetails").value.trim();
+
+            const description =
+                $("dollDescription").value.trim();
+
+            const details =
+                $("dollDetails").value.trim();
+
             const file = $("dollImage").files[0];
 
             if (!name) return;
@@ -401,22 +522,28 @@
             if (file && file.size > 10 * 1024 * 1024) {
                 showMessage(
                     formMessage,
-                    "Image is larger than 10 MB.",
+                    "IMAGE IS LARGER THAN 10 MB.",
                     true
                 );
+
                 return;
             }
 
             if (
                 file &&
-                !["image/jpeg", "image/png", "image/webp", "image/gif"]
-                    .includes(file.type)
+                ![
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp",
+                    "image/gif"
+                ].includes(file.type)
             ) {
                 showMessage(
                     formMessage,
-                    "Unsupported image format.",
+                    "UNSUPPORTED IMAGE FORMAT.",
                     true
                 );
+
                 return;
             }
 
@@ -429,10 +556,15 @@
                 ? dolls.find(item => item.id === editId)
                 : null;
 
+            // UPLOAD IMAGE
             if (file) {
-                const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+                const safeName = file.name.replace(
+                    /[^a-zA-Z0-9._-]/g,
+                    "_"
+                );
 
-                imagePath = `${user.id}/${crypto.randomUUID()}-${safeName}`;
+                imagePath =
+                    `${user.id}/${crypto.randomUUID()}-${safeName}`;
 
                 const { error: uploadError } = await supabase.storage
                     .from(BUCKET)
@@ -444,11 +576,13 @@
                 if (uploadError) {
                     showMessage(
                         formMessage,
-                        "Image upload failed: " + uploadError.message,
+                        "IMAGE UPLOAD FAILED: " +
+                        uploadError.message,
                         true
                     );
 
                     saveButton.disabled = false;
+
                     saveButton.textContent = editId
                         ? "SAVE CHANGES"
                         : "ADD DOLL";
@@ -487,9 +621,11 @@
             }
 
             if (result.error) {
+                console.error("Save error:", result.error);
+
                 showMessage(
                     formMessage,
-                    "Save failed: " + result.error.message,
+                    "SAVE FAILED: " + result.error.message,
                     true
                 );
 
@@ -499,6 +635,7 @@
                         .remove([imagePath]);
                 }
             } else {
+                // Remove previous image after successful update
                 if (
                     editId &&
                     imagePath &&
@@ -512,14 +649,18 @@
 
                 showMessage(
                     formMessage,
-                    editId ? "DOLL UPDATED." : "DOLL ADDED."
+                    editId
+                        ? "DOLL UPDATED."
+                        : "DOLL ADDED."
                 );
 
                 resetForm();
+
                 await loadDolls();
             }
 
             saveButton.disabled = false;
+
             saveButton.textContent = "ADD DOLL";
         });
 
@@ -537,7 +678,7 @@
             .order("start_date", { ascending: true });
 
         if (error) {
-            console.error(error);
+            console.error("Reservations loading error:", error);
             return;
         }
 
@@ -556,6 +697,7 @@
 
     async function renderMyReservations() {
         const container = $("myDollReservations");
+
         container.replaceChildren();
 
         const mine = reservations.filter(
@@ -570,6 +712,7 @@
                     "YOU HAVE NO RESERVATIONS."
                 )
             );
+
             return;
         }
 
@@ -583,13 +726,23 @@
                 "dolls-reservation"
             );
 
-            item.append(
-                makeElement(
-                    "strong",
-                    "",
-                    doll ? doll.name : "DOLL"
-                )
+            const name = makeElement(
+                "strong",
+                "",
+                doll ? doll.name : "DOLL"
             );
+
+            if (doll) {
+                name.style.cursor = "pointer";
+                name.title = "OPEN PERSONAL ARCHIVE";
+
+                name.addEventListener("click", () => {
+                    window.location.href =
+                        `doll-details.html?id=${encodeURIComponent(doll.id)}`;
+                });
+            }
+
+            item.append(name);
 
             item.append(
                 makeElement(
@@ -617,13 +770,19 @@
                 cancelButton.addEventListener("click", async () => {
                     if (!confirm("Cancel this reservation?")) return;
 
+                    cancelButton.disabled = true;
+
                     const { error } = await supabase
                         .from("doll_reservations")
                         .update({ status: "cancelled" })
                         .eq("id", reservation.id);
 
                     if (error) {
-                        alert("Cancellation failed: " + error.message);
+                        alert(
+                            "Cancellation failed: " + error.message
+                        );
+
+                        cancelButton.disabled = false;
                         return;
                     }
 
@@ -643,6 +802,7 @@
 
     async function renderAllReservations() {
         const container = $("allDollReservations");
+
         container.replaceChildren();
 
         if (!reservations.length) {
@@ -653,6 +813,7 @@
                     "NO RESERVATIONS."
                 )
             );
+
             return;
         }
 
@@ -708,13 +869,19 @@
                 cancelButton.addEventListener("click", async () => {
                     if (!confirm("Cancel this reservation?")) return;
 
+                    cancelButton.disabled = true;
+
                     const { error } = await supabase
                         .from("doll_reservations")
                         .update({ status: "cancelled" })
                         .eq("id", reservation.id);
 
                     if (error) {
-                        alert("Could not cancel: " + error.message);
+                        alert(
+                            "Could not cancel: " + error.message
+                        );
+
+                        cancelButton.disabled = false;
                         return;
                     }
 
@@ -742,9 +909,13 @@
     await loadDolls();
     await loadReservations();
 
-    // Realtime updates
-    supabase
+    // =====================================
+    // REALTIME UPDATES
+    // =====================================
+
+    realtimeChannel = supabase
         .channel("dolls-for-rent-live")
+
         .on(
             "postgres_changes",
             {
@@ -757,6 +928,7 @@
                 await loadReservations();
             }
         )
+
         .on(
             "postgres_changes",
             {
@@ -768,6 +940,17 @@
                 await loadReservations();
             }
         )
-        .subscribe();
+
+        .subscribe(status => {
+            if (status === "SUBSCRIBED") {
+                connection.textContent =
+                    "CONNECTED TO SUPABASE // REALTIME ACTIVE";
+            }
+
+            if (status === "CHANNEL_ERROR") {
+                connection.textContent =
+                    "DATABASE CONNECTED // REALTIME ERROR";
+            }
+        });
 
 })();
