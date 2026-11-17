@@ -92,6 +92,7 @@
 
                 <div id="galleryAdmin" class="gallery-admin" hidden>
                     <h4>ADD PHOTOGRAPHS</h4>
+
                     <label for="galleryFiles">SELECT IMAGES</label>
                     <input
                         type="file"
@@ -99,6 +100,7 @@
                         accept="image/jpeg,image/png,image/webp,image/gif"
                         multiple
                     >
+
                     <label for="galleryCaption">CAPTION (OPTIONAL)</label>
                     <input
                         type="text"
@@ -106,9 +108,11 @@
                         maxlength="200"
                         placeholder="Photo description"
                     >
+
                     <button type="button" id="uploadGalleryButton">
                         UPLOAD TO GALLERY
                     </button>
+
                     <p id="galleryMessage" class="profile-message"></p>
                 </div>
             </section>
@@ -122,12 +126,15 @@
             <section id="profileAdmin" class="profile-section profile-admin" hidden>
                 <p class="system-label">ADMINISTRATOR ACCESS</p>
                 <h3>EDIT PERSONAL RECORD</h3>
+
                 <form id="profileEditForm" class="profile-edit-form"></form>
+
                 <div class="profile-edit-actions">
                     <button type="submit" form="profileEditForm" id="profileSaveButton">
                         SAVE PROFILE
                     </button>
                 </div>
+
                 <p id="profileAdminMessage" class="profile-message"></p>
             </section>
 
