@@ -283,10 +283,14 @@
 
         </section>
 
-        <!-- RETURN -->
-        <a href="index.html" class="back">
-            ← RETURN TO LOGIN
-        </a>
+        <!-- LOG OUT -->
+        <button
+            type="button"
+            id="logoutButton"
+            class="back"
+        >
+            LOG OUT →
+        </button>
 
     </main>
 
@@ -307,6 +311,47 @@
     <script src="auth-guard.js"></script>
 
     <script src="js/homepage.js"></script>
+
+    <!-- LOGOUT -->
+    <script>
+        (async function () {
+            const button = document.getElementById("logoutButton");
+
+            if (!button) return;
+
+            try {
+                if (window.archiveAuthReady) {
+                    await window.archiveAuthReady;
+                }
+
+                if (!window.archiveSupabase) {
+                    console.error("Supabase client not available.");
+                    return;
+                }
+
+                button.addEventListener("click", async function () {
+                    button.disabled = true;
+                    button.textContent = "LOGGING OUT...";
+
+                    const { error } = await window.archiveSupabase.auth.signOut();
+
+                    if (error) {
+                        console.error("Logout error:", error);
+                        alert("Could not log out: " + error.message);
+
+                        button.disabled = false;
+                        button.textContent = "LOG OUT →";
+                        return;
+                    }
+
+                    window.location.replace("index.html");
+                });
+
+            } catch (error) {
+                console.error("Logout initialization error:", error);
+            }
+        })();
+    </script>
 
 </body>
 </html>
