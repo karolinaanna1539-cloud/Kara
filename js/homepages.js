@@ -1,5 +1,5 @@
 
-/* KAROLINA ARCHIVE — ACTIVE USERS / PRESENCE */
+/* THE DEN — ACTIVE USERS / PRESENCE */
 
 (async function () {
     "use strict";
@@ -17,7 +17,20 @@
 
     let presenceChannel = null;
 
+    // MEMBER DIRECTORY
+    const memberNames = {
+        "167a9314-92b5-42a1-8bad-d6e4a7d78198": "JOHNNIE DILLINGER"
+    };
+
     function getDisplayName(user) {
+        const userId = user.user_id || "";
+
+        // Check manually assigned member names
+        if (memberNames[userId]) {
+            return memberNames[userId];
+        }
+
+        // Read metadata for other users
         const metadata = user.user_metadata || {};
 
         return (
@@ -25,7 +38,7 @@
             metadata.full_name ||
             metadata.name ||
             metadata.display_name ||
-            "USER-" + String(user.user_id || "").slice(0, 6).toUpperCase()
+            "USER-" + userId.slice(0, 6).toUpperCase()
         );
     }
 
@@ -102,6 +115,7 @@
                 await presenceChannel.track({
                     user_id: session.user.id,
                     nickname:
+                        memberNames[session.user.id] ||
                         metadata.nickname ||
                         metadata.full_name ||
                         metadata.name ||
