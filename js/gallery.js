@@ -39,6 +39,172 @@
     let galleryChannel = null;
     let photos = [];
     let isUploading = false;
+    let lastFocusedImage = null;
+
+    /* =========================================
+       IMAGE LIGHTBOX
+    ========================================= */
+
+    function createLightbox() {
+        const style = document.createElement("style");
+
+        style.textContent = `
+            .gallery-lightbox {
+                position: fixed;
+                inset: 0;
+                z-index: 99999;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 30px;
+                background: rgba(0, 0, 0, 0.94);
+                backdrop-filter: blur(8px);
+                cursor: zoom-out;
+            }
+
+            .gallery-lightbox.active {
+                display: flex;
+            }
+
+            .gallery-lightbox-image {
+                display: block;
+                max-width: 95vw;
+                max-height: 90vh;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                border: 1px solid rgba(0, 255, 120, 0.45);
+                box-shadow: 0 0 35px rgba(0, 255, 120, 0.12);
+                cursor: default;
+            }
+
+            .gallery-lightbox-close {
+                position: absolute;
+                top: 18px;
+                right: 25px;
+                width: 48px;
+                height: 48px;
+                border: 1px solid rgba(0, 255, 120, 0.6);
+                background: rgba(0, 0, 0, 0.7);
+                color: #00ff88;
+                font-size: 32px;
+                line-height: 1;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+            .gallery-lightbox-close:hover {
+                background: #00ff88;
+                color: #000;
+            }
+
+            .gallery-photo-image {
+                cursor: zoom-in;
+                transition: transform 0.25s, opacity 0.25s;
+            }
+
+            .gallery-photo-image:hover {
+                opacity: 0.85;
+            }
+
+            @media (max-width: 600px) {
+                .gallery-lightbox {
+                    padding: 12px;
+                }
+
+                .gallery-lightbox-image {
+                    max-width: 96vw;
+                    max-height: 85vh;
+                }
+
+                .gallery-lightbox-close {
+                    top: 10px;
+                    right: 10px;
+                    width: 42px;
+                    height: 42px;
+                }
+            }
+        `;
+
+        document.head.appendChild(style);
+
+        const overlay = makeElement("div", "gallery-lightbox");
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.setAttribute("aria-label", "Image preview");
+
+        const closeButton = makeElement(
+            "button",
+            "gallery-lightbox-close",
+            "×"
+        );
+
+        closeButton.type = "button";
+        closeButton.setAttribute("aria-label", "Close image preview");
+
+        const previewImage = document.createElement("img");
+        previewImage.className = "gallery-lightbox-image";
+        previewImage.alt = "";
+
+        overlay.appendChild(closeButton);
+        overlay.appendChild(previewImage);
+        document.body.appendChild(overlay);
+
+        function closeLightbox() {
+            overlay.classList.remove("active");
+            previewImage.removeAttribute("src");
+            document.body.style.overflow = "";
+
+            if (lastFocusedImage) {
+                lastFocusedImage.focus();
+                lastFocusedImage = null;
+            }
+        }
+
+        function openLightbox(image) {
+            lastFocusedImage = image;
+
+            previewImage.src = image.src;
+            previewImage.alt = image.alt || "Community photo";
+
+            overlay.classList.add("active");
+            document.body.style.overflow = "hidden";
+
+            closeButton.focus();
+        }
+
+        closeButton.addEventListener("click", closeLightbox);
+
+        overlay.addEventListener("click", function (event) {
+            if (
+                event.target === overlay ||
+                event.target === closeButton
+            ) {
+                closeLightbox();
+            }
+        });
+
+        previewImage.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (
+                event.key === "Escape" &&
+                overlay.classList.contains("active")
+            ) {
+                closeLightbox();
+            }
+        });
+
+        return openLightbox;
+    }
+
+    const openLightbox = createLightbox();
+
+    /* =========================================
+       GENERAL FUNCTIONS
+    ========================================= */
 
     function setMessage(text, isError = false) {
         message.textContent = text;
@@ -78,6 +244,10 @@
         return data.signedUrl;
     }
 
+    /* =========================================
+       LOAD GALLERY
+    ========================================= */
+
     async function loadGallery() {
         setConnection("LOADING...");
 
@@ -99,6 +269,10 @@
 
         setConnection("ONLINE");
     }
+
+    /* =========================================
+       RENDER PHOTOS
+    ========================================= */
 
     async function renderGallery() {
         grid.replaceChildren();
@@ -127,6 +301,23 @@
                 image.alt = photo.caption || "Community photo";
                 image.loading = "lazy";
                 image.className = "gallery-photo-image";
+                image.tabIndex = 0;
+                image.setAttribute("role", "button");
+                image.setAttribute("aria-label", "Enlarge image");
+
+                image.addEventListener("click", function () {
+                    openLightbox(image);
+                });
+
+                image.addEventListener("keydown", function (event) {
+                    if (
+                        event.key === "Enter" ||
+                        event.key === " "
+                    ) {
+                        event.preventDefault();
+                        openLightbox(image);
+                    }
+                });
 
                 card.appendChild(image);
             } else {
@@ -187,6 +378,10 @@
             grid.appendChild(card);
         }
     }
+
+    /* =========================================
+       UPLOAD PHOTO
+    ========================================= */
 
     async function uploadPhoto(event) {
         event.preventDefault();
@@ -280,6 +475,10 @@
         }
     }
 
+    /* =========================================
+       DELETE PHOTO
+    ========================================= */
+
     async function deletePhoto(photo) {
         if (photo.user_id !== user.id) {
             setMessage("YOU CAN DELETE ONLY YOUR OWN PHOTOS.", true);
@@ -318,6 +517,10 @@
         await loadGallery();
     }
 
+    /* =========================================
+       REALTIME
+    ========================================= */
+
     function subscribeToGallery() {
         galleryChannel = supabaseClient
             .channel("community-gallery-" + user.id)
@@ -345,6 +548,10 @@
                 }
             });
     }
+
+    /* =========================================
+       INITIALIZATION
+    ========================================= */
 
     form.addEventListener("submit", uploadPhoto);
 
