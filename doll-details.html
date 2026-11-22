@@ -1,414 +1,185 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>DOLL PERSONAL ARCHIVE // THE DEN</title>
-
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="doll-details.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOLL PERSONAL ARCHIVE // THE DEN</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="doll-details.css">
 </head>
-
 <body class="protected-page">
-
-    <div class="scanline"></div>
-
-    <header>
-        <h1>THE DEN</h1>
-        <p class="subtitle">PRIVATE MEMBERS SPACE // CHARACTER DATABASE</p>
-    </header>
-
-    <main class="terminal doll-profile-terminal">
-
-        <div class="profile-topbar">
-            <div>
-                <p class="system-label">MODULE // 09.01</p>
-                <h2>DOLL PERSONAL ARCHIVE</h2>
-                <p class="profile-subtitle">INDIVIDUAL CHARACTER RECORD</p>
-            </div>
-            <span class="profile-online">● DATABASE ONLINE</span>
-        </div>
-
-        <p id="profileMessage" class="profile-message">
-            LOADING PERSONAL RECORD...
-        </p>
-
-        <section id="profileContent" hidden>
-
-            <!-- =====================================
-                 MAIN PROFILE
-            ====================================== -->
-
-            <div class="profile-hero">
-                <div id="profileMainImage" class="profile-main-image">
-                    NO IMAGE
-                </div>
-
-                <div class="profile-identity">
-                    <p class="system-label">PERSONAL RECORD</p>
-                    <h2 id="profileName">DOLL NAME</h2>
-                    <p id="profileDescription"></p>
-                    <span id="profileStatus" class="profile-status">
-                        ARCHIVE RECORD
-                    </span>
-                    <p id="profileCreated" class="profile-meta"></p>
-                </div>
-            </div>
-
-            <!-- =====================================
-                 NAVIGATION
-            ====================================== -->
-
-            <nav class="profile-nav">
-                <a href="#personal">PERSONAL DATA</a>
-                <a href="#physical">PHYSICAL PROFILE</a>
-                <a href="#clothing">CLOTHING</a>
-                <a href="#makeup">MAKE-UP</a>
-                <a href="#hairstyle">HAIRSTYLE</a>
-                <a href="#nails">NAILS</a>
-                <a href="#medical">CONDITION REPORT</a>
-                <a href="#gallery">GENERAL GALLERY</a>
-                <a href="#history">ARCHIVE HISTORY</a>
-            </nav>
-
-            <!-- =====================================
-                 01 - PERSONAL DATA
-            ====================================== -->
-
-            <section id="personal" class="profile-section">
-                <p class="system-label">01 // IDENTITY</p>
-                <h3>PERSONAL DATA</h3>
-                <div id="personalData" class="profile-data-grid"></div>
-            </section>
-
-            <!-- =====================================
-                 02 - PHYSICAL PROFILE
-            ====================================== -->
-
-            <section id="physical" class="profile-section">
-                <p class="system-label">02 // APPEARANCE</p>
-                <h3>PHYSICAL PROFILE</h3>
-                <div id="physicalData" class="profile-data-grid"></div>
-            </section>
-
-            <!-- =====================================
-                 03 - CLOTHING
-            ====================================== -->
-
-            <section id="clothing" class="profile-section">
-                <p class="system-label">03 // STYLE RECORD</p>
-                <h3>CLOTHING & ACCESSORIES</h3>
-
-                <p class="profile-note">
-                    Clothing, lingerie, footwear and accessories.
-                    This section documents the doll's wardrobe,
-                    outfit combinations and individual styling details.
-                </p>
-
-                <div id="clothingDescription"
-                     class="category-description">
-                    NO DESCRIPTION AVAILABLE.
-                </div>
-
-                <h4 class="category-gallery-title">CLOTHING GALLERY</h4>
-
-                <div id="clothingGallery" class="doll-gallery"></div>
-
-                <div id="clothingAdmin" class="gallery-admin" hidden>
-                    <h4>MANAGE CLOTHING GALLERY</h4>
-
-                    <label for="clothingFiles">SELECT IMAGES</label>
-                    <input
-                        type="file"
-                        id="clothingFiles"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        multiple
-                    >
-
-                    <label for="clothingCaption">CAPTION (OPTIONAL)</label>
-                    <input
-                        type="text"
-                        id="clothingCaption"
-                        maxlength="200"
-                        placeholder="Clothing description"
-                    >
-
-                    <button type="button" id="uploadClothingButton">
-                        UPLOAD CLOTHING PHOTOS
-                    </button>
-
-                    <p id="clothingMessage" class="profile-message"></p>
-                </div>
-            </section>
-
-            <!-- =====================================
-                 04 - MAKE-UP
-            ====================================== -->
-
-            <section id="makeup" class="profile-section">
-                <p class="system-label">04 // STYLE RECORD</p>
-                <h3>MAKE-UP & COSMETICS</h3>
-
-                <p class="profile-note">
-                    Make-up, cosmetics, face styling and colour palettes.
-                    This section documents cosmetic appearance and
-                    individual make-up styles.
-                </p>
-
-                <div id="makeupDescription"
-                     class="category-description">
-                    NO DESCRIPTION AVAILABLE.
-                </div>
-
-                <h4 class="category-gallery-title">MAKE-UP GALLERY</h4>
-
-                <div id="makeupGallery" class="doll-gallery"></div>
-
-                <div id="makeupAdmin" class="gallery-admin" hidden>
-                    <h4>MANAGE MAKE-UP GALLERY</h4>
-
-                    <label for="makeupFiles">SELECT IMAGES</label>
-                    <input
-                        type="file"
-                        id="makeupFiles"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        multiple
-                    >
-
-                    <label for="makeupCaption">CAPTION (OPTIONAL)</label>
-                    <input
-                        type="text"
-                        id="makeupCaption"
-                        maxlength="200"
-                        placeholder="Make-up description"
-                    >
-
-                    <button type="button" id="uploadMakeupButton">
-                        UPLOAD MAKE-UP PHOTOS
-                    </button>
-
-                    <p id="makeupMessage" class="profile-message"></p>
-                </div>
-            </section>
-
-            <!-- =====================================
-                 05 - HAIRSTYLE
-            ====================================== -->
-
-            <section id="hairstyle" class="profile-section">
-                <p class="system-label">05 // STYLE RECORD</p>
-                <h3>HAIRSTYLE & HAIR DETAILS</h3>
-
-                <p class="profile-note">
-                    Hair colour, length, hairstyle and styling.
-                    This section documents the doll's hairstyles,
-                    hair condition and different styling variations.
-                </p>
-
-                <div id="hairstyleDescription"
-                     class="category-description">
-                    NO DESCRIPTION AVAILABLE.
-                </div>
-
-                <h4 class="category-gallery-title">HAIRSTYLE GALLERY</h4>
-
-                <div id="hairstyleGallery" class="doll-gallery"></div>
-
-                <div id="hairstyleAdmin" class="gallery-admin" hidden>
-                    <h4>MANAGE HAIRSTYLE GALLERY</h4>
-
-                    <label for="hairstyleFiles">SELECT IMAGES</label>
-                    <input
-                        type="file"
-                        id="hairstyleFiles"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        multiple
-                    >
-
-                    <label for="hairstyleCaption">CAPTION (OPTIONAL)</label>
-                    <input
-                        type="text"
-                        id="hairstyleCaption"
-                        maxlength="200"
-                        placeholder="Hairstyle description"
-                    >
-
-                    <button type="button" id="uploadHairstyleButton">
-                        UPLOAD HAIRSTYLE PHOTOS
-                    </button>
-
-                    <p id="hairstyleMessage" class="profile-message"></p>
-                </div>
-            </section>
-
-            <!-- =====================================
-                 06 - NAILS
-            ====================================== -->
-
-            <section id="nails" class="profile-section">
-                <p class="system-label">06 // STYLE RECORD</p>
-                <h3>NAILS & MANICURE</h3>
-
-                <p class="profile-note">
-                    Nail polish colour, nail length and nail styling.
-                    This section documents manicure details,
-                    colours and different nail designs.
-                </p>
-
-                <div id="nailsDescription"
-                     class="category-description">
-                    NO DESCRIPTION AVAILABLE.
-                </div>
-
-                <h4 class="category-gallery-title">NAILS GALLERY</h4>
-
-                <div id="nailsGallery" class="doll-gallery"></div>
-
-                <div id="nailsAdmin" class="gallery-admin" hidden>
-                    <h4>MANAGE NAILS GALLERY</h4>
-
-                    <label for="nailsFiles">SELECT IMAGES</label>
-                    <input
-                        type="file"
-                        id="nailsFiles"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        multiple
-                    >
-
-                    <label for="nailsCaption">CAPTION (OPTIONAL)</label>
-                    <input
-                        type="text"
-                        id="nailsCaption"
-                        maxlength="200"
-                        placeholder="Nail style description"
-                    >
-
-                    <button type="button" id="uploadNailsButton">
-                        UPLOAD NAILS PHOTOS
-                    </button>
-
-                    <p id="nailsMessage" class="profile-message"></p>
-                </div>
-            </section>
-
-            <!-- =====================================
-                 07 - CONDITION REPORT
-            ====================================== -->
-
-            <section id="medical" class="profile-section">
-                <p class="system-label">07 // INSPECTION</p>
-                <h3>MEDICAL & CONDITION REPORT</h3>
-
-                <p class="profile-note">
-                    Character-style documentation adapted for a doll.
-                    This report describes physical condition, construction
-                    and maintenance — not human medical information.
-                </p>
-
-                <div id="conditionData" class="profile-report-grid"></div>
-            </section>
-
-            <!-- =====================================
-                 08 - GENERAL GALLERY
-            ====================================== -->
-
-            <section id="gallery" class="profile-section">
-                <p class="system-label">08 // VISUAL RECORD</p>
-                <h3>GENERAL PHOTO GALLERY</h3>
-
-                <p class="profile-note">
-                    General photographs and additional visual documentation.
-                </p>
-
-                <div id="dollGallery" class="doll-gallery"></div>
-
-                <div id="galleryAdmin" class="gallery-admin" hidden>
-                    <h4>ADD PHOTOGRAPHS</h4>
-
-                    <label for="galleryFiles">SELECT IMAGES</label>
-                    <input
-                        type="file"
-                        id="galleryFiles"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        multiple
-                    >
-
-                    <label for="galleryCaption">CAPTION (OPTIONAL)</label>
-                    <input
-                        type="text"
-                        id="galleryCaption"
-                        maxlength="200"
-                        placeholder="Photo description"
-                    >
-
-                    <button type="button" id="uploadGalleryButton">
-                        UPLOAD TO GALLERY
-                    </button>
-
-                    <p id="galleryMessage" class="profile-message"></p>
-                </div>
-            </section>
-
-            <!-- =====================================
-                 09 - ARCHIVE HISTORY
-            ====================================== -->
-
-            <section id="history" class="profile-section">
-                <p class="system-label">09 // ARCHIVE LOG</p>
-                <h3>ARCHIVE HISTORY</h3>
-                <div id="historyData" class="profile-report-grid"></div>
-            </section>
-
-            <!-- =====================================
-                 ADMIN PROFILE EDITOR
-            ====================================== -->
-
-            <section id="profileAdmin"
-                     class="profile-section profile-admin"
-                     hidden>
-
-                <p class="system-label">ADMINISTRATOR ACCESS</p>
-                <h3>EDIT PERSONAL RECORD</h3>
-
-                <p class="profile-note">
-                    Edit the doll's personal information, physical profile,
-                    condition report and descriptions for all style categories.
-                </p>
-
-                <form id="profileEditForm" class="profile-edit-form"></form>
-
-                <div class="profile-edit-actions">
-                    <button
-                        type="submit"
-                        form="profileEditForm"
-                        id="profileSaveButton"
-                    >
-                        SAVE PROFILE
-                    </button>
-                </div>
-
-                <p id="profileAdminMessage" class="profile-message"></p>
-            </section>
-
-        </section>
-
-        <a href="dolls-for-rent.html" class="back">
-            ← RETURN TO DOLLS FOR RENT
-        </a>
-
-    </main>
-
-    <footer>
-        THE DEN © 2026
-        <p>DOLL PERSONAL ARCHIVE // MODULE 09.01</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth-guard.js"></script>
-    <script src="js/doll-details.js"></script>
-
+<div class="scanline"></div>
+<header>
+<h1>THE DEN</h1>
+<p class="subtitle">PRIVATE MEMBERS SPACE // CHARACTER DATABASE</p>
+</header>
+<main class="terminal doll-profile-terminal">
+<div class="profile-topbar">
+<div>
+<p class="system-label">MODULE // 09.01</p>
+<h2>DOLL PERSONAL ARCHIVE</h2>
+<p class="profile-subtitle">INDIVIDUAL CHARACTER RECORD</p>
+</div>
+<span class="profile-online">● DATABASE ONLINE</span>
+</div>
+<p id="profileMessage" class="profile-message">LOADING PERSONAL RECORD...</p>
+
+<section id="profileContent" hidden>
+<div class="profile-hero">
+<div id="profileMainImage" class="profile-main-image">NO IMAGE</div>
+<div class="profile-identity">
+<p class="system-label">PERSONAL RECORD</p>
+<h2 id="profileName">DOLL NAME</h2>
+<p id="profileDescription"></p>
+<span id="profileStatus" class="profile-status">ARCHIVE RECORD</span>
+<p id="profileCreated" class="profile-meta"></p>
+</div>
+</div>
+
+<nav class="profile-nav">
+<a href="#personal">PERSONAL DATA</a>
+<a href="#physical">PHYSICAL PROFILE</a>
+<a href="#clothing">CLOTHING</a>
+<a href="#makeup">MAKE-UP</a>
+<a href="#hairstyle">HAIRSTYLE</a>
+<a href="#nails">NAILS</a>
+<a href="#medical">CONDITION REPORT</a>
+<a href="#gallery">GENERAL GALLERY</a>
+<a href="#history">ARCHIVE HISTORY</a>
+</nav>
+
+<section id="personal" class="profile-section">
+<p class="system-label">01 // IDENTITY</p>
+<h3>PERSONAL DATA</h3>
+<div id="personalData" class="profile-data-grid"></div>
+</section>
+
+<section id="physical" class="profile-section">
+<p class="system-label">02 // APPEARANCE</p>
+<h3>PHYSICAL PROFILE</h3>
+<div id="physicalData" class="profile-data-grid"></div>
+</section>
+
+<section id="clothing" class="profile-section">
+<p class="system-label">03 // STYLE RECORD</p>
+<h3>CLOTHING &amp; ACCESSORIES</h3>
+<p class="profile-note">Clothing, lingerie, footwear and accessories.</p>
+<div id="clothingDescription" class="category-description">NO DESCRIPTION AVAILABLE.</div>
+<h4>CLOTHING GALLERY</h4>
+<div id="clothingGallery" class="doll-gallery"></div>
+<div id="clothingAdmin" class="gallery-admin" hidden>
+<h4>MANAGE CLOTHING GALLERY</h4>
+<label for="clothingFiles">SELECT IMAGES</label>
+<input type="file" id="clothingFiles" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+<label for="clothingCaption">CAPTION (OPTIONAL)</label>
+<input type="text" id="clothingCaption" maxlength="200" placeholder="Clothing description">
+<button type="button" id="uploadClothingButton">UPLOAD CLOTHING PHOTOS</button>
+<p id="clothingMessage" class="profile-message"></p>
+</div>
+</section>
+
+<section id="makeup" class="profile-section">
+<p class="system-label">04 // STYLE RECORD</p>
+<h3>MAKE-UP &amp; COSMETICS</h3>
+<p class="profile-note">Make-up, cosmetics, face styling and colour palettes.</p>
+<div id="makeupDescription" class="category-description">NO DESCRIPTION AVAILABLE.</div>
+<h4>MAKE-UP GALLERY</h4>
+<div id="makeupGallery" class="doll-gallery"></div>
+<div id="makeupAdmin" class="gallery-admin" hidden>
+<h4>MANAGE MAKE-UP GALLERY</h4>
+<label for="makeupFiles">SELECT IMAGES</label>
+<input type="file" id="makeupFiles" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+<label for="makeupCaption">CAPTION (OPTIONAL)</label>
+<input type="text" id="makeupCaption" maxlength="200" placeholder="Make-up description">
+<button type="button" id="uploadMakeupButton">UPLOAD MAKE-UP PHOTOS</button>
+<p id="makeupMessage" class="profile-message"></p>
+</div>
+</section>
+
+<section id="hairstyle" class="profile-section">
+<p class="system-label">05 // STYLE RECORD</p>
+<h3>HAIRSTYLE &amp; HAIR DETAILS</h3>
+<p class="profile-note">Hair colour, length, hairstyle and styling.</p>
+<div id="hairstyleDescription" class="category-description">NO DESCRIPTION AVAILABLE.</div>
+<h4>HAIRSTYLE GALLERY</h4>
+<div id="hairstyleGallery" class="doll-gallery"></div>
+<div id="hairstyleAdmin" class="gallery-admin" hidden>
+<h4>MANAGE HAIRSTYLE GALLERY</h4>
+<label for="hairstyleFiles">SELECT IMAGES</label>
+<input type="file" id="hairstyleFiles" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+<label for="hairstyleCaption">CAPTION (OPTIONAL)</label>
+<input type="text" id="hairstyleCaption" maxlength="200" placeholder="Hairstyle description">
+<button type="button" id="uploadHairstyleButton">UPLOAD HAIRSTYLE PHOTOS</button>
+<p id="hairstyleMessage" class="profile-message"></p>
+</div>
+</section>
+
+<section id="nails" class="profile-section">
+<p class="system-label">06 // STYLE RECORD</p>
+<h3>NAILS &amp; MANICURE</h3>
+<p class="profile-note">Nail polish colour, nail length and nail styling.</p>
+<div id="nailsDescription" class="category-description">NO DESCRIPTION AVAILABLE.</div>
+<h4>NAILS GALLERY</h4>
+<div id="nailsGallery" class="doll-gallery"></div>
+<div id="nailsAdmin" class="gallery-admin" hidden>
+<h4>MANAGE NAILS GALLERY</h4>
+<label for="nailsFiles">SELECT IMAGES</label>
+<input type="file" id="nailsFiles" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+<label for="nailsCaption">CAPTION (OPTIONAL)</label>
+<input type="text" id="nailsCaption" maxlength="200" placeholder="Nail style description">
+<button type="button" id="uploadNailsButton">UPLOAD NAILS PHOTOS</button>
+<p id="nailsMessage" class="profile-message"></p>
+</div>
+</section>
+
+<section id="medical" class="profile-section">
+<p class="system-label">07 // INSPECTION</p>
+<h3>MEDICAL &amp; CONDITION REPORT</h3>
+<p class="profile-note">Character-style documentation adapted for a doll. This report describes physical condition, construction and maintenance — not human medical information.</p>
+<div id="conditionData" class="profile-report-grid"></div>
+</section>
+
+<section id="gallery" class="profile-section">
+<p class="system-label">08 // VISUAL RECORD</p>
+<h3>GENERAL PHOTO GALLERY</h3>
+<div id="dollGallery" class="doll-gallery"></div>
+<div id="galleryAdmin" class="gallery-admin" hidden>
+<h4>ADD PHOTOGRAPHS</h4>
+<label for="galleryFiles">SELECT IMAGES</label>
+<input type="file" id="galleryFiles" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+<label for="galleryCaption">CAPTION (OPTIONAL)</label>
+<input type="text" id="galleryCaption" maxlength="200" placeholder="Photo description">
+<button type="button" id="uploadGalleryButton">UPLOAD TO GALLERY</button>
+<p id="galleryMessage" class="profile-message"></p>
+</div>
+</section>
+
+<section id="history" class="profile-section">
+<p class="system-label">09 // ARCHIVE LOG</p>
+<h3>ARCHIVE HISTORY</h3>
+<div id="historyData" class="profile-report-grid"></div>
+</section>
+
+<section id="profileAdmin" class="profile-section profile-admin" hidden>
+<p class="system-label">ADMINISTRATOR ACCESS</p>
+<h3>EDIT PERSONAL RECORD</h3>
+<form id="profileEditForm" class="profile-edit-form"></form>
+<div class="profile-edit-actions">
+<button type="submit" form="profileEditForm" id="profileSaveButton">SAVE PROFILE</button>
+</div>
+<p id="profileAdminMessage" class="profile-message"></p>
+</section>
+</section>
+
+<a href="dolls-for-rent.html" class="back">← RETURN TO DOLLS FOR RENT</a>
+</main>
+<footer>
+THE DEN © 2026
+<p>DOLL PERSONAL ARCHIVE // MODULE 09.01</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-guard.js"></script>
+<script src="js/doll-details.js"></script>
 </body>
 </html>
