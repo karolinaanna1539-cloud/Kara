@@ -1,8 +1,5 @@
 
-/* =========================================
-   KAROLINA ARCHIVE
-   DOLL PERSONAL ARCHIVE
-========================================= */
+/* THE DEN - DOLL PERSONAL ARCHIVE */
 
 .doll-profile-terminal {
     max-width: 1150px;
@@ -68,6 +65,7 @@
     width: 100%;
     height: 380px;
     object-fit: contain;
+    cursor: zoom-in;
 }
 
 .profile-identity {
@@ -155,7 +153,7 @@
     border: 1px solid #26352b;
 }
 
-.profile-data-item label,
+.profile-data-label,
 .profile-report-item label {
     display: block;
     color: var(--green);
@@ -164,7 +162,7 @@
     margin-bottom: 8px;
 }
 
-.profile-data-item p,
+.profile-data-value,
 .profile-report-item p {
     color: white;
     font-size: 13px;
@@ -174,15 +172,23 @@
     overflow-wrap: anywhere;
 }
 
-.profile-report-item {
-    grid-column: span 1;
-}
-
 .profile-note {
     color: var(--muted);
     font-size: 12px;
     line-height: 1.6;
     margin-bottom: 20px;
+}
+
+.category-description {
+    color: white;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 16px;
+    margin: 16px 0 24px;
+    background: #020503;
+    border: 1px solid #26352b;
 }
 
 .doll-gallery {
@@ -275,6 +281,12 @@
     background: transparent;
 }
 
+.gallery-admin button:disabled,
+.profile-edit-actions button:disabled {
+    opacity: .55;
+    cursor: wait;
+}
+
 .profile-edit-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -303,7 +315,39 @@
     background: #441818 !important;
 }
 
-@media(max-width: 700px) {
+.doll-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background: rgba(0, 0, 0, .94);
+}
+
+.doll-lightbox.active {
+    display: flex;
+}
+
+.doll-lightbox img {
+    max-width: 95vw;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.doll-lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 25px;
+    color: white;
+    background: transparent;
+    border: 0;
+    font-size: 38px;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
     .profile-hero {
         grid-template-columns: 1fr;
     }
@@ -335,8 +379,12 @@
     }
 }
 
-@media(max-width: 420px) {
+@media (max-width: 420px) {
     .doll-gallery {
         grid-template-columns: 1fr;
+    }
+
+    .profile-section {
+        padding: 17px;
     }
 }
