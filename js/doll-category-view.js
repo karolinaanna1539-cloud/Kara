@@ -15,7 +15,8 @@
         "clothing",
         "makeup",
         "hairstyle",
-        "nails"
+        "nails",
+        "accessories"
     ];
 
     function closeCategoryView() {
