@@ -315,6 +315,122 @@
     background: #441818 !important;
 }
 
+/* =========================================
+   APPEARANCE CATEGORY HUB
+========================================= */
+
+.category-hub-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    min-width: 0;
+    min-height: 180px;
+    padding: 22px;
+    background: #020503;
+    border: 1px solid #344239;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color .2s, background .2s, transform .2s;
+}
+
+.category-card:hover {
+    border-color: var(--green);
+    background: #07120b;
+    transform: translateY(-2px);
+}
+
+.category-card-icon {
+    color: var(--green);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+.category-card-title {
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 9px;
+}
+
+.category-card-description {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.category-card-action {
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+/* =========================================
+   FULL CATEGORY VIEW
+========================================= */
+
+.category-section {
+    margin-top: 25px;
+    min-height: 350px;
+}
+
+.category-section[hidden] {
+    display: none !important;
+}
+
+.category-back-button {
+    display: inline-block;
+    padding: 10px 14px;
+    margin: 0 0 25px;
+    color: var(--green);
+    background: transparent;
+    border: 1px solid #344239;
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.category-back-button:hover {
+    color: #00150c;
+    background: var(--green);
+    border-color: var(--green);
+}
+
+/* Hide profile overview while a category is open */
+#profileContent.category-view-active > *:not(.active-category-view) {
+    display: none !important;
+}
+
+#profileContent.category-view-active > .active-category-view {
+    display: block;
+}
+
+#profileContent.category-view-active .active-category-view {
+    margin-top: 0;
+    min-height: 450px;
+}
+
+#profileContent.category-view-active .active-category-view .doll-gallery {
+    margin-top: 20px;
+}
+
+/* =========================================
+   LIGHTBOX
+========================================= */
+
 .doll-lightbox {
     position: fixed;
     inset: 0;
@@ -347,6 +463,10 @@
     cursor: pointer;
 }
 
+/* =========================================
+   RESPONSIVE
+========================================= */
+
 @media (max-width: 700px) {
     .profile-hero {
         grid-template-columns: 1fr;
@@ -377,6 +497,14 @@
     .gallery-item img {
         height: 160px;
     }
+
+    .category-hub-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-card {
+        min-height: 155px;
+    }
 }
 
 @media (max-width: 420px) {
@@ -385,6 +513,10 @@
     }
 
     .profile-section {
+        padding: 17px;
+    }
+
+    .category-section {
         padding: 17px;
     }
 }
