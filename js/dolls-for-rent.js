@@ -1,9 +1,10 @@
 
 /* =========================================
-   KAROLINA ARCHIVE
+   THE DEN
    DOLLS FOR RENT
    Supabase + Reservations + Admin
    Personal Archive Integration
+   Reservation Configurator
 ========================================= */
 
 (async function () {
@@ -117,6 +118,169 @@
     }
 
     // =====================================
+    // RESERVATION GALLERY OPTIONS
+    // =====================================
+
+    const bookingCategories = [
+        { key: "clothing", label: "CLOTHING", multiple: false },
+        { key: "makeup", label: "MAKE-UP", multiple: false },
+        { key: "hairstyle", label: "HAIRSTYLE", multiple: false },
+        { key: "nails", label: "NAILS", multiple: false },
+        { key: "accessories", label: "ACCESSORIES", multiple: true }
+    ];
+
+    async function loadBookingGalleryOptions(dollId) {
+        const { data, error } = await supabase
+            .from("doll_gallery")
+            .select("id, image_path, caption, category")
+            .eq("doll_id", dollId)
+            .in("category", bookingCategories.map(category => category.key))
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.error("Booking options loading error:", error);
+            return {};
+        }
+
+        const grouped = {};
+
+        for (const category of bookingCategories) {
+            grouped[category.key] = [];
+        }
+
+        for (const photo of (data || [])) {
+            if (grouped[photo.category]) {
+                grouped[photo.category].push(photo);
+            }
+        }
+
+        for (const category of bookingCategories) {
+            for (const photo of grouped[category.key]) {
+                photo.signedUrl = await getImageUrl(photo.image_path);
+            }
+        }
+
+        return grouped;
+    }
+
+    function createBookingOption(category, photo, index, dollId) {
+        const wrapper = makeElement("label", "booking-option-card");
+
+        const input = makeElement("input");
+
+        input.type = category.multiple ? "checkbox" : "radio";
+
+        input.name = category.multiple
+            ? `booking-${dollId}-${category.key}[]`
+            : `booking-${dollId}-${category.key}`;
+
+        input.value = photo.id;
+        input.dataset.category = category.key;
+        input.dataset.caption = photo.caption || `OPTION ${index + 1}`;
+        input.dataset.imagePath = photo.image_path;
+
+        wrapper.append(input);
+
+        if (photo.signedUrl) {
+            const image = makeElement("img", "booking-option-image");
+
+            image.src = photo.signedUrl;
+            image.alt = photo.caption || category.label;
+            image.loading = "lazy";
+
+            wrapper.append(image);
+        }
+
+        wrapper.append(
+            makeElement(
+                "span",
+                "booking-option-caption",
+                photo.caption && photo.caption.trim()
+                    ? photo.caption.trim()
+                    : `OPTION ${index + 1} — NOT NAMED YET`
+            )
+        );
+
+        return wrapper;
+    }
+
+    function readBookingSelection(formElement) {
+        const selected = {};
+
+        for (const category of bookingCategories) {
+            const chosen = Array.from(
+                formElement.querySelectorAll(
+                    `input[data-category="${category.key}"]:checked`
+                )
+            );
+
+            const records = chosen.map(input => ({
+                id: input.value,
+                caption: input.dataset.caption,
+                image_path: input.dataset.imagePath,
+                category: category.key
+            }));
+
+            selected[category.key] = category.multiple
+                ? records
+                : (records[0] || null);
+        }
+
+        return selected;
+    }
+
+    function updateBookingSummary(summary, selection) {
+        const lines = [];
+
+        for (const category of bookingCategories) {
+            const value = selection[category.key];
+
+            const entries = Array.isArray(value)
+                ? value
+                : (value ? [value] : []);
+
+            if (entries.length) {
+                lines.push(
+                    category.label + ": " +
+                    entries.map(item => item.caption).join(", ")
+                );
+            }
+        }
+
+        summary.textContent = lines.length
+            ? lines.join("  |  ")
+            : "NO STYLE OPTIONS SELECTED.";
+    }
+
+    function renderSavedOptions(reservation) {
+        const savedOptions = reservation.reservation_options || {};
+        const optionLines = [];
+
+        for (const category of bookingCategories) {
+            const value = savedOptions[category.key];
+
+            const entries = Array.isArray(value)
+                ? value
+                : (value ? [value] : []);
+
+            if (entries.length) {
+                optionLines.push(
+                    category.label + ": " +
+                    entries.map(entry =>
+                        entry.caption || "UNNAMED OPTION"
+                    ).join(", ")
+                );
+            }
+        }
+
+        if (savedOptions.notes) {
+            optionLines.push("NOTES: " + savedOptions.notes);
+        }
+
+        return optionLines;
+    }
+
+    // =====================================
     // LOAD DOLLS
     // =====================================
 
@@ -165,6 +329,7 @@
             const card = makeElement("article", "doll-card");
 
             // IMAGE
+
             if (doll.image_path) {
                 const imageUrl = await getImageUrl(doll.image_path);
 
@@ -196,11 +361,13 @@
             }
 
             // NAME
+
             card.append(
                 makeElement("h3", "", doll.name || "UNNAMED DOLL")
             );
 
             // PERSONAL ARCHIVE BUTTON
+
             const profileButton = makeElement(
                 "button",
                 "dolls-action-button",
@@ -217,6 +384,7 @@
             card.append(profileButton);
 
             // STATUS
+
             card.append(
                 makeElement(
                     "span",
@@ -226,6 +394,7 @@
             );
 
             // DESCRIPTION
+
             if (doll.description) {
                 card.append(
                     makeElement(
@@ -237,6 +406,7 @@
             }
 
             // ADDITIONAL DETAILS
+
             if (doll.details) {
                 card.append(
                     makeElement(
@@ -248,21 +418,33 @@
             }
 
             // =================================
-            // RESERVATION FORM
+            // RESERVATION CONFIGURATION FORM
             // =================================
 
             const bookingForm = makeElement(
                 "form",
-                "dolls-booking-form"
+                "dolls-booking-form booking-configurator"
+            );
+
+            const bookingOptions =
+                await loadBookingGalleryOptions(doll.id);
+
+            const dateHeading = makeElement(
+                "h4",
+                "booking-section-title",
+                "01 // RESERVATION DATES"
             );
 
             const startLabel = makeElement(
                 "label",
-                "",
+                "booking-field-label",
                 "START DATE"
             );
 
-            const startInput = makeElement("input");
+            const startInput = makeElement(
+                "input",
+                "booking-date-input"
+            );
 
             startInput.type = "date";
             startInput.required = true;
@@ -270,11 +452,14 @@
 
             const endLabel = makeElement(
                 "label",
-                "",
+                "booking-field-label",
                 "END DATE"
             );
 
-            const endInput = makeElement("input");
+            const endInput = makeElement(
+                "input",
+                "booking-date-input"
+            );
 
             endInput.type = "date";
             endInput.required = true;
@@ -291,26 +476,128 @@
                 }
             });
 
+            bookingForm.append(
+                dateHeading,
+                startLabel,
+                startInput,
+                endLabel,
+                endInput
+            );
+
+            const selectionSummary = makeElement(
+                "p",
+                "booking-selection-summary",
+                "NO STYLE OPTIONS SELECTED."
+            );
+
+            bookingCategories.forEach((category, categoryIndex) => {
+                const photos = bookingOptions[category.key] || [];
+
+                const section = makeElement(
+                    "fieldset",
+                    "booking-category-section"
+                );
+
+                const legend = makeElement(
+                    "legend",
+                    "booking-section-title",
+                    `${String(categoryIndex + 2).padStart(2, "0")} // ${category.label}` +
+                    (category.multiple
+                        ? " — SELECT ANY"
+                        : " — SELECT ONE")
+                );
+
+                section.append(legend);
+
+                if (!photos.length) {
+                    section.append(
+                        makeElement(
+                            "p",
+                            "booking-no-options",
+                            `NO ${category.label} OPTIONS ADDED YET.`
+                        )
+                    );
+                } else {
+                    const optionGrid = makeElement(
+                        "div",
+                        "booking-options-grid"
+                    );
+
+                    photos.forEach((photo, index) => {
+                        optionGrid.append(
+                            createBookingOption(
+                                category,
+                                photo,
+                                index,
+                                doll.id
+                            )
+                        );
+                    });
+
+                    section.append(optionGrid);
+                }
+
+                bookingForm.append(section);
+            });
+
+            // ADDITIONAL NOTES
+
+            const notesLabel = makeElement(
+                "label",
+                "booking-field-label",
+                "ADDITIONAL NOTES"
+            );
+
+            const notesInput = makeElement(
+                "textarea",
+                "booking-notes"
+            );
+
+            notesInput.rows = 3;
+            notesInput.maxLength = 2000;
+            notesInput.placeholder =
+                "Add any additional requests or information...";
+
+            bookingForm.append(notesLabel, notesInput);
+
+            // REVIEW
+
+            const reviewHeading = makeElement(
+                "h4",
+                "booking-section-title",
+                "07 // REVIEW YOUR SELECTION"
+            );
+
+            bookingForm.append(
+                reviewHeading,
+                selectionSummary
+            );
+
+            bookingForm.addEventListener("change", () => {
+                updateBookingSummary(
+                    selectionSummary,
+                    readBookingSelection(bookingForm)
+                );
+            });
+
+            // SUBMIT BUTTON
+
             const reserveButton = makeElement(
                 "button",
-                "",
-                "RESERVE"
+                "booking-submit-button",
+                "CONFIRM RESERVATION"
             );
 
             reserveButton.type = "submit";
 
-            bookingForm.append(
-                startLabel,
-                startInput,
-                endLabel,
-                endInput,
-                reserveButton
-            );
+            bookingForm.append(reserveButton);
 
             const bookingMessage = makeElement(
                 "p",
                 "dolls-form-message"
             );
+
+            // SAVE RESERVATION
 
             bookingForm.addEventListener("submit", async event => {
                 event.preventDefault();
@@ -348,6 +635,11 @@
                     return;
                 }
 
+                const selection =
+                    readBookingSelection(bookingForm);
+
+                selection.notes = notesInput.value.trim();
+
                 reserveButton.disabled = true;
                 reserveButton.textContent = "RESERVING...";
 
@@ -358,11 +650,12 @@
                         user_id: user.id,
                         start_date: startDate,
                         end_date: endDate,
-                        status: "confirmed"
+                        status: "confirmed",
+                        reservation_options: selection
                     });
 
                 reserveButton.disabled = false;
-                reserveButton.textContent = "RESERVE";
+                reserveButton.textContent = "CONFIRM RESERVATION";
 
                 if (error) {
                     console.error("Reservation error:", error);
@@ -385,8 +678,10 @@
                     "RESERVATION CONFIRMED."
                 );
 
-                startInput.value = "";
-                endInput.value = "";
+                bookingForm.reset();
+
+                selectionSummary.textContent =
+                    "NO STYLE OPTIONS SELECTED.";
 
                 await loadReservations();
             });
@@ -404,6 +699,7 @@
                 );
 
                 // EDIT
+
                 const editButton = makeElement(
                     "button",
                     "dolls-action-button",
@@ -430,6 +726,7 @@
                 });
 
                 // DELETE
+
                 const deleteButton = makeElement(
                     "button",
                     "dolls-action-button dolls-delete",
@@ -465,14 +762,15 @@
                     }
 
                     // Remove main image
+
                     if (doll.image_path) {
                         await supabase.storage
                             .from(BUCKET)
                             .remove([doll.image_path]);
                     }
 
-                    // Gallery records are deleted automatically
-                    // by ON DELETE CASCADE. Remove their files too.
+                    // Remove gallery files
+
                     const { data: galleryFiles } = await supabase
                         .from("doll_gallery")
                         .select("image_path")
@@ -557,6 +855,7 @@
                 : null;
 
             // UPLOAD IMAGE
+
             if (file) {
                 const safeName = file.name.replace(
                     /[^a-zA-Z0-9._-]/g,
@@ -636,6 +935,7 @@
                 }
             } else {
                 // Remove previous image after successful update
+
                 if (
                     editId &&
                     imagePath &&
@@ -660,7 +960,6 @@
             }
 
             saveButton.disabled = false;
-
             saveButton.textContent = "ADD DOLL";
         });
 
@@ -760,6 +1059,18 @@
                 )
             );
 
+            const optionLines = renderSavedOptions(reservation);
+
+            if (optionLines.length) {
+                item.append(
+                    makeElement(
+                        "p",
+                        "reservation-options-summary",
+                        optionLines.join(" | ")
+                    )
+                );
+            }
+
             if (reservation.status === "confirmed") {
                 const cancelButton = makeElement(
                     "button",
@@ -858,6 +1169,18 @@
                     `STATUS: ${reservation.status.toUpperCase()}`
                 )
             );
+
+            const optionLines = renderSavedOptions(reservation);
+
+            if (optionLines.length) {
+                item.append(
+                    makeElement(
+                        "p",
+                        "reservation-options-summary",
+                        optionLines.join(" | ")
+                    )
+                );
+            }
 
             if (reservation.status === "confirmed") {
                 const cancelButton = makeElement(
