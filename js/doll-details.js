@@ -1,6 +1,6 @@
 
 /* =====================================================
-   KAROLINA ARCHIVE
+   THE DEN
    DOLL PERSONAL ARCHIVE
    Supabase Database + Private Storage
    Admin-only profile editing
@@ -102,6 +102,16 @@
             buttonId: "uploadNailsButton",
             messageId: "nailsMessage",
             folder: "nails"
+        },
+        accessories: {
+            descriptionField: "accessories_description",
+            galleryId: "accessoriesGallery",
+            adminId: "accessoriesAdmin",
+            filesId: "accessoriesFiles",
+            captionId: "accessoriesCaption",
+            buttonId: "uploadAccessoriesButton",
+            messageId: "accessoriesMessage",
+            folder: "accessories"
         }
     };
 
@@ -163,7 +173,8 @@
         ["clothing_description", "CLOTHING DESCRIPTION", "textarea"],
         ["makeup_description", "MAKE-UP DESCRIPTION", "textarea"],
         ["hairstyle_description", "HAIRSTYLE DESCRIPTION", "textarea"],
-        ["nails_description", "NAILS DESCRIPTION", "textarea"]
+        ["nails_description", "NAILS DESCRIPTION", "textarea"],
+        ["accessories_description", "ACCESSORIES DESCRIPTION", "textarea"]
     ];
 
     // =================================================
@@ -445,6 +456,7 @@
         });
 
         // Main image upload
+
         const imageWrapper = document.createElement("div");
         imageWrapper.className = "profile-edit-field";
 
@@ -486,7 +498,7 @@
             const imageInput = $("mainProfileImageFile");
             const newImage = imageInput?.files?.[0];
 
-            let oldImagePath = currentDoll.image_path;
+            const oldImagePath = currentDoll.image_path;
             let newImagePath = null;
 
             if (newImage) {
@@ -524,7 +536,8 @@
 
             showMessage(
                 profileAdminMessage,
-                error.message || "COULD NOT SAVE PROFILE."
+                error.message || "COULD NOT SAVE PROFILE.",
+                "error"
             );
 
         } finally {
@@ -679,6 +692,11 @@
         const button = $(config.buttonId);
         const message = $(config.messageId);
 
+        if (!filesInput || !captionInput || !button || !message) {
+            console.error(`Missing HTML elements for ${category} gallery.`);
+            return;
+        }
+
         const files = Array.from(filesInput.files || []);
 
         if (!files.length) {
@@ -750,7 +768,7 @@
         const files = Array.from(galleryFiles.files || []);
 
         if (files.length === 0) {
-            showMessage(galleryMessage, "SELECT AT LEAST ONE IMAGE.");
+            showMessage(galleryMessage, "SELECT AT LEAST ONE IMAGE.", "error");
             return;
         }
 
@@ -800,7 +818,8 @@
 
             showMessage(
                 galleryMessage,
-                error.message || "GALLERY UPLOAD FAILED."
+                error.message || "GALLERY UPLOAD FAILED.",
+                "error"
             );
 
         } finally {
@@ -858,8 +877,11 @@
             console.error("Gallery deletion error:", error);
 
             showMessage(
-                galleryMessage,
-                error.message || "COULD NOT DELETE PHOTOGRAPH."
+                category === "general"
+                    ? galleryMessage
+                    : $(galleryCategories[category]?.messageId),
+                error.message || "COULD NOT DELETE PHOTOGRAPH.",
+                "error"
             );
         }
     }
