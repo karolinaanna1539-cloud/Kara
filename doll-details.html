@@ -93,7 +93,7 @@
                     <span class="category-card-icon">01</span>
                     <span class="category-card-title">CLOTHING</span>
                     <span class="category-card-description">
-                        Clothes, lingerie, footwear and accessories
+                        Clothes, lingerie and footwear
                     </span>
                     <span class="category-card-action">OPEN GALLERY →</span>
                 </button>
@@ -131,6 +131,17 @@
                     <span class="category-card-action">OPEN GALLERY →</span>
                 </button>
 
+                <button type="button"
+                    class="category-card"
+                    data-open-category="accessories">
+                    <span class="category-card-icon">05</span>
+                    <span class="category-card-title">ACCESSORIES</span>
+                    <span class="category-card-description">
+                        Jewellery, gloves, stockings, glasses and extras
+                    </span>
+                    <span class="category-card-action">OPEN GALLERY →</span>
+                </button>
+
             </div>
         </section>
 
@@ -142,10 +153,10 @@
             </button>
 
             <p class="system-label">STYLE RECORD // 01</p>
-            <h3>CLOTHING &amp; ACCESSORIES</h3>
+            <h3>CLOTHING</h3>
 
             <p class="profile-note">
-                Clothing, lingerie, footwear and accessories.
+                Clothing, lingerie and footwear.
             </p>
 
             <div id="clothingDescription" class="category-description">
@@ -295,6 +306,47 @@
                 </button>
 
                 <p id="nailsMessage" class="profile-message"></p>
+            </div>
+        </section>
+
+        <!-- ACCESSORIES GALLERY VIEW -->
+
+        <section id="accessories" class="profile-section category-section" hidden>
+            <button type="button" class="category-back-button">
+                ← BACK TO PROFILE
+            </button>
+
+            <p class="system-label">STYLE RECORD // 05</p>
+            <h3>ACCESSORIES &amp; EXTRAS</h3>
+
+            <p class="profile-note">
+                Jewellery, gloves, stockings, glasses, ornaments and other accessories.
+            </p>
+
+            <div id="accessoriesDescription" class="category-description">
+                NO DESCRIPTION AVAILABLE.
+            </div>
+
+            <h4>ACCESSORIES GALLERY</h4>
+            <div id="accessoriesGallery" class="doll-gallery"></div>
+
+            <div id="accessoriesAdmin" class="gallery-admin" hidden>
+                <h4>MANAGE ACCESSORIES GALLERY</h4>
+
+                <label for="accessoriesFiles">SELECT IMAGES</label>
+                <input type="file" id="accessoriesFiles"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    multiple>
+
+                <label for="accessoriesCaption">CAPTION (OPTIONAL)</label>
+                <input type="text" id="accessoriesCaption"
+                    maxlength="200" placeholder="Accessory description">
+
+                <button type="button" id="uploadAccessoriesButton">
+                    UPLOAD ACCESSORIES PHOTOS
+                </button>
+
+                <p id="accessoriesMessage" class="profile-message"></p>
             </div>
         </section>
 
