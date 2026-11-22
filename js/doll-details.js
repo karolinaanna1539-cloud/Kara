@@ -62,6 +62,49 @@
     let currentDoll = null;
     let galleryRecords = [];
 
+    const galleryCategories = {
+        clothing: {
+            descriptionField: "clothing_description",
+            galleryId: "clothingGallery",
+            adminId: "clothingAdmin",
+            filesId: "clothingFiles",
+            captionId: "clothingCaption",
+            buttonId: "uploadClothingButton",
+            messageId: "clothingMessage",
+            folder: "clothing"
+        },
+        makeup: {
+            descriptionField: "makeup_description",
+            galleryId: "makeupGallery",
+            adminId: "makeupAdmin",
+            filesId: "makeupFiles",
+            captionId: "makeupCaption",
+            buttonId: "uploadMakeupButton",
+            messageId: "makeupMessage",
+            folder: "makeup"
+        },
+        hairstyle: {
+            descriptionField: "hairstyle_description",
+            galleryId: "hairstyleGallery",
+            adminId: "hairstyleAdmin",
+            filesId: "hairstyleFiles",
+            captionId: "hairstyleCaption",
+            buttonId: "uploadHairstyleButton",
+            messageId: "hairstyleMessage",
+            folder: "hairstyle"
+        },
+        nails: {
+            descriptionField: "nails_description",
+            galleryId: "nailsGallery",
+            adminId: "nailsAdmin",
+            filesId: "nailsFiles",
+            captionId: "nailsCaption",
+            buttonId: "uploadNailsButton",
+            messageId: "nailsMessage",
+            folder: "nails"
+        }
+    };
+
     // =================================================
     // FIELD DEFINITIONS
     // =================================================
@@ -116,7 +159,11 @@
         ]),
         ...historyFields.map(([key, label]) => [
             key, label, "textarea"
-        ])
+        ]),
+        ["clothing_description", "CLOTHING DESCRIPTION", "textarea"],
+        ["makeup_description", "MAKE-UP DESCRIPTION", "textarea"],
+        ["hairstyle_description", "HAIRSTYLE DESCRIPTION", "textarea"],
+        ["nails_description", "NAILS DESCRIPTION", "textarea"]
     ];
 
     // =================================================
@@ -326,6 +373,24 @@
 
         renderHistory(data);
 
+        Object.entries(galleryCategories).forEach(([category, config]) => {
+            const description = $(category + "Description");
+
+            if (description) {
+                const value = data[config.descriptionField];
+
+                description.textContent = value && String(value).trim()
+                    ? value
+                    : "NO DESCRIPTION AVAILABLE.";
+            }
+
+            const panel = $(config.adminId);
+
+            if (panel) {
+                panel.hidden = !isAdmin;
+            }
+        });
+
         if (isAdmin) {
             profileAdmin.hidden = false;
             galleryAdmin.hidden = false;
@@ -343,6 +408,15 @@
         allEditableFields.forEach(([key, label, type]) => {
             const wrapper = document.createElement("div");
             wrapper.className = "profile-edit-field";
+
+            if (
+                type === "textarea" ||
+                key === "description" ||
+                key.endsWith("_description") ||
+                key === "archive_history"
+            ) {
+                wrapper.classList.add("full");
+            }
 
             const fieldLabel = document.createElement("label");
             fieldLabel.textContent = label;
@@ -504,29 +578,38 @@
     // LOAD GALLERY
     // =================================================
 
-    async function loadGallery() {
-        dollGallery.innerHTML = "";
+    async function loadGallery(category = "general", targetContainer = dollGallery) {
+        if (!targetContainer) return;
+
+        targetContainer.innerHTML = "LOADING PHOTOGRAPHS...";
 
         const { data, error } = await supabase
             .from("doll_gallery")
             .select("*")
             .eq("doll_id", dollId)
+            .eq("category", category)
             .order("created_at", { ascending: false });
 
         if (error) {
-            console.error("Gallery load error:", error);
-            dollGallery.textContent = "COULD NOT LOAD GALLERY.";
+            console.error(`${category} gallery load error:`, error);
+            targetContainer.textContent = "COULD NOT LOAD GALLERY.";
             return;
         }
 
-        galleryRecords = data || [];
+        const records = data || [];
 
-        if (galleryRecords.length === 0) {
-            dollGallery.textContent = "NO PHOTOGRAPHS IN ARCHIVE.";
+        if (category === "general") {
+            galleryRecords = records;
+        }
+
+        targetContainer.innerHTML = "";
+
+        if (!records.length) {
+            targetContainer.textContent = "NO PHOTOGRAPHS IN ARCHIVE.";
             return;
         }
 
-        for (const photo of galleryRecords) {
+        for (const photo of records) {
             const url = await getImageUrl(photo.image_path);
 
             if (!url) continue;
@@ -536,7 +619,7 @@
 
             const image = document.createElement("img");
             image.src = url;
-            image.alt = photo.caption || currentDoll.name || "Doll photo";
+            image.alt = photo.caption || currentDoll?.name || "Doll photo";
             image.loading = "lazy";
 
             image.addEventListener("click", () => {
@@ -555,21 +638,110 @@
                 const deleteButton = document.createElement("button");
                 deleteButton.type = "button";
                 deleteButton.textContent = "DELETE PHOTO";
-                deleteButton.className = "gallery-delete-button";
+                deleteButton.className = "gallery-delete";
 
                 deleteButton.addEventListener("click", () => {
-                    deleteGalleryPhoto(photo);
+                    deleteGalleryPhoto(photo, category);
                 });
 
                 item.appendChild(deleteButton);
             }
 
-            dollGallery.appendChild(item);
+            targetContainer.appendChild(item);
+        }
+
+        if (!targetContainer.children.length) {
+            targetContainer.textContent = "NO DISPLAYABLE PHOTOGRAPHS.";
+        }
+    }
+
+    async function loadCategoryGallery(category) {
+        const config = galleryCategories[category];
+
+        if (config) {
+            await loadGallery(category, $(config.galleryId));
         }
     }
 
     // =================================================
-    // UPLOAD GALLERY PHOTOS
+    // UPLOAD CATEGORY GALLERY PHOTOS
+    // =================================================
+
+    async function uploadCategoryGallery(category) {
+        if (!isAdmin) return;
+
+        const config = galleryCategories[category];
+
+        if (!config) return;
+
+        const filesInput = $(config.filesId);
+        const captionInput = $(config.captionId);
+        const button = $(config.buttonId);
+        const message = $(config.messageId);
+
+        const files = Array.from(filesInput.files || []);
+
+        if (!files.length) {
+            showMessage(message, "SELECT AT LEAST ONE IMAGE.", "error");
+            return;
+        }
+
+        button.disabled = true;
+        showMessage(message, "UPLOADING PHOTOGRAPHS...");
+
+        let uploadedCount = 0;
+        const caption = captionInput.value.trim();
+
+        try {
+            for (const file of files) {
+                const path = await uploadImage(file, config.folder);
+
+                const { error } = await supabase
+                    .from("doll_gallery")
+                    .insert({
+                        doll_id: dollId,
+                        image_path: path,
+                        caption: caption,
+                        category: category
+                    });
+
+                if (error) {
+                    await supabase.storage
+                        .from(BUCKET)
+                        .remove([path]);
+
+                    throw error;
+                }
+
+                uploadedCount++;
+            }
+
+            filesInput.value = "";
+            captionInput.value = "";
+
+            await loadCategoryGallery(category);
+
+            showMessage(
+                message,
+                `UPLOADED ${uploadedCount} PHOTOGRAPH(S) SUCCESSFULLY.`
+            );
+
+        } catch (error) {
+            console.error(`${category} gallery upload error:`, error);
+
+            showMessage(
+                message,
+                error.message || "GALLERY UPLOAD FAILED.",
+                "error"
+            );
+
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    // =================================================
+    // UPLOAD GENERAL GALLERY PHOTOS
     // =================================================
 
     uploadGalleryButton.addEventListener("click", async () => {
@@ -598,11 +770,15 @@
                     .insert({
                         doll_id: dollId,
                         image_path: path,
-                        caption: caption
+                        caption: caption,
+                        category: "general"
                     });
 
                 if (error) {
-                    await supabase.storage.from(BUCKET).remove([path]);
+                    await supabase.storage
+                        .from(BUCKET)
+                        .remove([path]);
+
                     throw error;
                 }
 
@@ -636,7 +812,7 @@
     // DELETE GALLERY PHOTO
     // =================================================
 
-    async function deleteGalleryPhoto(photo) {
+    async function deleteGalleryPhoto(photo, category = "general") {
         if (!isAdmin) return;
 
         const confirmed = window.confirm(
@@ -661,9 +837,22 @@
                 console.error("Storage deletion error:", storageError);
             }
 
-            await loadGallery();
+            if (category === "general") {
+                await loadGallery("general", dollGallery);
 
-            showMessage(galleryMessage, "PHOTOGRAPH DELETED.");
+                showMessage(
+                    galleryMessage,
+                    "PHOTOGRAPH DELETED."
+                );
+
+            } else {
+                await loadCategoryGallery(category);
+
+                showMessage(
+                    $(galleryCategories[category].messageId),
+                    "PHOTOGRAPH DELETED."
+                );
+            }
 
         } catch (error) {
             console.error("Gallery deletion error:", error);
@@ -707,8 +896,13 @@
         currentDoll = data;
 
         renderProfile(data);
+
         await renderMainImage(data);
-        await loadGallery();
+        await loadGallery("general", dollGallery);
+
+        for (const category of Object.keys(galleryCategories)) {
+            await loadCategoryGallery(category);
+        }
 
         profileMessage.hidden = true;
         profileContent.hidden = false;
@@ -718,10 +912,22 @@
     // START
     // =================================================
 
+    Object.entries(galleryCategories).forEach(([category, config]) => {
+        const button = $(config.buttonId);
+
+        if (button) {
+            button.addEventListener("click", () => {
+                uploadCategoryGallery(category);
+            });
+        }
+    });
+
     try {
         await loadDoll();
+
     } catch (error) {
         console.error("DOLL PERSONAL ARCHIVE ERROR:", error);
+
         setLoading("UNEXPECTED ERROR. CHECK THE BROWSER CONSOLE.");
     }
 
