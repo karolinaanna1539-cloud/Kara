@@ -1,5 +1,8 @@
 
-/* KAROLINA ARCHIVE — COMMUNITY GALLERY */
+/* =====================================================
+   THE DEN — COMMUNITY GALLERY
+   IMAGE + VIDEO UPLOAD
+===================================================== */
 
 (async function () {
     "use strict";
@@ -12,7 +15,7 @@
     const user = session.user;
 
     const BUCKET = "community-gallery";
-    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+    const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
     const form = document.getElementById("galleryForm");
     const imageInput = document.getElementById("galleryImage");
@@ -42,7 +45,7 @@
     let lastFocusedImage = null;
 
     /* =========================================
-       IMAGE LIGHTBOX
+       LIGHTBOX — IMAGE PREVIEW
     ========================================= */
 
     function createLightbox() {
@@ -107,6 +110,37 @@
                 opacity: 0.85;
             }
 
+            .gallery-video-player {
+                display: block;
+                width: 100%;
+                max-height: 420px;
+                aspect-ratio: 16 / 9;
+                object-fit: contain;
+                background: #050805;
+                border: 1px solid rgba(0, 255, 120, 0.18);
+            }
+
+            .gallery-media-type {
+                display: inline-block;
+                margin-bottom: 8px;
+                padding: 4px 8px;
+                border: 1px solid rgba(0, 255, 120, 0.3);
+                color: #00ff88;
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+
+            .gallery-image-error {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 180px;
+                padding: 20px;
+                color: #ff7777;
+                background: rgba(255, 0, 0, 0.05);
+                text-align: center;
+            }
+
             @media (max-width: 600px) {
                 .gallery-lightbox {
                     padding: 12px;
@@ -129,6 +163,7 @@
         document.head.appendChild(style);
 
         const overlay = makeElement("div", "gallery-lightbox");
+
         overlay.setAttribute("role", "dialog");
         overlay.setAttribute("aria-modal", "true");
         overlay.setAttribute("aria-label", "Image preview");
@@ -143,6 +178,7 @@
         closeButton.setAttribute("aria-label", "Close image preview");
 
         const previewImage = document.createElement("img");
+
         previewImage.className = "gallery-lightbox-image";
         previewImage.alt = "";
 
@@ -231,13 +267,23 @@
         return "USER-" + String(id || "").slice(0, 6).toUpperCase();
     }
 
-    async function getImageUrl(path) {
+    function isVideo(path) {
+        return /\.(mp4|webm)$/i.test(path || "");
+    }
+
+    function getMediaType(file) {
+        if (file.type.startsWith("video/")) return "video";
+        if (file.type.startsWith("image/")) return "image";
+        return null;
+    }
+
+    async function getMediaUrl(path) {
         const { data, error } = await supabaseClient.storage
             .from(BUCKET)
             .createSignedUrl(path, 3600);
 
         if (error) {
-            console.error("Gallery image URL error:", error);
+            console.error("Gallery media URL error:", error);
             return null;
         }
 
@@ -258,7 +304,9 @@
 
         if (error) {
             console.error("Gallery load error:", error);
+
             grid.textContent = "COULD NOT LOAD GALLERY: " + error.message;
+
             setConnection("DATABASE ERROR", true);
             return;
         }
@@ -271,7 +319,7 @@
     }
 
     /* =========================================
-       RENDER PHOTOS
+       RENDER GALLERY
     ========================================= */
 
     async function renderGallery() {
@@ -284,24 +332,53 @@
                 makeElement(
                     "p",
                     "homepage-loading",
-                    "NO PHOTOS YET. BE THE FIRST TO UPLOAD."
+                    "NO MEDIA YET. BE THE FIRST TO UPLOAD."
                 )
             );
+
             return;
         }
 
         for (const photo of photos) {
             const card = makeElement("article", "gallery-photo-card");
-            const imageUrl = await getImageUrl(photo.image_path);
 
-            if (imageUrl) {
+            const mediaUrl = await getMediaUrl(photo.image_path);
+            const videoFile = isVideo(photo.image_path);
+
+            if (mediaUrl && videoFile) {
+                const video = document.createElement("video");
+
+                video.className = "gallery-video-player";
+                video.src = mediaUrl;
+                video.controls = true;
+                video.preload = "metadata";
+                video.playsInline = true;
+                video.setAttribute("controlsList", "nodownload");
+
+                video.setAttribute(
+                    "aria-label",
+                    photo.caption || "Community video"
+                );
+
+                card.appendChild(video);
+
+                card.appendChild(
+                    makeElement(
+                        "span",
+                        "gallery-media-type",
+                        "VIDEO"
+                    )
+                );
+
+            } else if (mediaUrl) {
                 const image = document.createElement("img");
 
-                image.src = imageUrl;
+                image.src = mediaUrl;
                 image.alt = photo.caption || "Community photo";
                 image.loading = "lazy";
                 image.className = "gallery-photo-image";
                 image.tabIndex = 0;
+
                 image.setAttribute("role", "button");
                 image.setAttribute("aria-label", "Enlarge image");
 
@@ -320,12 +397,21 @@
                 });
 
                 card.appendChild(image);
+
+                card.appendChild(
+                    makeElement(
+                        "span",
+                        "gallery-media-type",
+                        "IMAGE"
+                    )
+                );
+
             } else {
                 card.appendChild(
                     makeElement(
                         "div",
                         "gallery-image-error",
-                        "IMAGE UNAVAILABLE"
+                        "MEDIA UNAVAILABLE"
                     )
                 );
             }
@@ -362,7 +448,7 @@
                 const deleteButton = makeElement(
                     "button",
                     "gallery-delete-button",
-                    "DELETE MY PHOTO"
+                    "DELETE MY UPLOAD"
                 );
 
                 deleteButton.type = "button";
@@ -380,7 +466,7 @@
     }
 
     /* =========================================
-       UPLOAD PHOTO
+       UPLOAD IMAGE OR VIDEO
     ========================================= */
 
     async function uploadPhoto(event) {
@@ -392,7 +478,7 @@
         const caption = captionInput.value.trim();
 
         if (!file) {
-            setMessage("PLEASE SELECT AN IMAGE.", true);
+            setMessage("PLEASE SELECT AN IMAGE OR VIDEO.", true);
             return;
         }
 
@@ -400,35 +486,46 @@
             "image/jpeg",
             "image/png",
             "image/webp",
-            "image/gif"
+            "image/gif",
+            "video/mp4",
+            "video/webm"
         ];
 
         if (!allowedTypes.includes(file.type)) {
-            setMessage("UNSUPPORTED IMAGE FORMAT.", true);
+            setMessage("UNSUPPORTED FILE FORMAT.", true);
             return;
         }
 
         if (file.size > MAX_FILE_SIZE) {
-            setMessage("IMAGE IS LARGER THAN 10 MB.", true);
+            setMessage("FILE IS LARGER THAN 50 MB.", true);
+            return;
+        }
+
+        const mediaType = getMediaType(file);
+
+        if (!mediaType) {
+            setMessage("UNSUPPORTED MEDIA TYPE.", true);
             return;
         }
 
         isUploading = true;
+
         uploadButton.disabled = true;
         uploadButton.textContent = "UPLOADING...";
-        setMessage("UPLOADING IMAGE...");
+
+        setMessage("UPLOADING " + mediaType.toUpperCase() + "...");
 
         const safeName = file.name
             .toLowerCase()
             .replace(/[^a-z0-9._-]/g, "-");
 
-        const imagePath =
+        const mediaPath =
             user.id + "/" + crypto.randomUUID() + "-" + safeName;
 
         try {
             const { error: uploadError } = await supabaseClient.storage
                 .from(BUCKET)
-                .upload(imagePath, file, {
+                .upload(mediaPath, file, {
                     cacheControl: "3600",
                     upsert: false,
                     contentType: file.type
@@ -442,21 +539,23 @@
                 .from("gallery_photos")
                 .insert({
                     user_id: user.id,
-                    image_path: imagePath,
+                    image_path: mediaPath,
                     caption: caption || null
                 });
 
             if (insertError) {
                 await supabaseClient.storage
                     .from(BUCKET)
-                    .remove([imagePath]);
+                    .remove([mediaPath]);
 
                 throw insertError;
             }
 
             form.reset();
 
-            setMessage("IMAGE UPLOADED SUCCESSFULLY.");
+            setMessage(
+                mediaType.toUpperCase() + " UPLOADED SUCCESSFULLY."
+            );
 
             await loadGallery();
 
@@ -470,23 +569,24 @@
 
         } finally {
             isUploading = false;
+
             uploadButton.disabled = false;
-            uploadButton.textContent = "UPLOAD IMAGE";
+            uploadButton.textContent = "UPLOAD MEDIA";
         }
     }
 
     /* =========================================
-       DELETE PHOTO
+       DELETE IMAGE OR VIDEO
     ========================================= */
 
     async function deletePhoto(photo) {
         if (photo.user_id !== user.id) {
-            setMessage("YOU CAN DELETE ONLY YOUR OWN PHOTOS.", true);
+            setMessage("YOU CAN DELETE ONLY YOUR OWN UPLOADS.", true);
             return;
         }
 
         const confirmed = window.confirm(
-            "Delete this photo permanently?"
+            "Delete this media permanently?"
         );
 
         if (!confirmed) return;
@@ -509,9 +609,14 @@
 
         if (storageError) {
             console.error("Storage cleanup error:", storageError);
-            setMessage("PHOTO REMOVED FROM DATABASE. STORAGE CLEANUP FAILED.", true);
+
+            setMessage(
+                "MEDIA REMOVED FROM DATABASE. STORAGE CLEANUP FAILED.",
+                true
+            );
+
         } else {
-            setMessage("PHOTO DELETED.");
+            setMessage("MEDIA DELETED.");
         }
 
         await loadGallery();
