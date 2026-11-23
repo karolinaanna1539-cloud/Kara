@@ -17,7 +17,7 @@
 
     <header>
         <h1>THE DEN</h1>
-        <p class="subtitle">PRIVATE COMMUNITY // SHARED IMAGE DATABASE</p>
+        <p class="subtitle">PRIVATE COMMUNITY // SHARED MEDIA DATABASE</p>
     </header>
 
     <main class="terminal">
@@ -34,7 +34,7 @@
 
             <div class="homepage-section-heading">
                 <div>
-                    <p class="system-label">THE DEN // SHARED IMAGE DATABASE</p>
+                    <p class="system-label">THE DEN // SHARED MEDIA DATABASE</p>
                     <h2>UPLOAD CENTER</h2>
                 </div>
 
@@ -42,19 +42,19 @@
             </div>
 
             <p class="homepage-description">
-                A shared photo collection for members of The Den.
-                All authenticated users can upload and view photos.
+                A shared photo and video collection for members of The Den.
+                All authenticated users can upload and view media.
                 You can delete only your own uploads.
             </p>
 
             <form id="galleryForm" class="gallery-form">
 
-                <label for="galleryImage">SELECT IMAGE</label>
+                <label for="galleryImage">SELECT IMAGE OR VIDEO</label>
 
                 <input
                     type="file"
                     id="galleryImage"
-                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
                     required
                 >
 
@@ -68,11 +68,13 @@
                 >
 
                 <button type="submit" id="galleryUploadButton">
-                    UPLOAD IMAGE
+                    UPLOAD MEDIA
                 </button>
 
                 <p class="gallery-help">
-                    JPG, PNG, WEBP or GIF. Maximum size: 10 MB.
+                    Images: JPG, PNG, WEBP or GIF.
+                    Videos: MP4 or WebM.
+                    Maximum size: 50 MB.
                 </p>
 
                 <p id="galleryMessage" class="gallery-message"></p>
@@ -82,7 +84,7 @@
             <div class="gallery-divider"></div>
 
             <div class="gallery-heading-row">
-                <h3>SHARED PHOTOS</h3>
+                <h3>SHARED MEDIA</h3>
                 <span id="galleryCount">0 FILES</span>
             </div>
 
