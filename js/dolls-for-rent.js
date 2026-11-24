@@ -1,255 +1,385 @@
 
-/* =========================================
+/* =====================================================
    THE DEN
-   DOLLS FOR RENT
-   PRIVATE COLLECTION
-   Supabase + Reservations + Admin
-========================================= */
+   COLLECTION & RESERVATION MANAGEMENT
+   MODULE 09
+===================================================== */
 
 (async function () {
+
     "use strict";
 
     const supabase = window.archiveSupabase;
     const session = await window.archiveAuthReady;
 
-    if (!session || !supabase) return;
+    if (!supabase || !session) return;
 
     const user = session.user;
 
-    const ADMIN_ID = "3d4c3c65-3956-46b3-a83d-aae7e671c0ff";
-    const isAdmin = user.id === ADMIN_ID;
+    const ADMIN_ID =
+        "3d4c3c65-3956-46b3-a83d-aae7e671c0ff";
 
+    const isAdmin = user.id === ADMIN_ID;
     const BUCKET = "dolls-for-rent";
 
     const $ = id => document.getElementById(id);
 
     const connection = $("dollsConnection");
-    const grid = $("dollsGrid");
-    const count = $("dollsCount");
-
     const adminPanel = $("dollsAdminPanel");
     const adminReservations = $("dollsAdminReservations");
-
     const form = $("dollForm");
-    const formMessage = $("dollAdminMessage");
     const saveButton = $("dollSaveButton");
     const cancelEditButton = $("dollCancelEdit");
+    const formMessage = $("dollAdminMessage");
+
+    const statuses = [
+        "pending",
+        "confirmed",
+        "preparing",
+        "ready_for_pickup",
+        "active",
+        "completed",
+        "declined",
+        "cancelled"
+    ];
+
+    const closedStatuses = [
+        "completed",
+        "declined",
+        "cancelled"
+    ];
+
+    const cancellableStatuses = [
+        "pending",
+        "confirmed",
+        "preparing",
+        "ready_for_pickup"
+    ];
+
+    const categories = {
+        clothing: "CLOTHING",
+        makeup: "MAKE-UP",
+        hairstyle: "HAIRSTYLE",
+        nails: "NAILS",
+        accessories: "ACCESSORIES"
+    };
 
     let dolls = [];
     let reservations = [];
+
+    let adminFilter = "all";
+    let adminSearch = "";
+
+    let dollLoadVersion = 0;
+    let reservationLoadVersion = 0;
+
+    let dollBusy = false;
+    let reservationWrites = 0;
+
     let realtimeChannel = null;
+    let refreshTimer = null;
 
-    // =====================================
-    // DATE HELPERS
-    // =====================================
+    const openRecords = new Set();
 
-    function today() {
-        const date = new Date();
+    /* =================================================
+       GENERAL HELPERS
+    ================================================= */
 
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
+    function makeElement(tag, className, content) {
 
-        return `${year}-${month}-${day}`;
-    }
-
-    function formatDate(date) {
-        if (!date) return "";
-
-        return new Date(date + "T12:00:00").toLocaleDateString();
-    }
-
-    // =====================================
-    // GENERAL HELPERS
-    // =====================================
-
-    function showMessage(element, message, error = false) {
-        if (!element) return;
-
-        element.textContent = message;
-        element.classList.toggle("error", error);
-    }
-
-    function makeElement(tag, className, text) {
-        const element = document.createElement(tag);
+        const node = document.createElement(tag);
 
         if (className) {
-            element.className = className;
+            node.className = className;
         }
 
-        if (text !== undefined) {
-            element.textContent = text;
+        if (content !== undefined) {
+            node.textContent = content;
         }
 
-        return element;
+        return node;
+
     }
 
-    function resetForm() {
-        form.reset();
+    function makeButton(label, className) {
 
-        $("dollEditId").value = "";
+        const button = makeElement(
+            "button",
+            className,
+            label
+        );
 
-        saveButton.textContent = "ADD DOLL";
-        saveButton.disabled = false;
+        button.type = "button";
 
-        cancelEditButton.hidden = true;
+        return button;
 
-        showMessage(formMessage, "");
     }
 
-    // =====================================
-    // STORAGE
-    // =====================================
+    function makeLink(label, className, href) {
+
+        const link = makeElement(
+            "a",
+            className,
+            label
+        );
+
+        link.href = href;
+
+        return link;
+
+    }
+
+    function statusLabel(status) {
+
+        return String(status || "unknown")
+            .replace(/_/g, " ")
+            .toUpperCase();
+
+    }
+
+    function reference(record) {
+
+        return "RES-" + String(record.id)
+            .slice(0, 8)
+            .toUpperCase();
+
+    }
+
+    function formatDate(value) {
+
+        if (!value) return "NOT SPECIFIED";
+
+        const date = new Date(
+            value + "T12:00:00Z"
+        );
+
+        if (Number.isNaN(date.getTime())) {
+            return value;
+        }
+
+        return new Intl.DateTimeFormat(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                timeZone: "UTC"
+            }
+        ).format(date);
+
+    }
+
+    function formatTime(value) {
+
+        return value
+            ? String(value).slice(0, 5)
+            : "To be agreed";
+
+    }
+
+    function formatTimestamp(value) {
+
+        if (!value) return "NOT RECORDED";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "NOT RECORDED";
+        }
+
+        return new Intl.DateTimeFormat(
+            "en-GB",
+            {
+                dateStyle: "medium",
+                timeStyle: "short",
+                timeZone: "Europe/Stockholm"
+            }
+        ).format(date);
+
+    }
+
+    function showMessage(target, message, error = false) {
+
+        target.textContent = message;
+
+        target.className = error
+            ? "dolls-form-message error"
+            : "dolls-form-message";
+
+    }
+
+    function showReservationMessage(
+        target,
+        message,
+        type = "info"
+    ) {
+
+        target.textContent = message;
+        target.className = "rm-message " + type;
+
+    }
+
+    function findDoll(id) {
+
+        return dolls.find(doll => doll.id === id);
+
+    }
+
+    function dollName(id) {
+
+        return findDoll(id)?.name || "PROFILE";
+
+    }
 
     async function getImageUrl(path) {
+
         if (!path) return null;
 
-        const { data, error } = await supabase.storage
+        const { data, error } = await supabase
+            .storage
             .from(BUCKET)
             .createSignedUrl(path, 3600);
 
         if (error) {
-            console.error("Image URL error:", error);
+
+            console.error(error);
             return null;
+
         }
 
-        return data.signedUrl;
+        return data?.signedUrl || null;
+
     }
 
-    // =====================================
-    // RESERVATION OPTIONS HISTORY
-    // =====================================
+    /* =================================================
+       CUSTOMIZATION ICONS
+    ================================================= */
 
-    function renderSavedOptions(reservation, container) {
-        if (!container) return;
+    function createIcon(category) {
 
-        const saved = reservation.reservation_options;
+        const namespace =
+            "http://www.w3.org/2000/svg";
 
-        if (!saved) return;
-
-        let selections = [];
-        let notes = "";
-
-        if (Array.isArray(saved)) {
-            selections = saved;
-
-        } else if (typeof saved === "object") {
-
-            selections = Array.isArray(saved.selections)
-                ? saved.selections
-                : [];
-
-            notes = typeof saved.notes === "string"
-                ? saved.notes
-                : "";
-        }
-
-        if (!selections.length && !notes) return;
-
-        const details = makeElement(
-            "div",
-            "reservation-saved-options"
+        const svg = document.createElementNS(
+            namespace,
+            "svg"
         );
 
-        details.style.marginTop = "12px";
-        details.style.padding = "12px";
-        details.style.border = "1px solid #34533a";
-        details.style.background = "#0b140d";
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("aria-hidden", "true");
 
-        const heading = makeElement(
-            "strong",
-            "",
-            "RESERVATION CONFIGURATION"
-        );
+        const paths = {
 
-        heading.style.display = "block";
-        heading.style.marginBottom = "8px";
-        heading.style.color = "#8fce9c";
+            clothing: [
+                "M8 3 3 6 1 11l5 2 2-3v11h8V10l2 3 5-2-2-5-5-3",
+                "M8 3c0 4 8 4 8 0"
+            ],
 
-        details.append(heading);
+            makeup: [
+                "m14 4 6 6-10 10-6-6Z",
+                "m14 4 3-3 6 6-3 3",
+                "M4 14c-3 2-3 6-3 8 3 0 7-1 9-2"
+            ],
 
-        const categoryNames = {
-            clothing: "CLOTHING",
-            makeup: "MAKE-UP",
-            hairstyle: "HAIRSTYLE",
-            nails: "NAILS",
-            accessories: "ACCESSORIES"
+            hairstyle: [
+                "M6 6m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0",
+                "M6 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0",
+                "M9 9l12 12",
+                "M9 15 21 3"
+            ],
+
+            nails: [
+                "M8 21V7a4 4 0 0 1 8 0v14Z",
+                "M10 8h4v7h-4Z"
+            ],
+
+            accessories: [
+                "m3 8 4-5h10l4 5-9 13Z",
+                "M3 8h18",
+                "m7 3 5 18 5-18"
+            ]
+
         };
 
-        if (selections.length) {
+        for (const definition of paths[category] || []) {
 
-            for (const option of selections) {
-
-                if (!option) continue;
-
-                const category =
-                    categoryNames[option.category]
-                    || String(
-                        option.category || "OPTION"
-                    ).toUpperCase();
-
-                const caption =
-                    option.caption || "Unnamed option";
-
-                const line = makeElement(
-                    "p",
-                    "",
-                    `${category}: ${caption}`
-                );
-
-                line.style.margin = "5px 0";
-                line.style.fontSize = "12px";
-                line.style.color = "#c5d2c7";
-
-                details.append(line);
-            }
-
-        } else {
-
-            const empty = makeElement(
-                "p",
-                "",
-                "No configuration options selected."
+            const path = document.createElementNS(
+                namespace,
+                "path"
             );
 
-            empty.style.fontSize = "12px";
+            path.setAttribute("d", definition);
 
-            details.append(empty);
+            svg.appendChild(path);
+
         }
 
-        if (notes) {
+        return svg;
 
-            const notesHeading = makeElement(
-                "p",
-                "",
-                "ADDITIONAL NOTES:"
-            );
-
-            notesHeading.style.marginTop = "12px";
-            notesHeading.style.color = "#8fce9c";
-            notesHeading.style.fontSize = "12px";
-
-            const notesText = makeElement(
-                "p",
-                "",
-                notes
-            );
-
-            notesText.style.whiteSpace = "pre-wrap";
-            notesText.style.fontSize = "12px";
-            notesText.style.color = "#c5d2c7";
-
-            details.append(notesHeading, notesText);
-        }
-
-        container.append(details);
     }
 
-    // =====================================
-    // LOAD DOLLS
-    // =====================================
+    function createCustomizationOptions() {
+
+        const section = makeElement(
+            "div",
+            "doll-customization"
+        );
+
+        section.appendChild(
+            makeElement(
+                "p",
+                "doll-customization-title",
+                "AVAILABLE CUSTOMIZATION CATEGORIES"
+            )
+        );
+
+        const grid = makeElement(
+            "div",
+            "doll-options-grid"
+        );
+
+        for (const [category, label] of Object.entries(categories)) {
+
+            const tile = makeElement(
+                "div",
+                "doll-option"
+            );
+
+            const icon = makeElement(
+                "div",
+                "doll-option-icon"
+            );
+
+            icon.appendChild(
+                createIcon(category)
+            );
+
+            tile.append(
+                icon,
+                makeElement(
+                    "span",
+                    "doll-option-name",
+                    label
+                )
+            );
+
+            grid.appendChild(tile);
+
+        }
+
+        section.appendChild(grid);
+
+        return section;
+
+    }
+
+    /* =================================================
+       LOAD COLLECTION
+    ================================================= */
 
     async function loadDolls() {
+
+        const version = ++dollLoadVersion;
 
         const { data, error } = await supabase
             .from("dolls")
@@ -258,182 +388,59 @@
                 ascending: false
             });
 
+        if (version !== dollLoadVersion) return;
+
         if (error) {
 
-            console.error("Dolls loading error:", error);
+            console.error(error);
 
-            connection.textContent =
-                "DATABASE ERROR: " + error.message;
-
-            return;
-        }
-
-        dolls = data || [];
-
-        count.textContent = `${dolls.length} DOLLS`;
-
-        await renderDolls();
-    }
-
-    // =====================================
-    // CUSTOMIZATION ICONS
-    // =====================================
-
-    function createCustomizationOptions() {
-
-        const customization = makeElement(
-            "div",
-            "doll-customization"
-        );
-
-        customization.append(
-            makeElement(
-                "p",
-                "doll-customization-title",
-                "CUSTOMIZATION OPTIONS"
-            )
-        );
-
-        const options = makeElement(
-            "div",
-            "doll-options-grid"
-        );
-
-        const categories = [
-
-            {
-                name: "CLOTHING",
-                icon: `
-                    <path d="
-                        M8 3
-                        L3 6
-                        L1 11
-                        L6 13
-                        V21
-                        H18
-                        V13
-                        L23 11
-                        L21 6
-                        L16 3
-                        A4 4 0 0 1 8 3
-                        Z
-                    "/>
-                `
-            },
-
-            {
-                name: "MAKE-UP",
-                icon: `
-                    <path d="M14 6l4-4 4 4-4 4"/>
-                    <path d="M14 6l-7 7 4 4 7-7"/>
-                    <path d="
-                        M7 13
-                        C2 13 5 19 1 21
-                        C7 23 11 20 11 17
-                    "/>
-                `
-            },
-
-            {
-                name: "HAIRSTYLE",
-                icon: `
-                    <circle cx="6" cy="6" r="3"/>
-                    <circle cx="6" cy="18" r="3"/>
-                    <path d="M8 8L21 21"/>
-                    <path d="M8 16L21 3"/>
-                `
-            },
-
-            {
-                name: "NAILS",
-                icon: `
-                    <path d="
-                        M8 21
-                        V9
-                        A4 4 0 0 1 16 9
-                        V21
-                        Z
-                    "/>
-                    <path d="M8 12H16"/>
-                `
-            },
-
-            {
-                name: "ACCESSORIES",
-                icon: `
-                    <path d="
-                        M3 8
-                        L7 3
-                        H17
-                        L21 8
-                        L12 21
-                        Z
-                    "/>
-                    <path d="M3 8H21"/>
-                    <path d="M7 3L12 21L17 3"/>
-                `
-            }
-
-        ];
-
-        for (const category of categories) {
-
-            const option = makeElement(
-                "div",
-                "doll-option"
-            );
-
-            const icon = makeElement(
-                "span",
-                "doll-option-icon"
-            );
-
-            icon.setAttribute("aria-hidden", "true");
-
-            icon.innerHTML = `
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                >
-                    ${category.icon}
-                </svg>
-            `;
-
-            const name = makeElement(
-                "span",
-                "doll-option-name",
-                category.name
-            );
-
-            option.append(icon, name);
-
-            options.append(option);
-        }
-
-        customization.append(options);
-
-        return customization;
-    }
-
-    // =====================================
-    // RENDER CATALOG
-    // =====================================
-
-    async function renderDolls() {
-
-        grid.replaceChildren();
-
-        if (!dolls.length) {
-
-            grid.append(
+            $("dollsGrid").replaceChildren(
                 makeElement(
                     "p",
                     "dolls-empty",
-                    "NO DOLLS IN THE COLLECTION YET."
+                    "UNABLE TO LOAD COLLECTION: " +
+                    error.message
                 )
             );
 
             return;
+
+        }
+
+        dolls = data || [];
+
+        $("dollsCount").textContent =
+            dolls.length + (
+                dolls.length === 1
+                    ? " DOLL"
+                    : " DOLLS"
+            );
+
+        await renderDolls(version);
+
+    }
+
+    /* =================================================
+       RENDER COLLECTION
+    ================================================= */
+
+    async function renderDolls(version) {
+
+        const grid = $("dollsGrid");
+
+        const fragment =
+            document.createDocumentFragment();
+
+        if (!dolls.length) {
+
+            fragment.appendChild(
+                makeElement(
+                    "p",
+                    "dolls-empty",
+                    "NO PROFILES AVAILABLE."
+                )
+            );
+
         }
 
         for (const doll of dolls) {
@@ -443,389 +450,380 @@
                 "doll-card"
             );
 
-            // =================================
-            // CARD HEADER
-            // =================================
-
-            const cardTop = makeElement(
+            const top = makeElement(
                 "div",
                 "doll-card-top"
             );
 
-            const collectionLabel = makeElement(
-                "span",
-                "doll-collection-label",
-                "THE DEN // COLLECTION"
+            top.append(
+
+                makeElement(
+                    "span",
+                    "doll-collection-label",
+                    "THE DEN // COLLECTION"
+                ),
+
+                makeElement(
+                    "span",
+                    "doll-status",
+                    doll.active === true
+                        ? "RESERVATIONS OPEN"
+                        : "UNAVAILABLE"
+                )
+
             );
 
-            const status = makeElement(
-                "span",
-                "doll-status",
-                "RESERVATIONS OPEN"
-            );
+            card.appendChild(top);
 
-            cardTop.append(
-                collectionLabel,
-                status
-            );
-
-            card.append(cardTop);
-
-            // =================================
-            // PROFILE IMAGE
-            // =================================
-
-            const imageFrame = makeElement(
+            const frame = makeElement(
                 "div",
                 "doll-image-frame"
             );
 
-            if (doll.image_path) {
+            const url = await getImageUrl(
+                doll.image_path
+            );
 
-                const imageUrl = await getImageUrl(
-                    doll.image_path
-                );
+            if (url) {
 
-                if (imageUrl) {
+                const image =
+                    document.createElement("img");
 
-                    const image = makeElement(
-                        "img",
-                        "doll-image"
-                    );
+                image.className = "doll-image";
+                image.src = url;
+                image.alt = doll.name || "Profile image";
+                image.loading = "lazy";
 
-                    image.src = imageUrl;
-                    image.alt = doll.name || "Doll";
-                    image.loading = "lazy";
-
-                    imageFrame.append(image);
-
-                } else {
-
-                    imageFrame.append(
-                        makeElement(
-                            "div",
-                            "doll-image-placeholder",
-                            "IMAGE UNAVAILABLE"
-                        )
-                    );
-                }
+                frame.appendChild(image);
 
             } else {
 
-                imageFrame.append(
+                frame.appendChild(
                     makeElement(
                         "div",
                         "doll-image-placeholder",
-                        "NO IMAGE"
+                        "NO IMAGE AVAILABLE"
                     )
                 );
+
             }
 
-            card.append(imageFrame);
-
-            // =================================
-            // DOLL NAME
-            // =================================
-
             card.append(
+
+                frame,
+
                 makeElement(
                     "h3",
                     "",
-                    doll.name || "UNNAMED DOLL"
-                )
-            );
+                    doll.name || "UNNAMED PROFILE"
+                ),
 
-            card.append(
                 makeElement(
                     "p",
                     "doll-profile-label",
                     "PERSONAL COLLECTION"
                 )
-            );
 
-            // =================================
-            // DESCRIPTION
-            // =================================
+            );
 
             if (doll.description) {
 
-                card.append(
+                card.appendChild(
                     makeElement(
                         "p",
                         "doll-description",
                         doll.description
                     )
                 );
-            }
 
-            // =================================
-            // ADDITIONAL DETAILS
-            // =================================
+            }
 
             if (doll.details) {
 
-                card.append(
+                card.appendChild(
                     makeElement(
                         "p",
                         "doll-details",
                         doll.details
                     )
                 );
+
             }
 
-            // =================================
-            // CUSTOMIZATION OPTIONS
-            // =================================
-
-            card.append(
+            card.appendChild(
                 createCustomizationOptions()
             );
 
-            // =================================
-            // MAIN ACTIONS
-            // =================================
-
-            const mainActions = makeElement(
+            const actions = makeElement(
                 "div",
                 "doll-main-actions"
             );
 
-            // EXPLORE AVAILABLE OPTIONS
-
-            const profileButton = makeElement(
-                "button",
-                "doll-explore-button",
-                "EXPLORE AVAILABLE OPTIONS →"
+            actions.appendChild(
+                makeLink(
+                    "EXPLORE AVAILABLE OPTIONS →",
+                    "doll-explore-button",
+                    "doll-details.html?id=" +
+                    encodeURIComponent(doll.id)
+                )
             );
 
-            profileButton.type = "button";
+            if (doll.active === true) {
 
-            profileButton.addEventListener(
-                "click",
-                () => {
+                actions.appendChild(
+                    makeLink(
+                        "MAKE A RESERVATION",
+                        "doll-reserve-button",
+                        "doll-reservation.html?id=" +
+                        encodeURIComponent(doll.id)
+                    )
+                );
 
-                    window.location.href =
-                        `doll-details.html?id=${encodeURIComponent(doll.id)}`;
-                }
-            );
+            } else {
 
-            // MAKE A RESERVATION
+                const unavailable = makeButton(
+                    "CURRENTLY UNAVAILABLE",
+                    "doll-reserve-button"
+                );
 
-            const reserveButton = makeElement(
-                "button",
-                "doll-reserve-button",
-                "MAKE A RESERVATION"
-            );
+                unavailable.disabled = true;
 
-            reserveButton.type = "button";
+                actions.appendChild(unavailable);
 
-            reserveButton.addEventListener(
-                "click",
-                () => {
-
-                    window.location.href =
-                        `doll-reservation.html?id=${encodeURIComponent(doll.id)}`;
-                }
-            );
-
-            mainActions.append(
-                profileButton,
-                reserveButton
-            );
-
-            card.append(mainActions);
-
-            // =================================
-            // CARD FOOTER
-            // =================================
+            }
 
             card.append(
+
+                actions,
+
                 makeElement(
                     "p",
                     "doll-card-footer",
                     "PRIVATE MEMBERS ONLY"
                 )
-            );
 
-            // =================================
-            // ADMIN CONTROLS
-            // =================================
+            );
 
             if (isAdmin) {
 
-                const actions = makeElement(
-                    "div",
-                    "dolls-admin-actions"
+                card.appendChild(
+                    createDollAdminActions(doll)
                 );
 
-                // EDIT DOLL
-
-                const editButton = makeElement(
-                    "button",
-                    "dolls-action-button",
-                    "EDIT"
-                );
-
-                editButton.type = "button";
-
-                editButton.addEventListener(
-                    "click",
-                    () => {
-
-                        $("dollEditId").value =
-                            doll.id;
-
-                        $("dollName").value =
-                            doll.name || "";
-
-                        $("dollDescription").value =
-                            doll.description || "";
-
-                        $("dollDetails").value =
-                            doll.details || "";
-
-                        saveButton.textContent =
-                            "SAVE CHANGES";
-
-                        cancelEditButton.hidden = false;
-
-                        adminPanel.scrollIntoView({
-                            behavior: "smooth"
-                        });
-                    }
-                );
-
-                // DELETE DOLL
-
-                const deleteButton = makeElement(
-                    "button",
-                    "dolls-action-button dolls-delete",
-                    "DELETE"
-                );
-
-                deleteButton.type = "button";
-
-                deleteButton.addEventListener(
-                    "click",
-                    async () => {
-
-                        if (!confirm(`Delete "${doll.name}"?`)) {
-                            return;
-                        }
-
-                        deleteButton.disabled = true;
-
-                        deleteButton.textContent =
-                            "DELETING...";
-
-                        // Read gallery paths before cascade deletion.
-
-                        const {
-                            data: galleryFiles,
-                            error: galleryError
-                        } = await supabase
-                            .from("doll_gallery")
-                            .select("image_path")
-                            .eq("doll_id", doll.id);
-
-                        if (galleryError) {
-
-                            alert(
-                                "Could not read gallery: " +
-                                galleryError.message
-                            );
-
-                            deleteButton.disabled = false;
-                            deleteButton.textContent = "DELETE";
-
-                            return;
-                        }
-
-                        const { error } = await supabase
-                            .from("dolls")
-                            .delete()
-                            .eq("id", doll.id);
-
-                        if (error) {
-
-                            console.error(
-                                "Delete error:",
-                                error
-                            );
-
-                            alert(
-                                "Could not delete doll: " +
-                                error.message
-                            );
-
-                            deleteButton.disabled = false;
-                            deleteButton.textContent = "DELETE";
-
-                            return;
-                        }
-
-                        const filesToRemove = [];
-
-                        if (doll.image_path) {
-
-                            filesToRemove.push(
-                                doll.image_path
-                            );
-                        }
-
-                        if (galleryFiles && galleryFiles.length) {
-
-                            filesToRemove.push(
-                                ...galleryFiles
-                                    .map(item => item.image_path)
-                                    .filter(Boolean)
-                            );
-                        }
-
-                        if (filesToRemove.length) {
-
-                            const {
-                                error: storageError
-                            } = await supabase.storage
-                                .from(BUCKET)
-                                .remove(
-                                    [...new Set(filesToRemove)]
-                                );
-
-                            if (storageError) {
-
-                                console.error(
-                                    "Storage cleanup error:",
-                                    storageError
-                                );
-
-                                alert(
-                                    "Doll deleted, but storage cleanup failed: " +
-                                    storageError.message
-                                );
-                            }
-                        }
-
-                        await loadDolls();
-                        await loadReservations();
-                    }
-                );
-
-                actions.append(
-                    editButton,
-                    deleteButton
-                );
-
-                card.append(actions);
             }
 
-            grid.append(card);
+            fragment.appendChild(card);
+
         }
+
+        if (version !== dollLoadVersion) return;
+
+        grid.replaceChildren(fragment);
+
     }
 
-    // =====================================
-    // ADD / EDIT DOLL
-    // =====================================
+    /* =================================================
+       DOLL ADMINISTRATION
+    ================================================= */
+
+    function resetForm() {
+
+        form.reset();
+
+        $("dollEditId").value = "";
+
+        saveButton.textContent = "ADD DOLL";
+
+        cancelEditButton.hidden = true;
+
+        showMessage(formMessage, "");
+
+    }
+
+    function editDoll(doll) {
+
+        if (!isAdmin || dollBusy) return;
+
+        $("dollEditId").value = doll.id;
+        $("dollName").value = doll.name || "";
+        $("dollDescription").value = doll.description || "";
+        $("dollDetails").value = doll.details || "";
+        $("dollImage").value = "";
+
+        saveButton.textContent = "SAVE CHANGES";
+
+        cancelEditButton.hidden = false;
+
+        showMessage(formMessage, "");
+
+        adminPanel.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+    function createDollAdminActions(doll) {
+
+        const actions = makeElement(
+            "div",
+            "dolls-admin-actions"
+        );
+
+        const edit = makeButton(
+            "EDIT",
+            "dolls-action-button"
+        );
+
+        const remove = makeButton(
+            "DELETE",
+            "dolls-action-button dolls-delete"
+        );
+
+        edit.addEventListener(
+            "click",
+            () => editDoll(doll)
+        );
+
+        remove.addEventListener(
+            "click",
+            () => deleteDoll(doll, remove)
+        );
+
+        actions.append(edit, remove);
+
+        return actions;
+
+    }
+
+    /* =================================================
+       DELETE DOLL
+    ================================================= */
+
+    async function deleteDoll(doll, button) {
+
+        if (!isAdmin || dollBusy) return;
+
+        if (!confirm(
+            'Delete "' + doll.name + '"?'
+        )) return;
+
+        dollBusy = true;
+        button.disabled = true;
+        button.textContent = "DELETING...";
+
+        try {
+
+            const {
+                data: gallery,
+                error: galleryError
+            } = await supabase
+                .from("doll_gallery")
+                .select("image_path")
+                .eq("doll_id", doll.id);
+
+            if (galleryError) throw galleryError;
+
+            const {
+                data: physicalGallery,
+                error: physicalError
+            } = await supabase
+                .from("doll_physical_gallery")
+                .select("image_path")
+                .eq("doll_id", doll.id);
+
+            if (physicalError) throw physicalError;
+
+            const { error } = await supabase
+                .from("dolls")
+                .delete()
+                .eq("id", doll.id)
+                .select("id")
+                .single();
+
+            if (error) throw error;
+
+            const files = [
+                doll.image_path,
+                ...(gallery || []).map(
+                    item => item.image_path
+                )
+            ].filter(Boolean);
+
+            const physicalFiles = (
+                physicalGallery || []
+            ).map(
+                item => item.image_path
+            ).filter(Boolean);
+
+            const cleanupErrors = [];
+
+            if (files.length) {
+
+                const { error: storageError } =
+                    await supabase.storage
+                        .from(BUCKET)
+                        .remove([...new Set(files)]);
+
+                if (storageError) {
+                    cleanupErrors.push(storageError.message);
+                }
+
+            }
+
+            if (physicalFiles.length) {
+
+                const { error: storageError } =
+                    await supabase.storage
+                        .from("doll-physical")
+                        .remove([
+                            ...new Set(physicalFiles)
+                        ]);
+
+                if (storageError) {
+                    cleanupErrors.push(storageError.message);
+                }
+
+            }
+
+            if (cleanupErrors.length) {
+
+                alert(
+                    "Profile deleted, but some storage files could not be removed: " +
+                    cleanupErrors.join("; ")
+                );
+
+            }
+
+            if ($("dollEditId").value === doll.id) {
+                resetForm();
+            }
+
+            await loadDolls();
+            await loadReservations();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Could not delete profile: " +
+                error.message
+            );
+
+        } finally {
+
+            dollBusy = false;
+            button.disabled = false;
+            button.textContent = "DELETE";
+
+        }
+
+    }
+
+    /* =================================================
+       SAVE DOLL
+    ================================================= */
 
     if (isAdmin) {
 
@@ -835,40 +833,22 @@
 
                 event.preventDefault();
 
-                const editId =
-                    $("dollEditId").value;
+                if (dollBusy) return;
 
-                const name =
-                    $("dollName").value.trim();
+                const editId = $("dollEditId").value;
 
-                const description =
-                    $("dollDescription").value.trim();
+                const oldDoll = findDoll(editId);
 
-                const details =
-                    $("dollDetails").value.trim();
+                const name = $("dollName")
+                    .value.trim();
 
-                const file =
-                    $("dollImage").files[0];
+                const description = $("dollDescription")
+                    .value.trim();
 
-                if (!name) return;
+                const details = $("dollDetails")
+                    .value.trim();
 
-                // FILE SIZE VALIDATION
-
-                if (
-                    file &&
-                    file.size > 10 * 1024 * 1024
-                ) {
-
-                    showMessage(
-                        formMessage,
-                        "IMAGE IS LARGER THAN 10 MB.",
-                        true
-                    );
-
-                    return;
-                }
-
-                // FILE TYPE VALIDATION
+                const file = $("dollImage").files[0];
 
                 const allowedTypes = [
                     "image/jpeg",
@@ -877,158 +857,136 @@
                     "image/gif"
                 ];
 
-                if (
-                    file &&
-                    !allowedTypes.includes(file.type)
-                ) {
+                if (!name) {
 
                     showMessage(
                         formMessage,
-                        "UNSUPPORTED IMAGE FORMAT.",
+                        "PLEASE ENTER A PROFILE NAME.",
                         true
                     );
 
                     return;
+
                 }
 
-                saveButton.disabled = true;
-
-                saveButton.textContent =
-                    "SAVING...";
-
-                let imagePath = null;
-
-                const oldDoll = editId
-                    ? dolls.find(
-                        item => item.id === editId
-                    )
-                    : null;
-
-                // =================================
-                // UPLOAD IMAGE
-                // =================================
-
-                if (file) {
-
-                    const safeName = file.name.replace(
-                        /[^a-zA-Z0-9._-]/g,
-                        "_"
-                    );
-
-                    imagePath =
-                        `${user.id}/${crypto.randomUUID()}-${safeName}`;
-
-                    const {
-                        error: uploadError
-                    } = await supabase.storage
-                        .from(BUCKET)
-                        .upload(
-                            imagePath,
-                            file,
-                            {
-                                contentType: file.type,
-                                upsert: false
-                            }
-                        );
-
-                    if (uploadError) {
-
-                        showMessage(
-                            formMessage,
-                            "IMAGE UPLOAD FAILED: " +
-                            uploadError.message,
-                            true
-                        );
-
-                        saveButton.disabled = false;
-
-                        saveButton.textContent = editId
-                            ? "SAVE CHANGES"
-                            : "ADD DOLL";
-
-                        return;
-                    }
-                }
-
-                // =================================
-                // SAVE DATABASE RECORD
-                // =================================
-
-                const dollData = {
-                    name,
-                    description,
-                    details
-                };
-
-                if (imagePath) {
-
-                    dollData.image_path = imagePath;
-                }
-
-                let result;
-
-                if (editId) {
-
-                    result = await supabase
-                        .from("dolls")
-                        .update({
-                            ...dollData,
-                            updated_at:
-                                new Date().toISOString()
-                        })
-                        .eq("id", editId);
-
-                } else {
-
-                    result = await supabase
-                        .from("dolls")
-                        .insert({
-                            ...dollData,
-                            created_by: user.id
-                        });
-                }
-
-                // =================================
-                // HANDLE SAVE RESULT
-                // =================================
-
-                if (result.error) {
-
-                    console.error(
-                        "Save error:",
-                        result.error
-                    );
+                if (file && (
+                    !allowedTypes.includes(file.type) ||
+                    file.size > 10 * 1024 * 1024
+                )) {
 
                     showMessage(
                         formMessage,
-                        "SAVE FAILED: " +
-                        result.error.message,
+                        "INVALID IMAGE TYPE OR FILE EXCEEDS 10 MB.",
                         true
                     );
 
-                    if (imagePath) {
+                    return;
 
-                        await supabase.storage
-                            .from(BUCKET)
-                            .remove([imagePath]);
+                }
+
+                dollBusy = true;
+                saveButton.disabled = true;
+                cancelEditButton.disabled = true;
+
+                saveButton.textContent = "SAVING...";
+
+                let uploadedPath = null;
+                let recordSaved = false;
+
+                try {
+
+                    if (file) {
+
+                        const safeName = file.name.replace(
+                            /[^a-zA-Z0-9._-]/g,
+                            "_"
+                        );
+
+                        const path =
+                            user.id + "/" +
+                            crypto.randomUUID() +
+                            "-" + safeName;
+
+                        const { error: uploadError } =
+                            await supabase.storage
+                                .from(BUCKET)
+                                .upload(path, file, {
+                                    contentType: file.type,
+                                    upsert: false
+                                });
+
+                        if (uploadError) {
+                            throw uploadError;
+                        }
+
+                        uploadedPath = path;
+
                     }
 
-                } else {
+                    const payload = {
+                        name,
+                        description,
+                        details
+                    };
 
-                    // Remove previous image.
+                    if (uploadedPath) {
+
+                        payload.image_path =
+                            uploadedPath;
+
+                    }
+
+                    let result;
+
+                    if (editId) {
+
+                        result = await supabase
+                            .from("dolls")
+                            .update({
+                                ...payload,
+                                updated_at:
+                                    new Date().toISOString()
+                            })
+                            .eq("id", editId)
+                            .select("id")
+                            .single();
+
+                    } else {
+
+                        result = await supabase
+                            .from("dolls")
+                            .insert({
+                                ...payload,
+                                created_by: user.id
+                            })
+                            .select("id")
+                            .single();
+
+                    }
+
+                    if (result.error) {
+                        throw result.error;
+                    }
+
+                    recordSaved = true;
 
                     if (
                         editId &&
-                        imagePath &&
-                        oldDoll &&
-                        oldDoll.image_path
+                        uploadedPath &&
+                        oldDoll?.image_path
                     ) {
 
-                        await supabase.storage
-                            .from(BUCKET)
-                            .remove([
-                                oldDoll.image_path
-                            ]);
+                        const { error: cleanupError } =
+                            await supabase.storage
+                                .from(BUCKET)
+                                .remove([
+                                    oldDoll.image_path
+                                ]);
+
+                        if (cleanupError) {
+                            console.error(cleanupError);
+                        }
+
                     }
 
                     resetForm();
@@ -1036,19 +994,44 @@
                     showMessage(
                         formMessage,
                         editId
-                            ? "DOLL UPDATED."
-                            : "DOLL ADDED."
+                            ? "PROFILE UPDATED."
+                            : "PROFILE ADDED."
                     );
 
                     await loadDolls();
+                    await loadReservations();
+
+                } catch (error) {
+
+                    if (uploadedPath && !recordSaved) {
+
+                        await supabase.storage
+                            .from(BUCKET)
+                            .remove([uploadedPath]);
+
+                    }
+
+                    console.error(error);
+
+                    showMessage(
+                        formMessage,
+                        "SAVE FAILED: " + error.message,
+                        true
+                    );
+
+                } finally {
+
+                    dollBusy = false;
+                    saveButton.disabled = false;
+                    cancelEditButton.disabled = false;
+
+                    saveButton.textContent =
+                        $("dollEditId").value
+                            ? "SAVE CHANGES"
+                            : "ADD DOLL";
+
                 }
 
-                saveButton.disabled = false;
-
-                saveButton.textContent =
-                    $("dollEditId").value
-                        ? "SAVE CHANGES"
-                        : "ADD DOLL";
             }
         );
 
@@ -1056,63 +1039,1150 @@
             "click",
             resetForm
         );
+
     }
 
-    // =====================================
-    // LOAD RESERVATIONS
-    // =====================================
+    /* =================================================
+       LOAD RESERVATIONS
+    ================================================= */
 
     async function loadReservations() {
 
-        const { data, error } = await supabase
+        const version = ++reservationLoadVersion;
+
+        let query = supabase
             .from("doll_reservations")
             .select("*")
-            .order(
-                "start_date",
-                {
-                    ascending: true
-                }
+            .order("start_date", {
+                ascending: true
+            });
+
+        if (!isAdmin) {
+
+            query = query.eq(
+                "user_id",
+                user.id
             );
+
+        }
+
+        const { data, error } = await query;
+
+        if (version !== reservationLoadVersion) {
+            return;
+        }
 
         if (error) {
 
-            console.error(
-                "Reservations loading error:",
-                error
+            console.error(error);
+
+            $("myDollReservations").replaceChildren(
+                makeElement(
+                    "p",
+                    "rm-message error",
+                    "UNABLE TO LOAD RESERVATIONS: " +
+                    error.message
+                )
             );
 
+            if (isAdmin) {
+
+                $("allDollReservations").replaceChildren(
+                    makeElement(
+                        "p",
+                        "rm-message error",
+                        error.message
+                    )
+                );
+
+            }
+
             return;
+
         }
 
         reservations = data || [];
 
-        await renderMyReservations();
+        renderMyReservations();
 
         if (isAdmin) {
-
-            await renderAllReservations();
+            renderAllReservations();
         }
+
     }
 
-    // =====================================
-    // MY RESERVATIONS
-    // =====================================
+    /* =================================================
+       RESERVATION INFORMATION
+    ================================================= */
 
-    async function renderMyReservations() {
+    function addInfo(container, label, value) {
 
-        const container =
-            $("myDollReservations");
+        container.append(
+
+            makeElement(
+                "span",
+                "rm-info-label",
+                label
+            ),
+
+            makeElement(
+                "span",
+                "rm-info-value",
+                value || "To be agreed privately"
+            )
+
+        );
+
+    }
+
+    function createLogistics(record) {
+
+        const section = makeElement(
+            "div",
+            "rm-logistics"
+        );
+
+        const pickup = makeElement(
+            "div",
+            "rm-logistics-panel"
+        );
+
+        pickup.appendChild(
+            makeElement("h4", "", "PICKUP")
+        );
+
+        addInfo(
+            pickup,
+            "DATE",
+            formatDate(record.start_date)
+        );
+
+        addInfo(
+            pickup,
+            "TIME",
+            formatTime(record.pickup_time)
+        );
+
+        addInfo(
+            pickup,
+            "LOCATION",
+            record.pickup_location
+        );
+
+        addInfo(
+            pickup,
+            "INSTRUCTIONS",
+            record.pickup_instructions ||
+            "Awaiting further instructions."
+        );
+
+        const returned = makeElement(
+            "div",
+            "rm-logistics-panel"
+        );
+
+        returned.appendChild(
+            makeElement("h4", "", "RETURN")
+        );
+
+        addInfo(
+            returned,
+            "DATE",
+            formatDate(record.end_date)
+        );
+
+        addInfo(
+            returned,
+            "TIME",
+            formatTime(record.return_time)
+        );
+
+        addInfo(
+            returned,
+            "LOCATION",
+            record.return_location
+        );
+
+        addInfo(
+            returned,
+            "INSTRUCTIONS",
+            record.return_instructions ||
+            "Awaiting further instructions."
+        );
+
+        section.append(pickup, returned);
+
+        return section;
+
+    }
+
+    /* =================================================
+       SAVED PERSONAL CONFIGURATION
+    ================================================= */
+
+    function createSavedOptions(record) {
+
+        const section = makeElement(
+            "div",
+            "rm-configuration"
+        );
+
+        section.appendChild(
+            makeElement(
+                "h4",
+                "",
+                "PERSONAL CONFIGURATION"
+            )
+        );
+
+        const options = record.reservation_options || {};
+
+        const selections = Array.isArray(options)
+            ? options
+            : Array.isArray(options.selections)
+                ? options.selections
+                : [];
+
+        for (const [category, label] of Object.entries(categories)) {
+
+            const selected = selections.filter(
+                item => item?.category === category
+            );
+
+            const names = selected.map(
+                item =>
+                    item.caption ||
+                    item.name ||
+                    "Selected option"
+            );
+
+            const line = makeElement("p");
+
+            line.append(
+
+                makeElement(
+                    "strong",
+                    "",
+                    label + ": "
+                ),
+
+                document.createTextNode(
+                    names.length
+                        ? names.join(", ")
+                        : "Default / no specific preference"
+                )
+
+            );
+
+            section.appendChild(line);
+
+        }
+
+        section.appendChild(
+            makeElement(
+                "p",
+                "",
+                "ADDITIONAL NOTES: " +
+                (options.notes || "None")
+            )
+        );
+
+        return section;
+
+    }
+
+    /* =================================================
+       RESERVATION CARDS
+    ================================================= */
+
+    function createReservationCard(
+        record,
+        adminMode = false
+    ) {
+
+        const card = makeElement(
+            "details",
+            "rm-card"
+        );
+
+        const recordKey =
+            (adminMode ? "admin-" : "member-") +
+            record.id;
+
+        card.open = openRecords.has(recordKey);
+
+        card.addEventListener(
+            "toggle",
+            () => {
+
+                if (card.open) {
+
+                    openRecords.add(recordKey);
+
+                } else {
+
+                    openRecords.delete(recordKey);
+
+                }
+
+            }
+        );
+
+        const summary = makeElement(
+            "summary",
+            "rm-card-summary"
+        );
+
+        const identity = makeElement(
+            "div",
+            "rm-card-identity"
+        );
+
+        identity.append(
+
+            makeElement(
+                "span",
+                "rm-reference",
+                reference(record)
+            ),
+
+            makeElement(
+                "strong",
+                "rm-profile-name",
+                dollName(record.doll_id)
+            ),
+
+            makeElement(
+                "span",
+                "rm-date-range",
+                formatDate(record.start_date) +
+                " — " +
+                formatDate(record.end_date)
+            )
+
+        );
+
+        summary.append(
+
+            identity,
+
+            makeElement(
+                "span",
+                "rm-status " + record.status,
+                statusLabel(record.status)
+            ),
+
+            makeElement(
+                "span",
+                "rm-chevron",
+                "+"
+            )
+
+        );
+
+        card.appendChild(summary);
+
+        const content = makeElement(
+            "div",
+            "rm-card-content"
+        );
+
+        if (adminMode && isAdmin) {
+
+            content.appendChild(
+                makeElement(
+                    "div",
+                    "rm-member",
+                    "MEMBER ID: " + record.user_id
+                )
+            );
+
+        }
+
+        if (record.status === "pending") {
+
+            content.appendChild(
+                makeElement(
+                    "p",
+                    "rm-message info",
+                    "Awaiting administrator approval."
+                )
+            );
+
+        }
+
+        content.append(
+
+            createLogistics(record),
+
+            createSavedOptions(record)
+
+        );
+
+        if (record.admin_notes) {
+
+            const notes = makeElement(
+                "div",
+                "rm-admin-notes"
+            );
+
+            notes.append(
+
+                makeElement(
+                    "h4",
+                    "",
+                    "ADMINISTRATOR MESSAGE"
+                ),
+
+                makeElement(
+                    "p",
+                    "",
+                    record.admin_notes
+                )
+
+            );
+
+            content.appendChild(notes);
+
+        }
+
+        if (adminMode && isAdmin) {
+
+            content.appendChild(
+                createAdminReservationForm(record)
+            );
+
+        } else {
+
+            content.appendChild(
+                createMemberActions(record)
+            );
+
+        }
+
+        const footer = makeElement(
+            "div",
+            "rm-record-footer"
+        );
+
+        footer.append(
+
+            makeElement(
+                "div",
+                "",
+                "CREATED: " +
+                formatTimestamp(record.created_at)
+            ),
+
+            makeElement(
+                "div",
+                "",
+                "LAST UPDATED: " +
+                formatTimestamp(
+                    record.updated_at ||
+                    record.created_at
+                )
+            ),
+
+            makeElement(
+                "div",
+                "",
+                "TIME ZONE: EUROPE/STOCKHOLM"
+            )
+
+        );
+
+        content.appendChild(footer);
+
+        card.appendChild(content);
+
+        return card;
+
+    }
+
+    /* =================================================
+       MEMBER ACTIONS
+    ================================================= */
+
+    function createMemberActions(record) {
+
+        const wrapper = makeElement("div");
+
+        const actions = makeElement(
+            "div",
+            "rm-actions"
+        );
+
+        const message = makeElement(
+            "div",
+            "rm-message"
+        );
+
+        message.setAttribute(
+            "aria-live",
+            "polite"
+        );
+
+        actions.appendChild(
+            makeLink(
+                "VIEW PROFILE →",
+                "rm-button",
+                "doll-details.html?id=" +
+                encodeURIComponent(record.doll_id)
+            )
+        );
+
+        if (
+            record.user_id === user.id &&
+            cancellableStatuses.includes(record.status)
+        ) {
+
+            const cancel = makeButton(
+                "CANCEL RESERVATION",
+                "rm-button danger"
+            );
+
+            cancel.addEventListener(
+                "click",
+                async () => {
+
+                    if (cancel.disabled) return;
+
+                    if (!confirm(
+                        "Cancel reservation " +
+                        reference(record) + "?"
+                    )) return;
+
+                    cancel.disabled = true;
+
+                    reservationWrites++;
+
+                    try {
+
+                        const { error } = await supabase
+                            .from("doll_reservations")
+                            .update({
+                                status: "cancelled"
+                            })
+                            .eq("id", record.id)
+                            .eq("user_id", user.id)
+                            .in(
+                                "status",
+                                cancellableStatuses
+                            )
+                            .select("id")
+                            .single();
+
+                        if (error) throw error;
+
+                        await loadReservations();
+
+                    } catch (error) {
+
+                        showReservationMessage(
+                            message,
+                            "Cancellation failed: " +
+                            error.message,
+                            "error"
+                        );
+
+                    } finally {
+
+                        reservationWrites--;
+
+                        cancel.disabled = false;
+
+                    }
+
+                }
+            );
+
+            actions.appendChild(cancel);
+
+        }
+
+        wrapper.append(actions, message);
+
+        return wrapper;
+
+    }
+
+    /* =================================================
+       ADMINISTRATOR FORM FIELDS
+    ================================================= */
+
+    function createField(
+        id,
+        label,
+        type,
+        value = ""
+    ) {
+
+        const wrapper = makeElement(
+            "div",
+            "rm-field"
+        );
+
+        const fieldLabel = makeElement(
+            "label",
+            "",
+            label
+        );
+
+        fieldLabel.htmlFor = id;
+
+        let input;
+
+        if (type === "textarea") {
+
+            input = document.createElement(
+                "textarea"
+            );
+
+            input.rows = 4;
+            input.maxLength = 3000;
+
+        } else if (type === "select") {
+
+            input = document.createElement(
+                "select"
+            );
+
+            for (const status of statuses) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = status;
+                option.textContent =
+                    statusLabel(status);
+
+                input.appendChild(option);
+
+            }
+
+        } else {
+
+            input = document.createElement(
+                "input"
+            );
+
+            input.type = type;
+
+            if (type === "text") {
+                input.maxLength = 500;
+            }
+
+        }
+
+        input.id = id;
+        input.value = value || "";
+
+        wrapper.append(fieldLabel, input);
+
+        return {
+            wrapper,
+            input
+        };
+
+    }
+
+    /* =================================================
+       ADMIN RESERVATION MANAGEMENT
+    ================================================= */
+
+    function createAdminReservationForm(record) {
+
+        const form = makeElement(
+            "form",
+            "rm-admin-form"
+        );
+
+        form.appendChild(
+            makeElement(
+                "h4",
+                "",
+                "ADMINISTRATOR CONTROLS"
+            )
+        );
+
+        const prefix = "rm-" + record.id + "-";
+
+        const status = createField(
+            prefix + "status",
+            "RESERVATION STATUS",
+            "select",
+            record.status
+        );
+
+        const pickupDate = createField(
+            prefix + "pickup-date",
+            "PICKUP DATE",
+            "date",
+            record.start_date
+        );
+
+        const returnDate = createField(
+            prefix + "return-date",
+            "RETURN DATE",
+            "date",
+            record.end_date
+        );
+
+        pickupDate.input.required = true;
+        returnDate.input.required = true;
+
+        const pickupTime = createField(
+            prefix + "pickup-time",
+            "PICKUP TIME",
+            "time",
+            record.pickup_time
+                ? record.pickup_time.slice(0, 5)
+                : ""
+        );
+
+        const returnTime = createField(
+            prefix + "return-time",
+            "RETURN TIME",
+            "time",
+            record.return_time
+                ? record.return_time.slice(0, 5)
+                : ""
+        );
+
+        const pickupLocation = createField(
+            prefix + "pickup-location",
+            "FINAL PICKUP LOCATION",
+            "text",
+            record.pickup_location
+        );
+
+        const returnLocation = createField(
+            prefix + "return-location",
+            "FINAL RETURN LOCATION",
+            "text",
+            record.return_location
+        );
+
+        const pickupInstructions = createField(
+            prefix + "pickup-instructions",
+            "PRIVATE PICKUP INSTRUCTIONS",
+            "textarea",
+            record.pickup_instructions
+        );
+
+        const returnInstructions = createField(
+            prefix + "return-instructions",
+            "PRIVATE RETURN INSTRUCTIONS",
+            "textarea",
+            record.return_instructions
+        );
+
+        const adminNotes = createField(
+            prefix + "admin-notes",
+            "MESSAGE TO MEMBER",
+            "textarea",
+            record.admin_notes
+        );
+
+        const dateGrid = makeElement(
+            "div",
+            "rm-form-grid"
+        );
+
+        dateGrid.append(
+
+            pickupDate.wrapper,
+            returnDate.wrapper,
+            pickupTime.wrapper,
+            returnTime.wrapper
+
+        );
+
+        const locationGrid = makeElement(
+            "div",
+            "rm-form-grid"
+        );
+
+        locationGrid.append(
+            pickupLocation.wrapper,
+            returnLocation.wrapper
+        );
+
+        const instructionGrid = makeElement(
+            "div",
+            "rm-form-grid"
+        );
+
+        instructionGrid.append(
+            pickupInstructions.wrapper,
+            returnInstructions.wrapper
+        );
+
+        form.append(
+
+            status.wrapper,
+
+            dateGrid,
+
+            locationGrid,
+
+            instructionGrid,
+
+            adminNotes.wrapper,
+
+            makeElement(
+                "p",
+                "rm-field-hint",
+                "Instructions and messages are visible to the reservation owner. All times are local Stockholm time."
+            )
+
+        );
+
+        const actions = makeElement(
+            "div",
+            "rm-actions"
+        );
+
+        const save = makeButton(
+            "SAVE RESERVATION DETAILS",
+            "rm-button primary"
+        );
+
+        save.type = "submit";
+
+        const approve = makeButton(
+            "APPROVE REQUEST",
+            "rm-button"
+        );
+
+        const decline = makeButton(
+            "DECLINE REQUEST",
+            "rm-button danger"
+        );
+
+        actions.appendChild(save);
+
+        if (record.status === "pending") {
+
+            actions.append(approve, decline);
+
+        }
+
+        const message = makeElement(
+            "div",
+            "rm-message"
+        );
+
+        message.setAttribute(
+            "aria-live",
+            "polite"
+        );
+
+        form.append(actions, message);
+
+        /* Preserve unsaved form edits during realtime updates. */
+
+        form.addEventListener(
+            "input",
+            () => {
+
+                form.dataset.dirty = "true";
+
+            }
+        );
+
+        form.addEventListener(
+            "change",
+            () => {
+
+                form.dataset.dirty = "true";
+
+            }
+        );
+
+        approve.addEventListener(
+            "click",
+            () => {
+
+                status.input.value = "confirmed";
+
+                form.dataset.dirty = "true";
+
+                form.requestSubmit();
+
+            }
+        );
+
+        decline.addEventListener(
+            "click",
+            () => {
+
+                status.input.value = "declined";
+
+                form.dataset.dirty = "true";
+
+                form.requestSubmit();
+
+            }
+        );
+
+        form.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                if (!isAdmin || save.disabled) return;
+
+                const payload = {
+
+                    status:
+                        status.input.value,
+
+                    start_date:
+                        pickupDate.input.value,
+
+                    end_date:
+                        returnDate.input.value,
+
+                    pickup_time:
+                        pickupTime.input.value || null,
+
+                    return_time:
+                        returnTime.input.value || null,
+
+                    pickup_location:
+                        pickupLocation.input.value.trim(),
+
+                    return_location:
+                        returnLocation.input.value.trim(),
+
+                    pickup_instructions:
+                        pickupInstructions.input.value.trim(),
+
+                    return_instructions:
+                        returnInstructions.input.value.trim(),
+
+                    admin_notes:
+                        adminNotes.input.value.trim()
+
+                };
+
+                if (!statuses.includes(payload.status)) {
+
+                    showReservationMessage(
+                        message,
+                        "Invalid reservation status.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+                if (
+                    !payload.start_date ||
+                    !payload.end_date ||
+                    payload.end_date < payload.start_date
+                ) {
+
+                    showReservationMessage(
+                        message,
+                        "Invalid reservation date range.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+                if (
+                    payload.start_date === payload.end_date &&
+                    payload.pickup_time &&
+                    payload.return_time &&
+                    payload.return_time <= payload.pickup_time
+                ) {
+
+                    showReservationMessage(
+                        message,
+                        "Return time must be later than pickup time.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+                if (
+                    payload.status !== record.status &&
+                    !confirm(
+                        "Change " +
+                        reference(record) +
+                        " to " +
+                        statusLabel(payload.status) +
+                        "?"
+                    )
+                ) return;
+
+                const controls = [
+                    ...form.querySelectorAll(
+                        "input, textarea, select, button"
+                    )
+                ];
+
+                controls.forEach(
+                    control => control.disabled = true
+                );
+
+                reservationWrites++;
+
+                save.textContent = "SAVING...";
+
+                try {
+
+                    let query = supabase
+                        .from("doll_reservations")
+                        .update(payload)
+                        .eq("id", record.id);
+
+                    if (record.updated_at) {
+
+                        query = query.eq(
+                            "updated_at",
+                            record.updated_at
+                        );
+
+                    } else {
+
+                        query = query.is(
+                            "updated_at",
+                            null
+                        );
+
+                    }
+
+                    const { error } = await query
+                        .select("id")
+                        .single();
+
+                    if (error) throw error;
+
+                    form.dataset.dirty = "false";
+
+                    await loadReservations();
+
+                    alert(
+                        reference(record) +
+                        " UPDATED SUCCESSFULLY."
+                    );
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    showReservationMessage(
+                        message,
+                        "SAVE FAILED: " +
+                        error.message +
+                        " If the record was changed elsewhere, refresh the page before trying again.",
+                        "error"
+                    );
+
+                } finally {
+
+                    reservationWrites--;
+
+                    controls.forEach(
+                        control => control.disabled = false
+                    );
+
+                    save.textContent =
+                        "SAVE RESERVATION DETAILS";
+
+                }
+
+            }
+        );
+
+        return form;
+
+    }
+
+    /* =================================================
+       RESERVATION HISTORY
+    ================================================= */
+
+    function createHistory(
+        records,
+        adminMode = false
+    ) {
+
+        const history = makeElement(
+            "details",
+            "rm-history"
+        );
+
+        history.appendChild(
+            makeElement(
+                "summary",
+                "",
+                "RESERVATION HISTORY (" +
+                records.length + ")"
+            )
+        );
+
+        const content = makeElement(
+            "div",
+            "rm-history-content rm-list"
+        );
+
+        if (!records.length) {
+
+            content.appendChild(
+                makeElement(
+                    "p",
+                    "dolls-empty",
+                    "NO HISTORICAL RESERVATIONS."
+                )
+            );
+
+        }
+
+        for (const record of records) {
+
+            content.appendChild(
+                createReservationCard(
+                    record,
+                    adminMode
+                )
+            );
+
+        }
+
+        history.appendChild(content);
+
+        return history;
+
+    }
+
+    /* =================================================
+       MY RESERVATIONS
+    ================================================= */
+
+    function renderMyReservations() {
+
+        const container = $("myDollReservations");
 
         container.replaceChildren();
 
         const mine = reservations.filter(
-            reservation =>
-                reservation.user_id === user.id
+            record => record.user_id === user.id
         );
 
         if (!mine.length) {
 
-            container.append(
+            container.appendChild(
                 makeElement(
                     "p",
                     "dolls-empty",
@@ -1121,358 +2191,559 @@
             );
 
             return;
+
         }
 
-        for (const reservation of mine) {
+        const current = mine.filter(
+            record =>
+                !closedStatuses.includes(record.status)
+        );
 
-            const doll = dolls.find(
-                item =>
-                    item.id === reservation.doll_id
-            );
+        const history = mine.filter(
+            record =>
+                closedStatuses.includes(record.status)
+        );
 
-            const item = makeElement(
-                "div",
-                "dolls-reservation"
-            );
+        const list = makeElement(
+            "div",
+            "rm-list"
+        );
 
-            const name = makeElement(
-                "strong",
-                "",
-                doll ? doll.name : "DOLL"
-            );
+        if (!current.length) {
 
-            if (doll) {
-
-                name.style.cursor = "pointer";
-
-                name.title =
-                    "EXPLORE AVAILABLE OPTIONS";
-
-                name.addEventListener(
-                    "click",
-                    () => {
-
-                        window.location.href =
-                            `doll-details.html?id=${encodeURIComponent(doll.id)}`;
-                    }
-                );
-            }
-
-            item.append(name);
-
-            // RESERVATION DATES
-
-            item.append(
-                makeElement(
-                    "p",
-                    "",
-                    `${formatDate(reservation.start_date)} — ${formatDate(reservation.end_date)}`
-                )
-            );
-
-            // RESERVATION STATUS
-
-            item.append(
-                makeElement(
-                    "p",
-                    "",
-                    `STATUS: ${reservation.status.toUpperCase()}`
-                )
-            );
-
-            // SAVED CONFIGURATION
-
-            renderSavedOptions(
-                reservation,
-                item
-            );
-
-            // CANCEL RESERVATION
-
-            if (reservation.status === "confirmed") {
-
-                const cancelButton = makeElement(
-                    "button",
-                    "dolls-action-button dolls-delete",
-                    "CANCEL RESERVATION"
-                );
-
-                cancelButton.type = "button";
-
-                cancelButton.addEventListener(
-                    "click",
-                    async () => {
-
-                        if (!confirm("Cancel this reservation?")) {
-                            return;
-                        }
-
-                        cancelButton.disabled = true;
-
-                        const { error } = await supabase
-                            .from("doll_reservations")
-                            .update({
-                                status: "cancelled"
-                            })
-                            .eq(
-                                "id",
-                                reservation.id
-                            )
-                            .eq(
-                                "user_id",
-                                user.id
-                            );
-
-                        if (error) {
-
-                            alert(
-                                "Cancellation failed: " +
-                                error.message
-                            );
-
-                            cancelButton.disabled = false;
-
-                            return;
-                        }
-
-                        await loadReservations();
-                    }
-                );
-
-                item.append(cancelButton);
-            }
-
-            container.append(item);
-        }
-    }
-
-    // =====================================
-    // ADMIN — ALL RESERVATIONS
-    // =====================================
-
-    async function renderAllReservations() {
-
-        if (!isAdmin) return;
-
-        const container =
-            $("allDollReservations");
-
-        container.replaceChildren();
-
-        if (!reservations.length) {
-
-            container.append(
+            list.appendChild(
                 makeElement(
                     "p",
                     "dolls-empty",
-                    "NO RESERVATIONS."
+                    "NO CURRENT RESERVATIONS."
                 )
             );
 
-            return;
         }
 
-        for (const reservation of reservations) {
+        for (const record of current) {
 
-            const doll = dolls.find(
-                item =>
-                    item.id === reservation.doll_id
+            list.appendChild(
+                createReservationCard(record)
             );
 
-            const item = makeElement(
-                "div",
-                "dolls-reservation"
+        }
+
+        container.append(
+
+            list,
+
+            createHistory(history)
+
+        );
+
+    }
+
+    /* =================================================
+       ADMINISTRATOR DASHBOARD
+    ================================================= */
+
+    function hasUnsavedChanges() {
+
+        return Boolean(
+            document.querySelector(
+                '.rm-admin-form[data-dirty="true"]'
+            )
+        );
+
+    }
+
+    function allowDiscardChanges() {
+
+        return !hasUnsavedChanges() ||
+            confirm(
+                "You have unsaved reservation changes. Discard them?"
             );
 
-            // DOLL NAME
+    }
 
-            item.append(
+    function renderAllReservations() {
+
+        if (!isAdmin) return;
+
+        const container = $("allDollReservations");
+
+        container.replaceChildren();
+
+        const dashboard = makeElement(
+            "div",
+            "rm-dashboard"
+        );
+
+        const toolbar = makeElement(
+            "div",
+            "rm-toolbar"
+        );
+
+        const list = makeElement(
+            "div",
+            "rm-list"
+        );
+
+        const count = makeElement(
+            "span",
+            "rm-result-count"
+        );
+
+        const filter = document.createElement(
+            "select"
+        );
+
+        filter.setAttribute(
+            "aria-label",
+            "Filter reservations by status"
+        );
+
+        const allOption =
+            document.createElement("option");
+
+        allOption.value = "all";
+        allOption.textContent = "ALL RESERVATIONS";
+
+        filter.appendChild(allOption);
+
+        for (const status of statuses) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = status;
+            option.textContent = statusLabel(status);
+
+            filter.appendChild(option);
+
+        }
+
+        filter.value = adminFilter;
+
+        const search = document.createElement(
+            "input"
+        );
+
+        search.type = "search";
+
+        search.placeholder =
+            "Search reference, profile or member...";
+
+        search.setAttribute(
+            "aria-label",
+            "Search reservations"
+        );
+
+        search.value = adminSearch;
+
+        const refresh = makeButton(
+            "REFRESH",
+            "rm-button"
+        );
+
+        refresh.addEventListener(
+            "click",
+            async () => {
+
+                if (!allowDiscardChanges()) return;
+
+                refresh.disabled = true;
+
+                try {
+
+                    await loadDolls();
+                    await loadReservations();
+
+                } finally {
+
+                    refresh.disabled = false;
+
+                }
+
+            }
+        );
+
+        toolbar.append(
+            filter,
+            search,
+            refresh,
+            count
+        );
+
+        function renderFilteredRecords() {
+
+            list.replaceChildren();
+
+            const term = adminSearch
+                .trim()
+                .toLowerCase();
+
+            const filtered = reservations.filter(
+                record => {
+
+                    const matchesStatus =
+                        adminFilter === "all" ||
+                        record.status === adminFilter;
+
+                    const searchable = [
+
+                        reference(record),
+                        record.id,
+                        record.user_id,
+                        dollName(record.doll_id),
+                        record.start_date,
+                        record.end_date
+
+                    ].join(" ").toLowerCase();
+
+                    return matchesStatus &&
+                        searchable.includes(term);
+
+                }
+            );
+
+            count.textContent =
+                filtered.length + " RECORD(S)";
+
+            if (!filtered.length) {
+
+                list.appendChild(
+                    makeElement(
+                        "p",
+                        "dolls-empty",
+                        "NO MATCHING RESERVATIONS."
+                    )
+                );
+
+                return;
+
+            }
+
+            if (adminFilter === "all") {
+
+                const current = filtered.filter(
+                    record =>
+                        !closedStatuses.includes(
+                            record.status
+                        )
+                );
+
+                const history = filtered.filter(
+                    record =>
+                        closedStatuses.includes(
+                            record.status
+                        )
+                );
+
+                for (const record of current) {
+
+                    list.appendChild(
+                        createReservationCard(
+                            record,
+                            true
+                        )
+                    );
+
+                }
+
+                if (history.length) {
+
+                    list.appendChild(
+                        createHistory(history, true)
+                    );
+
+                }
+
+            } else {
+
+                for (const record of filtered) {
+
+                    list.appendChild(
+                        createReservationCard(
+                            record,
+                            true
+                        )
+                    );
+
+                }
+
+            }
+
+        }
+
+        function updateFilter(value) {
+
+            if (!allowDiscardChanges()) {
+
+                filter.value = adminFilter;
+                return;
+
+            }
+
+            adminFilter = value;
+
+            filter.value = value;
+
+            dashboard.querySelectorAll(
+                ".rm-stat"
+            ).forEach(button => {
+
+                button.classList.toggle(
+                    "selected",
+                    button.dataset.status === value
+                );
+
+            });
+
+            renderFilteredRecords();
+
+        }
+
+        for (const status of statuses) {
+
+            const total = reservations.filter(
+                record => record.status === status
+            ).length;
+
+            const tile = makeButton(
+                "",
+                "rm-stat"
+            );
+
+            tile.dataset.status = status;
+
+            tile.classList.toggle(
+                "selected",
+                adminFilter === status
+            );
+
+            tile.append(
+
+                makeElement(
+                    "span",
+                    "rm-stat-label",
+                    statusLabel(status)
+                ),
+
                 makeElement(
                     "strong",
-                    "",
-                    doll ? doll.name : "DOLL"
+                    "rm-stat-value",
+                    String(total).padStart(2, "0")
                 )
+
             );
 
-            // MEMBER IDENTIFICATION
+            tile.addEventListener(
+                "click",
+                () => {
 
-            item.append(
-                makeElement(
-                    "p",
-                    "",
-                    `USER: ${reservation.user_id.slice(-6).toUpperCase()}`
-                )
+                    updateFilter(
+                        adminFilter === status
+                            ? "all"
+                            : status
+                    );
+
+                }
             );
 
-            // RESERVATION DATES
+            dashboard.appendChild(tile);
 
-            item.append(
-                makeElement(
-                    "p",
-                    "",
-                    `${formatDate(reservation.start_date)} — ${formatDate(reservation.end_date)}`
-                )
-            );
-
-            // RESERVATION STATUS
-
-            item.append(
-                makeElement(
-                    "p",
-                    "",
-                    `STATUS: ${reservation.status.toUpperCase()}`
-                )
-            );
-
-            // SAVED CONFIGURATION
-
-            renderSavedOptions(
-                reservation,
-                item
-            );
-
-            // ADMIN CANCELLATION
-
-            if (reservation.status === "confirmed") {
-
-                const cancelButton = makeElement(
-                    "button",
-                    "dolls-action-button dolls-delete",
-                    "CANCEL RESERVATION"
-                );
-
-                cancelButton.type = "button";
-
-                cancelButton.addEventListener(
-                    "click",
-                    async () => {
-
-                        if (!confirm("Cancel this reservation?")) {
-                            return;
-                        }
-
-                        cancelButton.disabled = true;
-
-                        const { error } = await supabase
-                            .from("doll_reservations")
-                            .update({
-                                status: "cancelled"
-                            })
-                            .eq(
-                                "id",
-                                reservation.id
-                            );
-
-                        if (error) {
-
-                            alert(
-                                "Could not cancel: " +
-                                error.message
-                            );
-
-                            cancelButton.disabled = false;
-
-                            return;
-                        }
-
-                        await loadReservations();
-                    }
-                );
-
-                item.append(cancelButton);
-            }
-
-            container.append(item);
         }
+
+        filter.addEventListener(
+            "change",
+            () => updateFilter(filter.value)
+        );
+
+        search.addEventListener(
+            "input",
+            () => {
+
+                if (!allowDiscardChanges()) {
+
+                    search.value = adminSearch;
+                    return;
+
+                }
+
+                adminSearch = search.value;
+
+                renderFilteredRecords();
+
+            }
+        );
+
+        container.append(
+            dashboard,
+            toolbar,
+            list
+        );
+
+        renderFilteredRecords();
+
     }
 
-    // =====================================
-    // INITIALIZATION
-    // =====================================
+    /* =================================================
+       REALTIME SYNCHRONIZATION
+    ================================================= */
 
-    if (isAdmin) {
+    function scheduleRefresh() {
 
-        adminPanel.hidden = false;
+        clearTimeout(refreshTimer);
 
-        adminReservations.hidden = false;
+        refreshTimer = setTimeout(
+            async () => {
+
+                if (
+                    reservationWrites > 0 ||
+                    dollBusy ||
+                    hasUnsavedChanges()
+                ) {
+
+                    scheduleRefresh();
+                    return;
+
+                }
+
+                try {
+
+                    await loadDolls();
+                    await loadReservations();
+
+                } catch (error) {
+
+                    console.error(error);
+
+                }
+
+            },
+            500
+        );
+
     }
 
-    connection.textContent =
-        "CONNECTED TO SUPABASE";
+    function connectRealtime() {
 
-    await loadDolls();
+        realtimeChannel = supabase
+            .channel("dolls-for-rent-live")
 
-    await loadReservations();
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "dolls"
+                },
+                scheduleRefresh
+            )
 
-    // =====================================
-    // REALTIME UPDATES
-    // =====================================
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "doll_reservations"
+                },
+                scheduleRefresh
+            )
 
-    realtimeChannel = supabase
+            .subscribe(status => {
 
-        .channel("dolls-for-rent-live")
+                if (status === "SUBSCRIBED") {
 
-        .on(
-            "postgres_changes",
-            {
-                event: "*",
-                schema: "public",
-                table: "dolls"
-            },
-            async () => {
+                    connection.textContent =
+                        "CONNECTED // LIVE SYNCHRONIZATION ACTIVE";
 
-                await loadDolls();
+                }
 
-                await loadReservations();
-            }
-        )
+                if (
+                    status === "CHANNEL_ERROR" ||
+                    status === "TIMED_OUT"
+                ) {
 
-        .on(
-            "postgres_changes",
-            {
-                event: "*",
-                schema: "public",
-                table: "doll_reservations"
-            },
-            async () => {
+                    connection.textContent =
+                        "DATABASE CONNECTED // LIVE SYNCHRONIZATION UNAVAILABLE";
 
-                await loadReservations();
-            }
-        )
+                }
 
-        .subscribe(status => {
+            });
 
-            if (status === "SUBSCRIBED") {
+    }
 
-                connection.textContent =
-                    "CONNECTED TO SUPABASE // REALTIME ACTIVE";
-            }
+    /* =================================================
+       INITIALIZATION
+    ================================================= */
 
-            if (
-                status === "CHANNEL_ERROR" ||
-                status === "TIMED_OUT"
-            ) {
+    async function initialize() {
 
-                connection.textContent =
-                    "DATABASE CONNECTED // REALTIME ERROR";
-            }
-        });
+        adminPanel.hidden = !isAdmin;
 
-    // =====================================
-    // CONNECTION CLEANUP
-    // =====================================
+        adminReservations.hidden = !isAdmin;
+
+        connection.textContent =
+            "CONNECTING TO DATABASE...";
+
+        try {
+
+            await loadDolls();
+
+            await loadReservations();
+
+            connection.textContent =
+                "CONNECTED TO SUPABASE";
+
+            connectRealtime();
+
+        } catch (error) {
+
+            console.error(error);
+
+            connection.textContent =
+                "CONNECTION ERROR: " +
+                error.message;
+
+        }
+
+    }
 
     window.addEventListener(
         "beforeunload",
+        event => {
+
+            if (hasUnsavedChanges()) {
+
+                event.preventDefault();
+
+                event.returnValue = "";
+
+            }
+
+        }
+    );
+
+    window.addEventListener(
+        "pagehide",
         () => {
+
+            clearTimeout(refreshTimer);
 
             if (realtimeChannel) {
 
                 supabase.removeChannel(
                     realtimeChannel
                 );
+
             }
+
         }
     );
 
+    await initialize();
+
 })();
+
+/* =====================================================
+   END OF FILE
+   THE DEN © 2026
+===================================================== */
