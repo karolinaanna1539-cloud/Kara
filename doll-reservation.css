@@ -1,0 +1,1381 @@
+
+/* =====================================================
+   THE DEN
+   RESERVATION CENTER
+   MODULE 09.02 / 09.03
+===================================================== */
+
+.reservation-terminal {
+    --res-background: #050a07;
+    --res-panel: #0a150e;
+    --res-border: #294332;
+    --res-accent: #8fce9c;
+    --res-text: #d7eee0;
+    --res-muted: #849b8c;
+
+    max-width: 1100px;
+    margin: 35px auto;
+    color: var(--res-text);
+}
+
+.reservation-terminal * {
+    box-sizing: border-box;
+}
+
+.reservation-terminal [hidden] {
+    display: none !important;
+}
+
+.reservation-terminal fieldset {
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+
+    border-bottom: 1px solid var(--res-border);
+}
+
+.reservation-header h1 {
+    margin: 8px 0;
+
+    color: #e4f4e9;
+    font-size: clamp(23px, 4vw, 34px);
+    letter-spacing: 4px;
+}
+
+.reservation-subtitle {
+    color: var(--res-muted);
+    font-size: 10px;
+    letter-spacing: 2px;
+    line-height: 1.7;
+}
+
+.reservation-online {
+    padding: 9px 13px;
+
+    color: var(--res-accent);
+    background: #0b1a10;
+    border: 1px solid var(--res-border);
+
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+/* =====================================================
+   SELECTED DOLL
+===================================================== */
+
+.reservation-doll {
+    display: grid;
+    grid-template-columns: minmax(180px, 280px) 1fr;
+    align-items: center;
+    gap: 30px;
+
+    padding: 22px;
+    margin-bottom: 25px;
+
+    background: linear-gradient(
+        135deg,
+        #102019,
+        #050a07
+    );
+
+    border: 1px solid var(--res-border);
+    border-radius: 6px;
+}
+
+.reservation-image-frame {
+    min-width: 0;
+    min-height: 220px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background: #020503;
+    border: 1px solid var(--res-border);
+    border-radius: 4px;
+}
+
+.reservation-image-frame img {
+    display: block;
+
+    width: 100%;
+    height: 300px;
+
+    object-fit: contain;
+}
+
+.reservation-doll-information {
+    min-width: 0;
+}
+
+.reservation-doll-information h2 {
+    margin: 12px 0;
+
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: 3px;
+
+    overflow-wrap: anywhere;
+}
+
+#reservationDollDescription {
+    color: var(--res-muted);
+    font-size: 13px;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.reservation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.reservation-tags span {
+    padding: 7px 10px;
+
+    background: #07110b;
+    border: 1px solid var(--res-border);
+
+    color: var(--res-accent);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   SERVICE INFORMATION
+===================================================== */
+
+.reservation-information {
+    padding: 24px;
+    margin-bottom: 30px;
+
+    background: #0b160f;
+    border: 1px solid var(--res-border);
+    border-left: 3px solid var(--res-accent);
+    border-radius: 4px;
+}
+
+.reservation-information h3 {
+    color: var(--res-text);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.reservation-information p:not(.system-label) {
+    color: #a4b7a9;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* =====================================================
+   COLLAPSIBLE RESERVATION SECTIONS
+===================================================== */
+
+.reservation-section {
+    margin-bottom: 14px;
+
+    background: var(--res-background);
+    border: 1px solid var(--res-border);
+    border-radius: 5px;
+
+    overflow: hidden;
+
+    transition:
+        border-color .2s,
+        background .2s;
+}
+
+.reservation-section:hover {
+    border-color: #527b62;
+}
+
+.reservation-section[open] {
+    border-color: #527b62;
+}
+
+.reservation-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #11231a,
+        #08110b
+    );
+
+    cursor: pointer;
+    list-style: none;
+}
+
+.reservation-section-heading::-webkit-details-marker,
+.reservation-category summary::-webkit-details-marker {
+    display: none;
+}
+
+.reservation-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    color: var(--res-accent);
+    background: #07110b;
+    border: 1px solid #365747;
+    border-radius: 4px;
+
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.reservation-section-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.reservation-section-title h2 {
+    margin: 0 0 7px;
+
+    color: var(--res-text);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.reservation-section-title p {
+    margin: 0;
+
+    color: var(--res-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.reservation-chevron {
+    flex-shrink: 0;
+
+    color: var(--res-accent);
+    font-size: 24px;
+
+    transition: transform .25s;
+}
+
+.reservation-section[open]
+> .reservation-section-heading
+> .reservation-chevron {
+    transform: rotate(45deg);
+}
+
+.reservation-section-content {
+    padding: 25px;
+    border-top: 1px solid var(--res-border);
+
+    animation: reservationReveal .25s ease;
+}
+
+@keyframes reservationReveal {
+
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* =====================================================
+   FORM FIELDS
+===================================================== */
+
+.reservation-field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.reservation-field {
+    min-width: 0;
+    margin-bottom: 18px;
+}
+
+.reservation-field label {
+    display: block;
+    margin-bottom: 9px;
+
+    color: var(--res-accent);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.reservation-field input,
+.reservation-field textarea,
+.reservation-field select,
+.wishlist-requests textarea,
+.wishlist-requests select {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 13px;
+
+    color: var(--res-text);
+    background: #030805;
+    border: 1px solid #345443;
+    border-radius: 3px;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    color-scheme: dark;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+.reservation-field input:focus,
+.reservation-field textarea:focus,
+.reservation-field select:focus,
+.wishlist-requests textarea:focus,
+.wishlist-requests select:focus {
+    outline: none;
+
+    border-color: var(--res-accent);
+    box-shadow: 0 0 12px rgba(143, 206, 156, .08);
+}
+
+.reservation-field input::placeholder,
+.reservation-field textarea::placeholder {
+    color: #607367;
+}
+
+.reservation-field textarea,
+.wishlist-requests textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+.reservation-field input[type="file"] {
+    font-size: 11px;
+}
+
+.reservation-field input[type="file"]::file-selector-button {
+    padding: 10px;
+    margin-right: 12px;
+
+    color: var(--res-accent);
+    background: #14291c;
+    border: 1px solid #345443;
+
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.reservation-field input:disabled,
+.reservation-field textarea:disabled,
+.reservation-field select:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.reservation-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+
+    margin: 18px 0;
+
+    color: #b6c8bc;
+    font-size: 12px;
+    line-height: 1.7;
+
+    cursor: pointer;
+}
+
+.reservation-checkbox input {
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    margin: 2px 0 0;
+
+    accent-color: var(--res-accent);
+}
+
+.reservation-hint {
+    color: var(--res-muted);
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+/* =====================================================
+   RESERVATION DURATION
+===================================================== */
+
+.reservation-duration {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    padding: 17px;
+    margin: 10px 0 15px;
+
+    background: #102019;
+    border: 1px solid var(--res-border);
+    border-radius: 3px;
+}
+
+.reservation-duration span {
+    color: var(--res-muted);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.reservation-duration strong {
+    color: var(--res-accent);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   PRIVATE INFORMATION
+===================================================== */
+
+.reservation-private-notice {
+    padding: 18px;
+    margin: 18px 0;
+
+    background: #0d1c13;
+    border: 1px solid #365747;
+    border-left: 3px solid var(--res-accent);
+    border-radius: 3px;
+}
+
+.reservation-private-notice strong {
+    color: var(--res-accent);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.reservation-private-notice p {
+    color: #a8bcaf;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* =====================================================
+   CUSTOMIZATION CATEGORIES
+===================================================== */
+
+.reservation-category {
+    margin: 12px 0;
+
+    background: #08110b;
+    border: 1px solid var(--res-border);
+    border-radius: 4px;
+
+    overflow: hidden;
+}
+
+.reservation-category > summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    padding: 17px;
+
+    color: var(--res-text);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+    list-style: none;
+}
+
+.reservation-category > summary:hover {
+    background: #102019;
+}
+
+.reservation-category[open] > summary {
+    background: #14251a;
+    border-bottom: 1px solid var(--res-border);
+}
+
+.reservation-category-count {
+    color: var(--res-accent);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.reservation-category-count::after {
+    content: " +";
+}
+
+.reservation-category[open]
+.reservation-category-count::after {
+    content: " −";
+}
+
+.reservation-category-content {
+    padding: 18px;
+}
+
+.reservation-category-content > p {
+    color: var(--res-muted);
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+/* =====================================================
+   SELECTABLE GALLERY OPTIONS
+===================================================== */
+
+.reservation-options {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(150px, 1fr));
+
+    gap: 12px;
+}
+
+.reservation-option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    background: #050a07;
+    border: 1px solid var(--res-border);
+    border-radius: 4px;
+
+    overflow: hidden;
+    cursor: pointer;
+
+    transition:
+        border-color .2s,
+        background .2s,
+        box-shadow .2s;
+}
+
+.reservation-option:hover {
+    border-color: var(--res-accent);
+    background: #102019;
+}
+
+.reservation-option.selected {
+    border-color: var(--res-accent);
+    background: #14291c;
+
+    box-shadow:
+        inset 0 0 0 1px var(--res-accent),
+        0 0 15px rgba(143, 206, 156, .1);
+}
+
+.reservation-option img {
+    display: block;
+
+    width: 100%;
+    height: 200px;
+
+    object-fit: contain;
+    background: #020503;
+}
+
+.reservation-option-info {
+    padding: 13px;
+
+    color: var(--res-text);
+    font-size: 11px;
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+.reservation-option input {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    width: 19px;
+    height: 19px;
+
+    accent-color: var(--res-accent);
+    cursor: pointer;
+}
+
+.reservation-option:focus-within {
+    outline: 2px solid var(--res-accent);
+    outline-offset: 2px;
+}
+
+.reservation-empty {
+    grid-column: 1 / -1;
+
+    padding: 20px;
+
+    color: var(--res-muted);
+    border: 1px dashed var(--res-border);
+
+    font-size: 12px;
+    text-align: center;
+}
+
+/* =====================================================
+   WISHLIST INTRODUCTION
+===================================================== */
+
+.reservation-wishlist-intro {
+    padding: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #13251a,
+        #08110b
+    );
+
+    border: 1px solid var(--res-border);
+    border-radius: 4px;
+}
+
+.reservation-wishlist-intro h3 {
+    color: var(--res-text);
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.reservation-wishlist-intro p {
+    color: #a3b9aa;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.reservation-wishlist-intro button {
+    margin-top: 15px;
+}
+
+/* =====================================================
+   RESERVATION SUMMARY
+===================================================== */
+
+.reservation-summary {
+    padding: 22px;
+
+    background: #07110b;
+    border: 1px solid #456d4d;
+    border-radius: 4px;
+}
+
+.reservation-summary h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    color: var(--res-accent);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.reservation-summary p {
+    margin: 0;
+    padding: 12px 0;
+
+    color: #bdcec2;
+    border-bottom: 1px solid #20382a;
+
+    font-size: 12px;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.reservation-summary p:last-child {
+    border-bottom: 0;
+}
+
+.reservation-summary strong {
+    color: var(--res-accent);
+}
+
+.reservation-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.reservation-summary-item {
+    padding: 15px;
+
+    background: #102019;
+    border: 1px solid var(--res-border);
+    border-radius: 3px;
+}
+
+.reservation-summary-item span {
+    display: block;
+
+    color: var(--res-muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+
+    margin-bottom: 9px;
+}
+
+.reservation-summary-item strong {
+    display: block;
+
+    color: var(--res-text);
+    font-size: 14px;
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   APPROVAL INFORMATION
+===================================================== */
+
+.reservation-approval-notice {
+    padding: 20px;
+    margin: 20px 0;
+
+    background: #1b1a0e;
+    border: 1px solid #5d5834;
+    border-radius: 4px;
+}
+
+.reservation-approval-notice .system-label {
+    color: #a69c71;
+}
+
+.reservation-approval-notice strong {
+    color: #e4c38c;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    line-height: 1.7;
+}
+
+.reservation-approval-notice p:not(.system-label) {
+    color: #b6ad8f;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+/* =====================================================
+   BUTTONS & ACTIONS
+===================================================== */
+
+.reservation-actions,
+.reservation-bottom-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 22px;
+}
+
+.reservation-bottom-actions {
+    padding: 20px 0;
+}
+
+.reservation-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 45px;
+
+    padding: 13px 19px;
+
+    color: var(--res-accent);
+    background: #102019;
+    border: 1px solid #527b62;
+    border-radius: 3px;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.3px;
+    line-height: 1.5;
+
+    text-align: center;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        color .2s,
+        border-color .2s,
+        box-shadow .2s;
+}
+
+.reservation-button:hover:not(:disabled) {
+    color: #e4f4e9;
+    background: #203a27;
+    border-color: var(--res-accent);
+}
+
+.reservation-button.reservation-primary {
+    color: #06120a;
+    background: var(--res-accent);
+    border-color: var(--res-accent);
+}
+
+.reservation-button.reservation-primary:hover:not(:disabled) {
+    color: #06120a;
+    background: #b9e8c6;
+
+    box-shadow: 0 0 18px rgba(143, 206, 156, .2);
+}
+
+.reservation-button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.reservation-button:focus-visible,
+.reservation-section-heading:focus-visible,
+.reservation-category > summary:focus-visible {
+    outline: 2px solid var(--res-accent);
+    outline-offset: -3px;
+}
+
+/* =====================================================
+   STATUS MESSAGES
+===================================================== */
+
+.reservation-message {
+    display: none;
+
+    margin: 16px 0;
+    padding: 14px;
+
+    border-radius: 3px;
+
+    font-size: 12px;
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+.reservation-message.success {
+    display: block;
+
+    color: #a9e4b1;
+    background: #102016;
+    border: 1px solid #456d4d;
+}
+
+.reservation-message.error {
+    display: block;
+
+    color: #ffaaaa;
+    background: #241010;
+    border: 1px solid #8a3434;
+}
+
+.reservation-message.info {
+    display: block;
+
+    color: #b4cbbb;
+    background: #102019;
+    border: 1px solid var(--res-border);
+}
+
+/* =====================================================
+   PRIVATE WISHLIST PANEL
+===================================================== */
+
+.reservation-wishlist-panel {
+    padding: 28px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+
+    background: linear-gradient(
+        145deg,
+        #0e1c13,
+        #050a07
+    );
+
+    border: 1px solid #456d4d;
+    border-radius: 6px;
+
+    animation: reservationReveal .25s ease;
+}
+
+.wishlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding-bottom: 22px;
+    margin-bottom: 25px;
+
+    border-bottom: 1px solid var(--res-border);
+}
+
+.reservation-wishlist-panel h2 {
+    color: var(--res-text);
+    font-size: 21px;
+    letter-spacing: 3px;
+}
+
+.reservation-wishlist-panel h3 {
+    color: var(--res-accent);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.reservation-wishlist-panel p {
+    color: #a3b9aa;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.wishlist-image-preview {
+    display: block;
+
+    width: 100%;
+    max-width: 350px;
+    max-height: 350px;
+
+    margin-top: 15px;
+    padding: 5px;
+
+    object-fit: contain;
+
+    background: #020503;
+    border: 1px solid var(--res-border);
+    border-radius: 4px;
+}
+
+/* =====================================================
+   WISHLIST HISTORY
+===================================================== */
+
+.wishlist-history {
+    padding-top: 25px;
+    margin-top: 35px;
+
+    border-top: 1px solid var(--res-border);
+}
+
+.wishlist-requests {
+    display: grid;
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.wishlist-card,
+.wishlist-request {
+    min-width: 0;
+    padding: 20px;
+
+    background: #08110b;
+    border: 1px solid var(--res-border);
+    border-radius: 4px;
+}
+
+.wishlist-card-header,
+.wishlist-request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+
+    border-bottom: 1px solid var(--res-border);
+}
+
+.wishlist-card h3,
+.wishlist-card h4,
+.wishlist-request h3,
+.wishlist-request h4 {
+    margin: 10px 0;
+
+    color: var(--res-text);
+    font-size: 15px;
+    letter-spacing: 1px;
+
+    overflow-wrap: anywhere;
+}
+
+.wishlist-card p,
+.wishlist-request p {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.wishlist-card img,
+.wishlist-request img {
+    display: block;
+
+    width: 100%;
+    max-width: 350px;
+    max-height: 350px;
+
+    margin: 15px 0;
+
+    object-fit: contain;
+
+    background: #020503;
+    border: 1px solid var(--res-border);
+    border-radius: 3px;
+}
+
+.wishlist-meta {
+    color: var(--res-muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   WISHLIST STATUS
+===================================================== */
+
+.wishlist-status {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 7px 10px;
+
+    color: #e4c38c;
+    background: #211d10;
+    border: 1px solid #625536;
+    border-radius: 3px;
+
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.wishlist-status.pending {
+    color: #e4c38c;
+    border-color: #625536;
+    background: #211d10;
+}
+
+.wishlist-status.under_review {
+    color: #b4cce8;
+    border-color: #405b79;
+    background: #101b29;
+}
+
+.wishlist-status.approved,
+.wishlist-status.completed {
+    color: #a9e4b1;
+    border-color: #456d4d;
+    background: #102016;
+}
+
+.wishlist-status.declined {
+    color: #ffaaaa;
+    border-color: #704343;
+    background: #241010;
+}
+
+/* =====================================================
+   PRIVATE ADMINISTRATOR RESPONSE
+===================================================== */
+
+.wishlist-response,
+.wishlist-admin-response {
+    padding: 17px;
+    margin-top: 18px;
+
+    background: #102019;
+    border: 1px solid #365747;
+    border-left: 3px solid var(--res-accent);
+    border-radius: 3px;
+}
+
+.wishlist-response strong,
+.wishlist-admin-response strong {
+    color: var(--res-accent);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.wishlist-response p,
+.wishlist-admin-response p {
+    color: #c4d6c9;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.wishlist-admin-form {
+    display: grid;
+    gap: 12px;
+
+    padding-top: 18px;
+    margin-top: 18px;
+
+    border-top: 1px solid var(--res-border);
+}
+
+.wishlist-admin-form label {
+    color: var(--res-accent);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.wishlist-admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* =====================================================
+   INDEPENDENT WISHLIST ACCESS
+===================================================== */
+
+.reservation-independent-wishlist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding: 24px;
+    margin: 30px 0;
+
+    background: linear-gradient(
+        135deg,
+        #13251a,
+        #07110b
+    );
+
+    border: 1px solid var(--res-border);
+    border-radius: 5px;
+}
+
+.reservation-independent-wishlist h3 {
+    color: var(--res-text);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.reservation-independent-wishlist p:not(.system-label) {
+    color: var(--res-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 800px) {
+
+    .reservation-doll {
+        grid-template-columns: 200px 1fr;
+        gap: 20px;
+    }
+
+    .reservation-image-frame img {
+        height: 260px;
+    }
+
+    .reservation-section-content {
+        padding: 20px;
+    }
+
+    .reservation-wishlist-panel {
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .reservation-terminal {
+        margin: 15px auto;
+    }
+
+    .reservation-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reservation-header h1 {
+        font-size: 23px;
+        letter-spacing: 2px;
+    }
+
+    .reservation-doll {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 15px;
+    }
+
+    .reservation-image-frame img {
+        height: 300px;
+    }
+
+    .reservation-doll-information h2 {
+        font-size: 23px;
+    }
+
+    .reservation-information {
+        padding: 17px;
+    }
+
+    .reservation-section-heading {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .reservation-step {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+
+    .reservation-section-title h2 {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .reservation-section-title p {
+        font-size: 10px;
+    }
+
+    .reservation-section-content {
+        padding: 15px;
+    }
+
+    .reservation-field-grid,
+    .reservation-summary-grid {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+    .reservation-options {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+    }
+
+    .reservation-option img {
+        height: 170px;
+    }
+
+    .reservation-category-content {
+        padding: 10px;
+    }
+
+    .reservation-category > summary {
+        padding: 13px;
+        font-size: 11px;
+    }
+
+    .reservation-summary {
+        padding: 15px;
+    }
+
+    .reservation-wishlist-panel {
+        padding: 16px;
+    }
+
+    .wishlist-card,
+    .wishlist-request {
+        padding: 15px;
+    }
+
+    .reservation-actions,
+    .reservation-bottom-actions {
+        flex-direction: column;
+    }
+
+    .reservation-actions .reservation-button,
+    .reservation-bottom-actions .reservation-button,
+    .reservation-independent-wishlist .reservation-button {
+        width: 100%;
+    }
+
+    .reservation-independent-wishlist {
+        padding: 18px;
+    }
+
+}
+
+@media (max-width: 360px) {
+
+    .reservation-options {
+        grid-template-columns: 1fr;
+    }
+
+    .reservation-option img {
+        height: 230px;
+    }
+
+    .reservation-section-heading {
+        gap: 8px;
+        padding: 12px;
+    }
+
+}
+
+/* =====================================================
+   ACCESSIBILITY
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .reservation-terminal *,
+    .reservation-terminal *::before,
+    .reservation-terminal *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+}
