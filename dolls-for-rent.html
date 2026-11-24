@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050806">
 
     <title>DOLLS FOR RENT // THE DEN</title>
 
@@ -18,29 +19,47 @@
 
     <header>
         <h1>THE DEN</h1>
-        <p class="subtitle">PRIVATE MEMBERS SPACE // COLLECTION DATABASE</p>
+        <p class="subtitle">
+            PRIVATE MEMBERS SPACE // COLLECTION DATABASE
+        </p>
     </header>
 
     <main class="terminal dolls-terminal">
 
+        <!-- PAGE HEADER -->
+
         <div class="dolls-topbar">
+
             <div>
                 <p class="system-label">MODULE // 09</p>
+
                 <h2>DOLLS FOR RENT</h2>
-                <p class="dolls-subtitle">PRIVATE DOLL COLLECTION</p>
+
+                <p class="dolls-subtitle">
+                    PRIVATE DOLL COLLECTION
+                </p>
             </div>
 
-            <div class="online">● SYSTEM ONLINE</div>
+            <div class="online">
+                ● SYSTEM ONLINE
+            </div>
+
         </div>
 
+        <!-- COLLECTION INTRODUCTION -->
+
         <section class="dolls-intro">
-            <p class="system-label">THE DEN // COLLECTION ACCESS</p>
+
+            <p class="system-label">
+                THE DEN // COLLECTION ACCESS
+            </p>
 
             <h3>EXPLORE THE COLLECTION</h3>
 
             <p>
-                Discover the collection, explore available customization
-                options and create your personalized reservation.
+                Discover the collection, explore available
+                customization options and create your
+                personalized reservation.
             </p>
 
             <div class="dolls-intro-tags">
@@ -48,29 +67,51 @@
                 <span>PERSONAL CUSTOMIZATION</span>
                 <span>MEMBERS ONLY</span>
             </div>
+
         </section>
+
+        <!-- DATABASE CONNECTION -->
 
         <div id="dollsConnection" class="dolls-message">
             CONNECTING TO DATABASE...
         </div>
 
         <!-- ADMIN PANEL -->
-        <section id="dollsAdminPanel" class="dolls-admin" hidden>
+
+        <section
+            id="dollsAdminPanel"
+            class="dolls-admin"
+            hidden
+        >
 
             <div class="dolls-section-heading">
+
                 <div>
-                    <p class="system-label">ADMINISTRATOR ACCESS</p>
+
+                    <p class="system-label">
+                        ADMINISTRATOR ACCESS
+                    </p>
+
                     <h3>DOLL MANAGEMENT</h3>
+
                 </div>
 
-                <span class="dolls-admin-label">ADMIN</span>
+                <span class="dolls-admin-label">
+                    ADMIN
+                </span>
+
             </div>
 
             <form id="dollForm" class="dolls-form">
 
-                <input type="hidden" id="dollEditId">
+                <input
+                    type="hidden"
+                    id="dollEditId"
+                >
 
-                <label for="dollName">DOLL NAME</label>
+                <label for="dollName">
+                    DOLL NAME
+                </label>
 
                 <input
                     type="text"
@@ -80,7 +121,9 @@
                     required
                 >
 
-                <label for="dollDescription">DESCRIPTION</label>
+                <label for="dollDescription">
+                    DESCRIPTION
+                </label>
 
                 <textarea
                     id="dollDescription"
@@ -89,7 +132,9 @@
                     placeholder="Describe the doll..."
                 ></textarea>
 
-                <label for="dollDetails">ADDITIONAL DETAILS</label>
+                <label for="dollDetails">
+                    ADDITIONAL DETAILS
+                </label>
 
                 <textarea
                     id="dollDetails"
@@ -98,7 +143,9 @@
                     placeholder="Additional information..."
                 ></textarea>
 
-                <label for="dollImage">DOLL IMAGE</label>
+                <label for="dollImage">
+                    DOLL IMAGE
+                </label>
 
                 <input
                     type="file"
@@ -114,7 +161,10 @@
 
                 <div class="dolls-form-actions">
 
-                    <button type="submit" id="dollSaveButton">
+                    <button
+                        type="submit"
+                        id="dollSaveButton"
+                    >
                         ADD DOLL
                     </button>
 
@@ -129,49 +179,137 @@
 
                 </div>
 
-                <p id="dollAdminMessage" class="dolls-form-message"></p>
+                <p
+                    id="dollAdminMessage"
+                    class="dolls-form-message"
+                    aria-live="polite"
+                ></p>
 
             </form>
 
         </section>
 
-        <!-- CATALOG -->
+        <!-- DOLL CATALOG -->
+
         <section class="dolls-catalog-section">
 
             <div class="dolls-section-heading">
+
                 <div>
-                    <p class="system-label">THE DEN // PRIVATE COLLECTION</p>
+
+                    <p class="system-label">
+                        THE DEN // PRIVATE COLLECTION
+                    </p>
+
                     <h3>DISCOVER OUR DOLLS</h3>
+
                 </div>
 
-                <span id="dollsCount" class="dolls-count">
+                <span
+                    id="dollsCount"
+                    class="dolls-count"
+                >
                     0 DOLLS
                 </span>
+
             </div>
 
             <div id="dollsGrid" class="dolls-grid">
-                <p class="dolls-empty">LOADING COLLECTION...</p>
+
+                <p class="dolls-empty">
+                    LOADING COLLECTION...
+                </p>
+
             </div>
+
+        </section>
+
+        <!-- PERSONAL WISHLIST -->
+
+        <section class="dolls-reservations">
+
+            <div class="dolls-section-heading">
+
+                <div>
+
+                    <p class="system-label">
+                        MODULE // 09.03
+                    </p>
+
+                    <h3>PERSONAL WISHLIST</h3>
+
+                </div>
+
+            </div>
+
+            <p class="dolls-hint">
+                Looking for something special?
+                Submit individual customization requests,
+                attach reference images and receive private
+                administrator responses.
+            </p>
+
+            <div class="dolls-intro-tags">
+
+                <span>PRIVATE REQUESTS</span>
+                <span>REFERENCE IMAGES</span>
+                <span>PERSONAL PREFERENCES</span>
+
+            </div>
+
+            <p class="dolls-hint">
+                A reservation is not required to submit
+                a personal wishlist request.
+            </p>
+
+            <a
+                href="doll-reservation.html"
+                class="doll-explore-button"
+            >
+                OPEN PRIVATE WISHLIST →
+            </a>
 
         </section>
 
         <!-- USER RESERVATIONS -->
-        <section class="dolls-reservations">
+
+        <section
+            id="memberReservationSection"
+            class="dolls-reservations"
+        >
 
             <div class="dolls-section-heading">
+
                 <div>
-                    <p class="system-label">MEMBER RECORDS</p>
+
+                    <p class="system-label">
+                        MEMBER RECORDS // MODULE 09.02
+                    </p>
+
                     <h3>MY RESERVATIONS</h3>
+
                 </div>
+
             </div>
 
+            <p class="dolls-hint">
+                View your reservation requests, track their
+                current status and review pickup and return
+                arrangements.
+            </p>
+
             <div id="myDollReservations">
-                <p class="dolls-empty">LOADING RESERVATIONS...</p>
+
+                <p class="dolls-empty">
+                    LOADING RESERVATIONS...
+                </p>
+
             </div>
 
         </section>
 
-        <!-- ADMIN RESERVATIONS -->
+        <!-- ADMIN RESERVATION MANAGEMENT -->
+
         <section
             id="dollsAdminReservations"
             class="dolls-reservations"
@@ -179,15 +317,51 @@
         >
 
             <div class="dolls-section-heading">
+
                 <div>
-                    <p class="system-label">ADMINISTRATOR DATABASE</p>
-                    <h3>ALL RESERVATIONS</h3>
+
+                    <p class="system-label">
+                        ADMINISTRATOR DATABASE
+                    </p>
+
+                    <h3>RESERVATION MANAGEMENT</h3>
+
                 </div>
+
+                <span class="dolls-admin-label">
+                    ADMIN
+                </span>
+
             </div>
 
-            <div id="allDollReservations"></div>
+            <p class="dolls-hint">
+                Manage member reservations, approve requests,
+                update reservation statuses and coordinate
+                pickup and return arrangements.
+            </p>
+
+            <div id="allDollReservations">
+
+                <p class="dolls-empty">
+                    LOADING RESERVATION RECORDS...
+                </p>
+
+            </div>
+
+            <div class="dolls-form-actions">
+
+                <a
+                    href="doll-reservation.html"
+                    class="doll-explore-button"
+                >
+                    MANAGE PRIVATE WISHLIST →
+                </a>
+
+            </div>
 
         </section>
+
+        <!-- RETURN TO MAIN ARCHIVE -->
 
         <a href="archive.html" class="back">
             ← RETURN TO THE DEN
@@ -195,13 +369,24 @@
 
     </main>
 
+    <!-- FOOTER -->
+
     <footer>
+
         THE DEN © 2026
-        <p>DOLLS FOR RENT // MODULE 09</p>
+
+        <p>
+            DOLLS FOR RENT // MODULE 09
+        </p>
+
     </footer>
 
+    <!-- SYSTEM SCRIPTS -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src="auth-guard.js"></script>
+
     <script src="js/dolls-for-rent.js"></script>
 
 </body>
