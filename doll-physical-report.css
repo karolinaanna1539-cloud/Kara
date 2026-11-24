@@ -1,0 +1,499 @@
+
+/* =====================================================
+   THE DEN
+   PHYSICAL REPORT — CLINICAL DOCUMENTATION
+===================================================== */
+
+.anatomical-documentation {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #365747;
+}
+
+.anatomical-documentation [hidden] {
+    display: none !important;
+}
+
+/* HEADER */
+
+.anatomical-header {
+    margin-bottom: 25px;
+}
+
+.anatomical-header h3 {
+    color: #d7eee0;
+    font-size: 19px;
+    letter-spacing: 2px;
+    margin: 10px 0;
+}
+
+.anatomical-header .system-label {
+    color: #91c5a6;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+/* ANATOMICAL CATEGORY GRID */
+
+.anatomical-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.anatomical-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+
+    min-width: 0;
+    min-height: 120px;
+    padding: 17px;
+
+    background: linear-gradient(
+        145deg,
+        #11231a,
+        #09130e
+    );
+
+    border: 1px solid #345443;
+    border-radius: 4px;
+
+    color: #d7eee0;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        border-color .2s,
+        transform .2s,
+        box-shadow .2s;
+}
+
+.anatomical-tile:hover {
+    border-color: #91c5a6;
+    transform: translateY(-2px);
+    background: #152b20;
+}
+
+.anatomical-tile.active {
+    border-color: #75c9a0;
+    background: #193327;
+    box-shadow: 0 0 18px rgba(117, 201, 160, .1);
+}
+
+.anatomical-number {
+    color: #75c9a0;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.anatomical-tile strong {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    overflow-wrap: anywhere;
+}
+
+.anatomical-tile-label {
+    color: #789b87;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+/* EXPANDED CATEGORY */
+
+.anatomical-panel {
+    margin-top: 22px;
+    padding: 24px;
+
+    background: #09150f;
+    border: 1px solid #365747;
+    border-radius: 5px;
+
+    animation: anatomicalReveal .3s ease both;
+}
+
+@keyframes anatomicalReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.anatomical-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #345443;
+}
+
+.anatomical-panel-header h3 {
+    margin: 0;
+    color: #91c5a6;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+/* BUTTONS */
+
+.anatomical-documentation button:not(.anatomical-tile) {
+    padding: 11px 15px;
+
+    background: transparent;
+    border: 1px solid #527b62;
+    border-radius: 3px;
+
+    color: #91c5a6;
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.anatomical-documentation button:not(.anatomical-tile):hover {
+    background: #91c5a6;
+    color: #06120a;
+}
+
+.anatomical-documentation button:disabled {
+    opacity: .45;
+    cursor: wait;
+}
+
+.anatomical-documentation button:focus-visible,
+.anatomical-documentation input:focus-visible,
+.anatomical-documentation textarea:focus-visible {
+    outline: 2px solid #91c5a6;
+    outline-offset: 3px;
+}
+
+/* PHOTO GALLERY */
+
+.anatomical-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+
+    color: #789b87;
+    font-size: 11px;
+}
+
+.anatomical-record {
+    min-width: 0;
+    padding: 14px;
+
+    background: #0d1b13;
+    border: 1px solid #304b3b;
+    border-radius: 4px;
+}
+
+.anatomical-record img {
+    display: block;
+
+    width: 100%;
+    height: 280px;
+
+    object-fit: contain;
+
+    background: #030805;
+    border: 1px solid #294332;
+    border-radius: 3px;
+
+    cursor: zoom-in;
+}
+
+.anatomical-record h4 {
+    color: #d7eee0;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin: 18px 0;
+
+    overflow-wrap: anywhere;
+}
+
+.anatomical-record-field {
+    padding: 12px 0;
+    border-top: 1px solid #294332;
+}
+
+.anatomical-record-field span {
+    display: block;
+
+    color: #75c9a0;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+
+    margin-bottom: 7px;
+}
+
+.anatomical-record-field p {
+    color: #c3d6c9;
+    font-size: 12px;
+    line-height: 1.7;
+
+    margin: 0;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.anatomical-record-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    margin-top: 15px;
+}
+
+.anatomical-documentation .anatomical-delete {
+    color: #e18a8a !important;
+    border-color: #704343 !important;
+}
+
+.anatomical-documentation .anatomical-delete:hover {
+    background: #492323 !important;
+    color: #ffb0b0 !important;
+}
+
+/* DOCUMENTATION FORM */
+
+.anatomical-form {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    margin-top: 30px;
+    padding: 22px;
+
+    background: #07100b;
+    border: 1px solid #365747;
+    border-radius: 4px;
+}
+
+.anatomical-form h4 {
+    color: #91c5a6;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin: 0 0 15px;
+}
+
+.anatomical-form label {
+    display: block;
+
+    color: #91c5a6;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+
+    margin-top: 10px;
+}
+
+.anatomical-form input,
+.anatomical-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 13px;
+
+    background: #030905;
+    border: 1px solid #345443;
+    border-radius: 3px;
+
+    color: #d7eee0;
+    font-family: inherit;
+    font-size: 12px;
+
+    color-scheme: dark;
+}
+
+.anatomical-form textarea {
+    min-height: 90px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.anatomical-form input:focus,
+.anatomical-form textarea:focus {
+    border-color: #75c9a0;
+}
+
+.anatomical-form input[type="file"]::file-selector-button {
+    padding: 10px;
+    margin-right: 12px;
+
+    color: #91c5a6;
+    background: #14291c;
+    border: 1px solid #345443;
+
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.anatomical-form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    margin-top: 18px;
+}
+
+.anatomical-documentation #anatomicalSave {
+    background: #75c9a0;
+    color: #06120a;
+    border-color: #75c9a0;
+    font-weight: bold;
+}
+
+.anatomical-documentation #anatomicalSave:hover {
+    background: #b5e6c9;
+}
+
+/* STATUS MESSAGES */
+
+#anatomicalMessage {
+    color: #91c5a6;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+#anatomicalMessage.error {
+    color: #ff8888;
+}
+
+/* FULLSCREEN PHOTO VIEW */
+
+.anatomical-lightbox {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 50px 20px 20px;
+
+    background: rgba(0, 0, 0, .96);
+    border: 0;
+
+    overflow: auto;
+}
+
+.anatomical-lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.anatomical-lightbox::backdrop {
+    background: #000;
+}
+
+.anatomical-lightbox img {
+    display: block;
+
+    max-width: 95vw;
+    max-height: 85vh;
+
+    object-fit: contain;
+}
+
+.anatomical-lightbox-close {
+    position: fixed;
+    top: 18px;
+    right: 25px;
+
+    padding: 12px 18px;
+
+    color: #d7eee0;
+    background: #102019;
+    border: 1px solid #527b62;
+
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 950px) {
+
+    .anatomical-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .anatomical-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .anatomical-tile {
+        padding: 13px;
+        min-height: 105px;
+    }
+
+    .anatomical-tile strong {
+        font-size: 11px;
+        letter-spacing: 1px;
+    }
+
+    .anatomical-panel {
+        padding: 15px;
+    }
+
+    .anatomical-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .anatomical-record img {
+        height: 260px;
+    }
+
+    .anatomical-form {
+        padding: 15px;
+    }
+
+    .anatomical-form-actions button {
+        flex: 1;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .anatomical-tile,
+    .anatomical-documentation button {
+        transition: none;
+    }
+
+    .anatomical-panel {
+        animation: none;
+    }
+
+}
