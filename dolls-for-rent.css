@@ -1,6 +1,7 @@
 
 /* =========================================
-   DOLLS FOR RENT
+   THE DEN — DOLLS FOR RENT
+   PRIVATE COLLECTION DESIGN
 ========================================= */
 
 .dolls-terminal {
@@ -40,6 +41,14 @@
     margin-bottom: 30px;
 }
 
+.dolls-intro {
+    background: linear-gradient(
+        135deg,
+        #0b1810,
+        #050a07 75%
+    );
+}
+
 .dolls-intro h3,
 .dolls-section-heading h3 {
     color: white;
@@ -48,6 +57,23 @@
 
 .dolls-intro p:not(.system-label) {
     color: var(--muted);
+    line-height: 1.7;
+}
+
+.dolls-intro-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.dolls-intro-tags span {
+    color: #8db59a;
+    background: #07110b;
+    border: 1px solid #294332;
+    padding: 7px 10px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
 }
 
 .dolls-message {
@@ -72,6 +98,10 @@
     font-size: 11px;
     letter-spacing: 2px;
 }
+
+/* =========================================
+   ADMIN FORM
+========================================= */
 
 .dolls-form {
     display: grid;
@@ -126,6 +156,8 @@
     font-weight: bold;
     cursor: pointer;
     letter-spacing: 1px;
+    transition: background 0.2s, color 0.2s,
+                border-color 0.2s, box-shadow 0.2s;
 }
 
 .dolls-form button:hover,
@@ -146,6 +178,10 @@
     font-size: 12px;
 }
 
+/* =========================================
+   COLLECTION GRID
+========================================= */
+
 .dolls-catalog-section {
     margin: 35px 0;
 }
@@ -153,65 +189,285 @@
 .dolls-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 25px;
+    align-items: stretch;
 }
+
+/* =========================================
+   DOLL CARD
+========================================= */
 
 .doll-card {
     min-width: 0;
-    background: #050a07;
-    border: 1px solid var(--border);
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(
+        160deg,
+        #0b150e,
+        #050a07 65%
+    );
+    border: 1px solid #294332;
+    padding: 18px;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.25s,
+                box-shadow 0.25s,
+                transform 0.25s;
 }
 
 .doll-card:hover {
     border-color: var(--green);
-    box-shadow: 0 0 18px rgba(0,255,170,.08);
+    box-shadow: 0 0 25px rgba(0, 255, 170, 0.09);
+    transform: translateY(-3px);
+}
+
+.doll-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.doll-collection-label {
+    color: #789d85;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+}
+
+.doll-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--green);
+    background: rgba(0, 255, 136, 0.04);
+    border: 1px solid #28583c;
+    padding: 6px 9px;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.doll-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    flex-shrink: 0;
+}
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.doll-image-frame {
+    position: relative;
+    overflow: hidden;
+    background: #020503;
+    border: 1px solid #25392c;
+    border-radius: 4px;
 }
 
 .doll-image {
     width: 100%;
-    height: 280px;
+    height: 420px;
     object-fit: contain;
     display: block;
     background: #020503;
-    border: 1px solid #202d24;
+    transition: transform 0.35s ease;
+}
+
+.doll-image-frame:hover .doll-image {
+    transform: scale(1.025);
 }
 
 .doll-image-placeholder {
-    height: 200px;
+    height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #555;
-    border: 1px dashed #344239;
+    color: #617268;
     background: #020503;
     letter-spacing: 3px;
+    font-size: 12px;
 }
+
+/* =========================================
+   DOLL INFORMATION
+========================================= */
 
 .doll-card h3 {
     color: white;
+    font-size: 26px;
+    letter-spacing: 3px;
+    margin: 20px 0 6px;
+    overflow-wrap: anywhere;
+}
+
+.doll-profile-label {
+    color: #789d85;
+    font-size: 10px;
     letter-spacing: 2px;
-    margin-bottom: 8px;
+    margin: 0 0 15px;
 }
 
 .doll-description,
 .doll-details {
     color: var(--muted);
     font-size: 13px;
-    line-height: 1.6;
+    line-height: 1.7;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
-.doll-status {
-    display: inline-block;
-    color: var(--green);
-    border: 1px solid var(--green);
-    padding: 6px 10px;
-    margin: 10px 0;
+.doll-details {
+    color: #84958a;
+    font-size: 12px;
+}
+
+/* =========================================
+   CUSTOMIZATION OPTIONS
+========================================= */
+
+.doll-customization {
+    border-top: 1px solid #25392c;
+    padding-top: 20px;
+    margin-top: 20px;
+    margin-bottom: 22px;
+}
+
+.doll-customization-title {
+    color: #92b79d;
     font-size: 10px;
     letter-spacing: 2px;
+    margin: 0 0 12px;
 }
+
+.doll-options-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.doll-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 75px;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    background: #08110b;
+    border: 1px solid #294332;
+    border-radius: 3px;
+    color: #b1c9b9;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.doll-option:hover {
+    background: #102219;
+    border-color: var(--green);
+}
+
+.doll-option-icon {
+    width: 23px;
+    height: 23px;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.doll-option-icon svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.doll-option-name {
+    font-size: 9px;
+    letter-spacing: 0.7px;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   PRIMARY CARD BUTTONS
+========================================= */
+
+.doll-main-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.doll-explore-button,
+.doll-reserve-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 49px;
+    box-sizing: border-box;
+    padding: 14px 12px;
+    border: 1px solid var(--green);
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.3px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.doll-explore-button {
+    color: var(--green);
+    background: transparent;
+}
+
+.doll-explore-button:hover {
+    background: rgba(0, 255, 136, 0.08);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.12);
+}
+
+.doll-reserve-button {
+    background: var(--green);
+    color: #00150c;
+}
+
+.doll-reserve-button:hover {
+    background: #b0ffd3;
+    border-color: #b0ffd3;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.doll-explore-button:focus-visible,
+.doll-reserve-button:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+.doll-card-footer {
+    color: #607c69;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-align: center;
+    margin: 17px 0 0;
+}
+
+/* =========================================
+   BOOKING FORM — LEGACY SUPPORT
+========================================= */
 
 .dolls-booking-form {
     display: grid;
@@ -239,11 +495,17 @@
     margin-top: 5px;
 }
 
+/* =========================================
+   ADMIN CONTROLS
+========================================= */
+
 .dolls-admin-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 15px;
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #25392c;
 }
 
 .dolls-action-button {
@@ -260,6 +522,10 @@
 .dolls-action-button.dolls-delete:hover {
     background: #441818;
 }
+
+/* =========================================
+   RESERVATIONS
+========================================= */
 
 .dolls-reservations {
     margin: 40px 0;
@@ -297,13 +563,19 @@
     color: #ff7777;
 }
 
-[hidden] {
+.dolls-terminal [hidden] {
     display: none !important;
 }
 
-@media(max-width: 700px) {
+/* =========================================
+   MOBILE VERSION
+========================================= */
+
+@media (max-width: 700px) {
+
     .dolls-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .dolls-topbar {
@@ -311,7 +583,51 @@
         flex-direction: column;
     }
 
-    .doll-image {
-        height: 240px;
+    .doll-image,
+    .doll-image-placeholder {
+        height: 350px;
+    }
+
+    .doll-card {
+        padding: 14px;
+    }
+
+    .doll-card h3 {
+        font-size: 23px;
+    }
+
+    .dolls-intro,
+    .dolls-admin {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .doll-image,
+    .doll-image-placeholder {
+        height: 290px;
+    }
+
+    .doll-options-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .doll-explore-button,
+    .doll-reserve-button {
+        font-size: 10px;
+        letter-spacing: 0.7px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .doll-card,
+    .doll-image,
+    .doll-option,
+    .doll-explore-button,
+    .doll-reserve-button {
+        transition: none;
+        transform: none !important;
     }
 }
