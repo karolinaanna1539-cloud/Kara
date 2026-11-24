@@ -1,12 +1,23 @@
 
-/* =========================================
+/* =====================================================
    THE DEN — DOLLS FOR RENT
-   PRIVATE COLLECTION DESIGN
-========================================= */
+   PRIVATE COLLECTION & RESERVATION MANAGEMENT
+   MODULE 09
+===================================================== */
 
 .dolls-terminal {
     max-width: 1150px;
+
+    --rm-accent: #8fce9c;
+    --rm-border: #294332;
+    --rm-panel: #0b160f;
+    --rm-text: #d7eee0;
+    --rm-muted: #849b8c;
 }
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
 
 .dolls-topbar,
 .dolls-section-heading {
@@ -99,9 +110,9 @@
     letter-spacing: 2px;
 }
 
-/* =========================================
-   ADMIN FORM
-========================================= */
+/* =====================================================
+   DOLL ADMINISTRATION FORM
+===================================================== */
 
 .dolls-form {
     display: grid;
@@ -136,8 +147,9 @@
 }
 
 .dolls-hint {
-    color: #777;
+    color: #84958a;
     font-size: 11px;
+    line-height: 1.8;
 }
 
 .dolls-form-actions {
@@ -156,8 +168,12 @@
     font-weight: bold;
     cursor: pointer;
     letter-spacing: 1px;
-    transition: background 0.2s, color 0.2s,
-                border-color 0.2s, box-shadow 0.2s;
+
+    transition:
+        background 0.2s,
+        color 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
 
 .dolls-form button:hover,
@@ -178,9 +194,13 @@
     font-size: 12px;
 }
 
-/* =========================================
+.dolls-form-message.error {
+    color: #ff7777;
+}
+
+/* =====================================================
    COLLECTION GRID
-========================================= */
+===================================================== */
 
 .dolls-catalog-section {
     margin: 35px 0;
@@ -193,26 +213,30 @@
     align-items: stretch;
 }
 
-/* =========================================
+/* =====================================================
    DOLL CARD
-========================================= */
+===================================================== */
 
 .doll-card {
     min-width: 0;
     display: flex;
     flex-direction: column;
+
     background: linear-gradient(
         160deg,
         #0b150e,
         #050a07 65%
     );
+
     border: 1px solid #294332;
     padding: 18px;
     border-radius: 6px;
     overflow: hidden;
-    transition: border-color 0.25s,
-                box-shadow 0.25s,
-                transform 0.25s;
+
+    transition:
+        border-color 0.25s,
+        box-shadow 0.25s,
+        transform 0.25s;
 }
 
 .doll-card:hover {
@@ -240,10 +264,13 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+
     color: var(--green);
     background: rgba(0, 255, 136, 0.04);
     border: 1px solid #28583c;
+
     padding: 6px 9px;
+
     font-size: 9px;
     letter-spacing: 1px;
 }
@@ -258,9 +285,9 @@
     flex-shrink: 0;
 }
 
-/* =========================================
+/* =====================================================
    PROFILE IMAGE
-========================================= */
+===================================================== */
 
 .doll-image-frame {
     position: relative;
@@ -288,15 +315,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     color: #617268;
     background: #020503;
+
     letter-spacing: 3px;
     font-size: 12px;
 }
 
-/* =========================================
+/* =====================================================
    DOLL INFORMATION
-========================================= */
+===================================================== */
 
 .doll-card h3 {
     color: white;
@@ -327,9 +356,9 @@
     font-size: 12px;
 }
 
-/* =========================================
+/* =====================================================
    CUSTOMIZATION OPTIONS
-========================================= */
+===================================================== */
 
 .doll-customization {
     border-top: 1px solid #25392c;
@@ -357,14 +386,20 @@
     align-items: center;
     justify-content: center;
     gap: 9px;
+
     min-height: 75px;
     padding: 10px 5px;
     box-sizing: border-box;
+
     background: #08110b;
     border: 1px solid #294332;
     border-radius: 3px;
+
     color: #b1c9b9;
-    transition: background 0.2s, border-color 0.2s;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s;
 }
 
 .doll-option:hover {
@@ -376,6 +411,7 @@
     width: 23px;
     height: 23px;
     color: var(--green);
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -398,9 +434,9 @@
     overflow-wrap: anywhere;
 }
 
-/* =========================================
+/* =====================================================
    PRIMARY CARD BUTTONS
-========================================= */
+===================================================== */
 
 .doll-main-actions {
     display: flex;
@@ -415,18 +451,25 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+
     width: 100%;
     min-height: 49px;
     box-sizing: border-box;
+
     padding: 14px 12px;
+
     border: 1px solid var(--green);
     border-radius: 3px;
+
     font-family: inherit;
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 1.3px;
+
     text-align: center;
+    text-decoration: none;
     cursor: pointer;
+
     transition: all 0.2s ease;
 }
 
@@ -465,9 +508,9 @@
     margin: 17px 0 0;
 }
 
-/* =========================================
-   BOOKING FORM — LEGACY SUPPORT
-========================================= */
+/* =====================================================
+   LEGACY BOOKING FORM
+===================================================== */
 
 .dolls-booking-form {
     display: grid;
@@ -495,9 +538,9 @@
     margin-top: 5px;
 }
 
-/* =========================================
-   ADMIN CONTROLS
-========================================= */
+/* =====================================================
+   DOLL ADMINISTRATOR CONTROLS
+===================================================== */
 
 .dolls-admin-actions {
     display: flex;
@@ -523,9 +566,9 @@
     background: #441818;
 }
 
-/* =========================================
-   RESERVATIONS
-========================================= */
+/* =====================================================
+   RESERVATION SECTIONS
+===================================================== */
 
 .dolls-reservations {
     margin: 40px 0;
@@ -552,24 +595,673 @@
 }
 
 .dolls-empty {
-    color: #777;
+    color: #84958a;
     padding: 20px;
     border: 1px dashed #344239;
     text-align: center;
     font-size: 12px;
 }
 
-.dolls-form-message.error {
-    color: #ff7777;
-}
-
 .dolls-terminal [hidden] {
     display: none !important;
 }
 
-/* =========================================
-   MOBILE VERSION
-========================================= */
+/* =====================================================
+   PERSONAL WISHLIST
+===================================================== */
+
+.dolls-reservations > .doll-explore-button {
+    margin-top: 20px;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.dolls-reservations > .dolls-form-actions {
+    margin-top: 25px;
+}
+
+.dolls-reservations > .dolls-intro-tags {
+    margin-bottom: 20px;
+}
+
+/* =====================================================
+   RESERVATION MANAGEMENT DASHBOARD
+===================================================== */
+
+.rm-dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.rm-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    min-width: 0;
+    padding: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #14251a,
+        #08110b
+    );
+
+    border: 1px solid var(--rm-border);
+    border-radius: 5px;
+
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        border-color .2s;
+}
+
+.rm-stat:hover,
+.rm-stat.selected {
+    border-color: var(--rm-accent);
+    background: #1a3021;
+}
+
+.rm-stat-label {
+    color: var(--rm-muted);
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    overflow-wrap: anywhere;
+}
+
+.rm-stat-value {
+    color: var(--rm-accent);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* =====================================================
+   RESERVATION FILTERS
+===================================================== */
+
+.rm-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    padding: 16px;
+    margin-bottom: 20px;
+
+    background: #08110b;
+    border: 1px solid var(--rm-border);
+    border-radius: 4px;
+}
+
+.rm-toolbar label {
+    color: var(--rm-accent);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.rm-toolbar select,
+.rm-toolbar input {
+    flex: 1;
+    min-width: 150px;
+    padding: 12px;
+
+    color: var(--rm-text);
+    background: #030805;
+    border: 1px solid #345443;
+    border-radius: 3px;
+
+    font-family: inherit;
+    font-size: 12px;
+    color-scheme: dark;
+}
+
+.rm-result-count {
+    color: var(--rm-muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   RESERVATION CARDS
+===================================================== */
+
+.rm-list {
+    display: grid;
+    gap: 14px;
+}
+
+.rm-card {
+    min-width: 0;
+    background: #07110b;
+    border: 1px solid var(--rm-border);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.rm-card[open] {
+    border-color: #527b62;
+}
+
+.rm-card-summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    padding: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #14251a,
+        #08110b
+    );
+
+    cursor: pointer;
+    list-style: none;
+}
+
+.rm-card-summary::-webkit-details-marker {
+    display: none;
+}
+
+.rm-card-summary:hover {
+    background: #192e20;
+}
+
+.rm-card-identity {
+    flex: 1;
+    min-width: 150px;
+}
+
+.rm-reference {
+    display: block;
+    margin-bottom: 8px;
+
+    color: var(--rm-accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.rm-profile-name {
+    display: block;
+
+    color: #ffffff;
+    font-size: 17px;
+    letter-spacing: 1px;
+    overflow-wrap: anywhere;
+}
+
+.rm-date-range {
+    display: block;
+    margin-top: 8px;
+
+    color: var(--rm-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.rm-chevron {
+    color: var(--rm-accent);
+    font-size: 23px;
+    transition: transform .2s;
+}
+
+.rm-card[open] > summary .rm-chevron {
+    transform: rotate(45deg);
+}
+
+.rm-card-content {
+    padding: 22px;
+    border-top: 1px solid var(--rm-border);
+}
+
+/* =====================================================
+   RESERVATION STATUS LABELS
+===================================================== */
+
+.rm-status {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 12px;
+
+    border: 1px solid #45634e;
+    border-radius: 3px;
+
+    color: #b5cbbd;
+    background: #102019;
+
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.rm-status.pending {
+    color: #e4c38c;
+    background: #211d10;
+    border-color: #625536;
+}
+
+.rm-status.confirmed {
+    color: #a9e4b1;
+    background: #102016;
+    border-color: #456d4d;
+}
+
+.rm-status.preparing {
+    color: #c5b5e8;
+    background: #1b1429;
+    border-color: #594778;
+}
+
+.rm-status.ready_for_pickup {
+    color: #a9e5e4;
+    background: #102323;
+    border-color: #376666;
+}
+
+.rm-status.active {
+    color: #b4cce8;
+    background: #101b29;
+    border-color: #405b79;
+}
+
+.rm-status.completed {
+    color: #a7b8ac;
+    background: #18201b;
+    border-color: #45564a;
+}
+
+.rm-status.declined,
+.rm-status.cancelled {
+    color: #ffaaaa;
+    background: #241010;
+    border-color: #704343;
+}
+
+/* =====================================================
+   MEMBER INFORMATION
+===================================================== */
+
+.rm-member {
+    padding: 12px 15px;
+    margin-bottom: 18px;
+
+    background: #0e1b13;
+    border: 1px solid var(--rm-border);
+
+    color: var(--rm-muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   PICKUP AND RETURN INFORMATION
+===================================================== */
+
+.rm-logistics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.rm-logistics-panel {
+    min-width: 0;
+    padding: 18px;
+
+    background: #102019;
+    border: 1px solid var(--rm-border);
+    border-radius: 4px;
+}
+
+.rm-logistics-panel h4 {
+    margin: 0 0 18px;
+
+    color: var(--rm-accent);
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.rm-info-label {
+    display: block;
+
+    margin-top: 15px;
+    margin-bottom: 7px;
+
+    color: var(--rm-muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.rm-info-value {
+    display: block;
+
+    color: var(--rm-text);
+    font-size: 13px;
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   PERSONAL CONFIGURATION
+===================================================== */
+
+.rm-configuration,
+.rm-admin-notes {
+    padding: 18px;
+    margin: 18px 0;
+
+    background: #0b160f;
+    border: 1px solid var(--rm-border);
+    border-radius: 4px;
+}
+
+.rm-configuration h4,
+.rm-admin-notes h4 {
+    margin-top: 0;
+
+    color: var(--rm-accent);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+}
+
+.rm-configuration p,
+.rm-admin-notes p {
+    color: #b6c8bc;
+    font-size: 12px;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.rm-admin-notes {
+    border-left: 3px solid var(--rm-accent);
+}
+
+/* =====================================================
+   ADMINISTRATOR RESERVATION EDIT FORM
+===================================================== */
+
+.rm-admin-form {
+    padding: 22px;
+    margin-top: 25px;
+
+    background: #0b160f;
+    border: 1px solid #456d4d;
+    border-radius: 4px;
+}
+
+.rm-admin-form h4 {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    color: var(--rm-accent);
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.rm-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.rm-field {
+    min-width: 0;
+    margin-bottom: 17px;
+}
+
+.rm-field label {
+    display: block;
+    margin-bottom: 9px;
+
+    color: var(--rm-accent);
+    font-size: 10px;
+    letter-spacing: 1.2px;
+}
+
+.rm-field input,
+.rm-field select,
+.rm-field textarea {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    padding: 13px;
+
+    color: var(--rm-text);
+    background: #030805;
+    border: 1px solid #345443;
+    border-radius: 3px;
+
+    font-family: inherit;
+    font-size: 12px;
+    color-scheme: dark;
+}
+
+.rm-field textarea {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+.rm-field input::placeholder,
+.rm-field textarea::placeholder {
+    color: #607367;
+}
+
+.rm-field input:focus,
+.rm-field select:focus,
+.rm-field textarea:focus,
+.rm-toolbar input:focus,
+.rm-toolbar select:focus {
+    outline: none;
+    border-color: var(--rm-accent);
+    box-shadow: 0 0 12px rgba(143, 206, 156, .08);
+}
+
+.rm-field input:disabled,
+.rm-field select:disabled,
+.rm-field textarea:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.rm-field-hint {
+    margin-top: 8px;
+
+    color: var(--rm-muted);
+    font-size: 10px;
+    line-height: 1.7;
+}
+
+/* =====================================================
+   RESERVATION ACTION BUTTONS
+===================================================== */
+
+.rm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.rm-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 45px;
+    padding: 13px 18px;
+
+    color: var(--rm-accent);
+    background: #102019;
+    border: 1px solid #527b62;
+    border-radius: 3px;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.5;
+
+    text-align: center;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.rm-button:hover:not(:disabled) {
+    background: #203a27;
+}
+
+.rm-button.primary {
+    color: #06120a;
+    background: var(--rm-accent);
+    border-color: var(--rm-accent);
+}
+
+.rm-button.primary:hover:not(:disabled) {
+    background: #b9e8c6;
+}
+
+.rm-button.danger {
+    color: #ffaaaa;
+    background: #241010;
+    border-color: #704343;
+}
+
+.rm-button.danger:hover:not(:disabled) {
+    background: #381818;
+}
+
+.rm-button:disabled,
+.dolls-action-button:disabled,
+.dolls-form button:disabled,
+.doll-reserve-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.rm-button:focus-visible,
+.rm-stat:focus-visible,
+.rm-card-summary:focus-visible {
+    outline: 2px solid var(--rm-accent);
+    outline-offset: -3px;
+}
+
+/* =====================================================
+   SYSTEM MESSAGES
+===================================================== */
+
+.rm-message {
+    padding: 14px;
+    margin: 15px 0;
+
+    border-radius: 3px;
+
+    font-size: 12px;
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+.rm-message:empty {
+    display: none;
+}
+
+.rm-message.success {
+    color: #a9e4b1;
+    background: #102016;
+    border: 1px solid #456d4d;
+}
+
+.rm-message.error {
+    color: #ffaaaa;
+    background: #241010;
+    border: 1px solid #704343;
+}
+
+.rm-message.info {
+    color: #b4cbbb;
+    background: #102019;
+    border: 1px solid var(--rm-border);
+}
+
+/* =====================================================
+   RESERVATION HISTORY
+===================================================== */
+
+.rm-history {
+    margin-top: 30px;
+    border: 1px solid var(--rm-border);
+    border-radius: 4px;
+    background: #08110b;
+}
+
+.rm-history > summary {
+    padding: 18px;
+
+    color: var(--rm-muted);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+}
+
+.rm-history-content {
+    padding: 15px;
+    border-top: 1px solid var(--rm-border);
+}
+
+.rm-record-footer {
+    padding-top: 15px;
+    margin-top: 20px;
+
+    border-top: 1px solid var(--rm-border);
+
+    color: var(--rm-muted);
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN — TABLET
+===================================================== */
+
+@media (max-width: 800px) {
+
+    .rm-dashboard {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .rm-card-content {
+        padding: 18px;
+    }
+
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN — MOBILE COLLECTION
+===================================================== */
 
 @media (max-width: 700px) {
 
@@ -600,7 +1292,85 @@
     .dolls-admin {
         padding: 18px;
     }
+
 }
+
+/* =====================================================
+   RESPONSIVE DESIGN — MOBILE RESERVATIONS
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .rm-dashboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .rm-stat {
+        padding: 14px;
+    }
+
+    .rm-stat-value {
+        font-size: 25px;
+    }
+
+    .rm-stat-label {
+        font-size: 9px;
+    }
+
+    .rm-card-summary {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .rm-card-content {
+        padding: 14px;
+    }
+
+    .rm-logistics,
+    .rm-form-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .rm-admin-form {
+        padding: 15px;
+    }
+
+    .rm-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rm-toolbar input,
+    .rm-toolbar select {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .rm-actions {
+        flex-direction: column;
+    }
+
+    .rm-actions .rm-button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .rm-card-identity {
+        min-width: 120px;
+    }
+
+    .rm-profile-name {
+        font-size: 15px;
+    }
+
+}
+
+/* =====================================================
+   SMALL MOBILE SCREENS
+===================================================== */
 
 @media (max-width: 380px) {
 
@@ -618,7 +1388,25 @@
         font-size: 10px;
         letter-spacing: 0.7px;
     }
+
+    .rm-stat {
+        padding: 10px;
+    }
+
+    .rm-card-content {
+        padding: 10px;
+    }
+
+    .rm-status {
+        font-size: 8px;
+        padding: 6px 8px;
+    }
+
 }
+
+/* =====================================================
+   ACCESSIBILITY — REDUCED MOTION
+===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -630,4 +1418,17 @@
         transition: none;
         transform: none !important;
     }
+
+    .rm-card *,
+    .rm-stat,
+    .rm-button {
+        animation: none !important;
+        transition: none !important;
+    }
+
 }
+
+/* =====================================================
+   END OF FILE
+   THE DEN © 2026
+===================================================== */
