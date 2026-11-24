@@ -7,341 +7,987 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050806">
 
-    <title>RESERVATION // THE DEN</title>
+    <title>RESERVATION CENTER // THE DEN</title>
 
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        .reservation-terminal {
-            max-width: 1050px;
-            margin: 35px auto;
-        }
-
-        .reservation-header {
-            border-bottom: 1px solid #25432e;
-            padding-bottom: 18px;
-            margin-bottom: 25px;
-        }
-
-        .reservation-header h1 {
-            color: #8fce9c;
-            letter-spacing: 4px;
-        }
-
-        .reservation-doll {
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 22px;
-            align-items: center;
-            padding: 18px;
-            border: 1px solid #25432e;
-            margin-bottom: 25px;
-        }
-
-        .reservation-doll img {
-            width: 100%;
-            max-height: 220px;
-            object-fit: cover;
-            background: #101510;
-        }
-
-        .reservation-section {
-            border: 1px solid #25432e;
-            padding: 22px;
-            margin-bottom: 20px;
-            background: rgba(10, 18, 12, 0.55);
-        }
-
-        .reservation-section h2 {
-            color: #8fce9c;
-            font-size: 17px;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        .reservation-field {
-            margin-bottom: 16px;
-        }
-
-        .reservation-field label {
-            display: block;
-            margin-bottom: 7px;
-            color: #a7b5a9;
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-
-        .reservation-field input,
-        .reservation-field textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px;
-            color: #e4eee5;
-            background: #080d09;
-            border: 1px solid #34533a;
-            font: inherit;
-        }
-
-        .reservation-field textarea {
-            min-height: 110px;
-            resize: vertical;
-        }
-
-        .reservation-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 14px;
-        }
-
-        .reservation-option {
-            position: relative;
-            display: block;
-            border: 1px solid #29432e;
-            background: #080d09;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .reservation-option:hover {
-            border-color: #8fce9c;
-        }
-
-        .reservation-option.selected {
-            border: 2px solid #8fce9c;
-            background: #142219;
-        }
-
-        .reservation-option img {
-            display: block;
-            width: 100%;
-            height: 155px;
-            object-fit: cover;
-        }
-
-        .reservation-option-info {
-            padding: 10px;
-            color: #dce9de;
-            font-size: 12px;
-        }
-
-        .reservation-option input {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            accent-color: #8fce9c;
-            width: 18px;
-            height: 18px;
-        }
-
-        .reservation-empty {
-            color: #89958b;
-            font-size: 13px;
-            padding: 12px 0;
-        }
-
-        .reservation-summary {
-            border: 1px solid #456d4d;
-            padding: 18px;
-            margin-top: 20px;
-            background: #0b140d;
-        }
-
-        .reservation-summary h3 {
-            color: #8fce9c;
-            letter-spacing: 2px;
-        }
-
-        .reservation-summary p {
-            color: #c5d2c7;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        .reservation-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .reservation-button {
-            padding: 13px 22px;
-            border: 1px solid #689a70;
-            background: #142219;
-            color: #b8e3bf;
-            letter-spacing: 2px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .reservation-button:hover {
-            background: #203a27;
-        }
-
-        .reservation-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .reservation-message {
-            margin: 16px 0;
-            padding: 12px;
-            font-size: 13px;
-            display: none;
-        }
-
-        .reservation-message.error {
-            display: block;
-            color: #ffaaaa;
-            border: 1px solid #8a3434;
-            background: #241010;
-        }
-
-        .reservation-message.success {
-            display: block;
-            color: #a9e4b1;
-            border: 1px solid #456d4d;
-            background: #102016;
-        }
-
-        @media (max-width: 600px) {
-            .reservation-doll {
-                grid-template-columns: 1fr;
-            }
-
-            .reservation-doll img {
-                max-height: 280px;
-            }
-
-            .reservation-section {
-                padding: 15px;
-            }
-
-            .reservation-options {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="doll-reservation.css">
 </head>
 
 <body class="protected-page">
 
+    <div class="scanline"></div>
+
     <header class="site-header">
+
         <div class="header-inner">
-            <a href="archive.html" class="logo">THE DEN</a>
-            <span class="header-tag">PRIVATE MEMBERS AREA</span>
+
+            <a href="archive.html" class="logo">
+                THE DEN
+            </a>
+
+            <span class="header-tag">
+                PRIVATE MEMBERS AREA
+            </span>
+
         </div>
+
     </header>
 
     <main class="terminal reservation-terminal">
 
+        <!-- PAGE HEADER -->
+
         <div class="reservation-header">
-            <p>THE DEN // MODULE 09</p>
-            <h1>DOLL RESERVATION</h1>
-            <p>Configure your reservation before confirmation.</p>
-        </div>
-
-        <div id="reservationConnection" class="reservation-message"></div>
-
-        <section class="reservation-doll">
-            <img id="reservationDollImage" src="" alt="Selected doll" hidden>
 
             <div>
-                <p>SELECTED DOLL</p>
-                <h2 id="reservationDollName">Loading...</h2>
-                <p id="reservationDollDescription"></p>
+
+                <p class="system-label">
+                    MODULE // 09.02
+                </p>
+
+                <h1>RESERVATION CENTER</h1>
+
+                <p class="reservation-subtitle">
+                    PRIVATE RESERVATIONS & PERSONALIZATION
+                </p>
+
             </div>
+
+            <span class="reservation-online">
+                ● MEMBERS SERVICE
+            </span>
+
+        </div>
+
+        <div id="reservationConnection"
+             class="reservation-message"
+             role="status">
+        </div>
+
+        <!-- SELECTED DOLL -->
+
+        <section class="reservation-doll">
+
+            <div class="reservation-image-frame">
+
+                <img id="reservationDollImage"
+                     alt="Selected doll"
+                     hidden>
+
+            </div>
+
+            <div class="reservation-doll-information">
+
+                <p class="system-label">
+                    SELECTED PROFILE
+                </p>
+
+                <h2 id="reservationDollName">
+                    LOADING...
+                </h2>
+
+                <p id="reservationDollDescription"></p>
+
+                <div class="reservation-tags">
+
+                    <span>PRIVATE COLLECTION</span>
+
+                    <span>PERSONAL CONFIGURATION</span>
+
+                    <span>ADMIN APPROVAL</span>
+
+                </div>
+
+            </div>
+
         </section>
+
+        <!-- SERVICE INFORMATION -->
+
+        <section class="reservation-information">
+
+            <p class="system-label">
+                IMPORTANT INFORMATION
+            </p>
+
+            <h3>BEFORE YOU MAKE A RESERVATION</h3>
+
+            <p>
+                Select your preferred dates, pickup arrangements
+                and personal configuration.
+            </p>
+
+            <p>
+                All reservation requests are subject to
+                administrator approval. Final pickup and return
+                arrangements will be confirmed privately.
+            </p>
+
+            <p>
+                All dates and times refer to local Swedish time
+                (Europe/Stockholm).
+            </p>
+
+        </section>
+
+        <!-- MAIN RESERVATION FORM -->
 
         <form id="reservationForm">
 
-            <section class="reservation-section">
-                <h2>01 // RESERVATION PERIOD</h2>
+            <fieldset id="reservationFields" disabled>
 
-                <div class="reservation-field">
-                    <label for="reservationStart">START DATE</label>
-                    <input type="date" id="reservationStart" required>
-                </div>
+                <!-- 01 RESERVATION PERIOD -->
 
-                <div class="reservation-field">
-                    <label for="reservationEnd">END DATE</label>
-                    <input type="date" id="reservationEnd" required>
-                </div>
-            </section>
+                <details class="reservation-section" open>
 
-            <section class="reservation-section">
-                <h2>02 // CLOTHING</h2>
-                <p>Select one option.</p>
-                <div id="reservationClothing" class="reservation-options"></div>
-            </section>
+                    <summary class="reservation-section-heading">
 
-            <section class="reservation-section">
-                <h2>03 // MAKE-UP</h2>
-                <p>Select one option.</p>
-                <div id="reservationMakeup" class="reservation-options"></div>
-            </section>
+                        <span class="reservation-step">
+                            01
+                        </span>
 
-            <section class="reservation-section">
-                <h2>04 // HAIRSTYLE</h2>
-                <p>Select one option.</p>
-                <div id="reservationHairstyle" class="reservation-options"></div>
-            </section>
+                        <div class="reservation-section-title">
 
-            <section class="reservation-section">
-                <h2>05 // NAILS</h2>
-                <p>Select one option.</p>
-                <div id="reservationNails" class="reservation-options"></div>
-            </section>
+                            <h2>RESERVATION PERIOD</h2>
 
-            <section class="reservation-section">
-                <h2>06 // ACCESSORIES</h2>
-                <p>Select as many options as you like.</p>
-                <div id="reservationAccessories" class="reservation-options"></div>
-            </section>
+                            <p>Preferred dates and times</p>
 
-            <section class="reservation-section">
-                <h2>07 // ADDITIONAL NOTES</h2>
+                        </div>
 
-                <div class="reservation-field">
-                    <label for="reservationNotes">NOTES / SPECIAL REQUESTS</label>
-                    <textarea
-                        id="reservationNotes"
-                        placeholder="Write any additional information here..."
-                    ></textarea>
-                </div>
-            </section>
+                        <span class="reservation-chevron">
+                            +
+                        </span>
 
-            <section class="reservation-section">
-                <h2>08 // REVIEW</h2>
+                    </summary>
 
-                <div id="reservationSummary" class="reservation-summary">
-                    <p>Your reservation summary will appear here.</p>
-                </div>
+                    <div class="reservation-section-content">
 
-                <div id="reservationMessage" class="reservation-message"></div>
+                        <div class="reservation-field-grid">
 
-                <div class="reservation-actions">
-                    <button type="button" id="reservationReviewButton" class="reservation-button">
-                        REVIEW RESERVATION
-                    </button>
+                            <div class="reservation-field">
 
-                    <button type="submit" id="reservationConfirmButton" class="reservation-button" disabled>
-                        CONFIRM RESERVATION
-                    </button>
+                                <label for="reservationStart">
+                                    PICKUP DATE
+                                </label>
 
-                    <a href="dolls-for-rent.html" class="reservation-button">
-                        CANCEL
-                    </a>
-                </div>
-            </section>
+                                <input type="date"
+                                       id="reservationStart"
+                                       required>
+
+                            </div>
+
+                            <div class="reservation-field">
+
+                                <label for="reservationPickupTime">
+                                    PICKUP TIME
+                                </label>
+
+                                <input type="time"
+                                       id="reservationPickupTime"
+                                       required>
+
+                            </div>
+
+                            <div class="reservation-field">
+
+                                <label for="reservationEnd">
+                                    RETURN DATE
+                                </label>
+
+                                <input type="date"
+                                       id="reservationEnd"
+                                       required>
+
+                            </div>
+
+                            <div class="reservation-field">
+
+                                <label for="reservationReturnTime">
+                                    RETURN TIME
+                                </label>
+
+                                <input type="time"
+                                       id="reservationReturnTime"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="reservation-duration">
+
+                            <span>RESERVATION DURATION</span>
+
+                            <strong id="reservationDuration">
+                                NOT SELECTED
+                            </strong>
+
+                        </div>
+
+                        <p class="reservation-hint">
+                            Your selected dates are reserved as
+                            full calendar days. Pickup and return
+                            times are preferred arrangements.
+                        </p>
+
+                    </div>
+
+                </details>
+
+                <!-- 02 PICKUP AND RETURN -->
+
+                <details class="reservation-section">
+
+                    <summary class="reservation-section-heading">
+
+                        <span class="reservation-step">
+                            02
+                        </span>
+
+                        <div class="reservation-section-title">
+
+                            <h2>PICKUP & RETURN</h2>
+
+                            <p>Location and private arrangements</p>
+
+                        </div>
+
+                        <span class="reservation-chevron">
+                            +
+                        </span>
+
+                    </summary>
+
+                    <div class="reservation-section-content">
+
+                        <div class="reservation-field-grid">
+
+                            <div class="reservation-field">
+
+                                <label for="reservationPickupLocation">
+                                    PREFERRED PICKUP LOCATION
+                                </label>
+
+                                <input type="text"
+                                       id="reservationPickupLocation"
+                                       maxlength="300"
+                                       placeholder="To be agreed privately">
+
+                            </div>
+
+                            <div class="reservation-field">
+
+                                <label for="reservationReturnLocation">
+                                    PREFERRED RETURN LOCATION
+                                </label>
+
+                                <input type="text"
+                                       id="reservationReturnLocation"
+                                       maxlength="300"
+                                       placeholder="To be agreed privately">
+
+                            </div>
+
+                        </div>
+
+                        <label class="reservation-checkbox">
+
+                            <input type="checkbox"
+                                   id="reservationSameLocation">
+
+                            Return location is the same
+                            as pickup location.
+
+                        </label>
+
+                        <div class="reservation-private-notice">
+
+                            <strong>PRIVATE INFORMATION</strong>
+
+                            <p>
+                                Pickup and return details are
+                                accessible to you and the
+                                administrator.
+                            </p>
+
+                            <p>
+                                Final locations and instructions
+                                will be provided after approval.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+                <!-- 03 PERSONAL CONFIGURATION -->
+
+                <details class="reservation-section">
+
+                    <summary class="reservation-section-heading">
+
+                        <span class="reservation-step">
+                            03
+                        </span>
+
+                        <div class="reservation-section-title">
+
+                            <h2>PERSONAL CONFIGURATION</h2>
+
+                            <p>Customize your reservation</p>
+
+                        </div>
+
+                        <span class="reservation-chevron">
+                            +
+                        </span>
+
+                    </summary>
+
+                    <div class="reservation-section-content">
+
+                        <p class="reservation-hint">
+
+                            Explore the available options.
+                            All customization choices are optional.
+
+                        </p>
+
+                        <!-- CLOTHING -->
+
+                        <details class="reservation-category">
+
+                            <summary>
+
+                                <span>CLOTHING</span>
+
+                                <span class="reservation-category-count"
+                                      id="clothingSelectedCount">
+                                    OPTIONAL
+                                </span>
+
+                            </summary>
+
+                            <div class="reservation-category-content">
+
+                                <p>Select one clothing option.</p>
+
+                                <div id="reservationClothing"
+                                     class="reservation-options">
+                                </div>
+
+                            </div>
+
+                        </details>
+
+                        <!-- MAKEUP -->
+
+                        <details class="reservation-category">
+
+                            <summary>
+
+                                <span>MAKE-UP</span>
+
+                                <span class="reservation-category-count"
+                                      id="makeupSelectedCount">
+                                    OPTIONAL
+                                </span>
+
+                            </summary>
+
+                            <div class="reservation-category-content">
+
+                                <p>Select one make-up option.</p>
+
+                                <div id="reservationMakeup"
+                                     class="reservation-options">
+                                </div>
+
+                            </div>
+
+                        </details>
+
+                        <!-- HAIRSTYLE -->
+
+                        <details class="reservation-category">
+
+                            <summary>
+
+                                <span>HAIRSTYLE</span>
+
+                                <span class="reservation-category-count"
+                                      id="hairstyleSelectedCount">
+                                    OPTIONAL
+                                </span>
+
+                            </summary>
+
+                            <div class="reservation-category-content">
+
+                                <p>Select one hairstyle option.</p>
+
+                                <div id="reservationHairstyle"
+                                     class="reservation-options">
+                                </div>
+
+                            </div>
+
+                        </details>
+
+                        <!-- NAILS -->
+
+                        <details class="reservation-category">
+
+                            <summary>
+
+                                <span>NAILS & MANICURE</span>
+
+                                <span class="reservation-category-count"
+                                      id="nailsSelectedCount">
+                                    OPTIONAL
+                                </span>
+
+                            </summary>
+
+                            <div class="reservation-category-content">
+
+                                <p>Select one nail styling option.</p>
+
+                                <div id="reservationNails"
+                                     class="reservation-options">
+                                </div>
+
+                            </div>
+
+                        </details>
+
+                        <!-- ACCESSORIES -->
+
+                        <details class="reservation-category">
+
+                            <summary>
+
+                                <span>ACCESSORIES</span>
+
+                                <span class="reservation-category-count"
+                                      id="accessoriesSelectedCount">
+                                    OPTIONAL
+                                </span>
+
+                            </summary>
+
+                            <div class="reservation-category-content">
+
+                                <p>Select multiple accessories.</p>
+
+                                <div id="reservationAccessories"
+                                     class="reservation-options">
+                                </div>
+
+                            </div>
+
+                        </details>
+
+                    </div>
+
+                </details>
+
+                <!-- 04 WISHLIST -->
+
+                <details class="reservation-section">
+
+                    <summary class="reservation-section-heading">
+
+                        <span class="reservation-step">
+                            04
+                        </span>
+
+                        <div class="reservation-section-title">
+
+                            <h2>PRIVATE WISHLIST</h2>
+
+                            <p>Individual customization requests</p>
+
+                        </div>
+
+                        <span class="reservation-chevron">
+                            +
+                        </span>
+
+                    </summary>
+
+                    <div class="reservation-section-content">
+
+                        <div class="reservation-wishlist-intro">
+
+                            <p class="system-label">
+                                PERSONAL REQUEST SERVICE
+                            </p>
+
+                            <h3>LOOKING FOR SOMETHING SPECIAL?</h3>
+
+                            <p>
+                                If your preferred outfit, hairstyle,
+                                make-up or accessories are not
+                                available in the collection,
+                                you can submit a private request.
+                            </p>
+
+                            <p>
+                                Wishlist requests are reviewed
+                                separately and are not guaranteed
+                                as part of your reservation.
+                            </p>
+
+                            <button type="button"
+                                    id="openWishlistButton"
+                                    class="reservation-button">
+
+                                OPEN PRIVATE WISHLIST →
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+                <!-- 05 ADDITIONAL INFORMATION -->
+
+                <details class="reservation-section">
+
+                    <summary class="reservation-section-heading">
+
+                        <span class="reservation-step">
+                            05
+                        </span>
+
+                        <div class="reservation-section-title">
+
+                            <h2>ADDITIONAL INFORMATION</h2>
+
+                            <p>Notes and special arrangements</p>
+
+                        </div>
+
+                        <span class="reservation-chevron">
+                            +
+                        </span>
+
+                    </summary>
+
+                    <div class="reservation-section-content">
+
+                        <div class="reservation-field">
+
+                            <label for="reservationNotes">
+                                PRIVATE RESERVATION NOTES
+                            </label>
+
+                            <textarea
+                                id="reservationNotes"
+                                maxlength="3000"
+                                rows="6"
+                                placeholder="Describe any additional preferences, arrangements or information..."
+                            ></textarea>
+
+                        </div>
+
+                        <p class="reservation-hint">
+
+                            Your notes will be included in the
+                            reservation request and reviewed
+                            by the administrator.
+
+                        </p>
+
+                    </div>
+
+                </details>
+
+                <!-- 06 REVIEW -->
+
+                <details class="reservation-section"
+                         id="reservationReviewSection">
+
+                    <summary class="reservation-section-heading">
+
+                        <span class="reservation-step">
+                            06
+                        </span>
+
+                        <div class="reservation-section-title">
+
+                            <h2>REVIEW & CONFIRM</h2>
+
+                            <p>Complete reservation summary</p>
+
+                        </div>
+
+                        <span class="reservation-chevron">
+                            +
+                        </span>
+
+                    </summary>
+
+                    <div class="reservation-section-content">
+
+                        <div id="reservationSummary"
+                             class="reservation-summary">
+
+                            <p>
+                                Your reservation summary
+                                will appear here.
+                            </p>
+
+                        </div>
+
+                        <div class="reservation-approval-notice">
+
+                            <p class="system-label">
+                                RESERVATION STATUS
+                            </p>
+
+                            <strong>
+                                PENDING ADMINISTRATOR APPROVAL
+                            </strong>
+
+                            <p>
+                                Submitting this request does not
+                                constitute final confirmation.
+                            </p>
+
+                        </div>
+
+                        <label class="reservation-checkbox">
+
+                            <input type="checkbox"
+                                   id="reservationAgreement"
+                                   required>
+
+                            I have reviewed my reservation details
+                            and understand that administrator
+                            approval is required.
+
+                        </label>
+
+                        <div id="reservationMessage"
+                             class="reservation-message"
+                             role="status">
+                        </div>
+
+                        <div class="reservation-actions">
+
+                            <button type="button"
+                                    id="reservationReviewButton"
+                                    class="reservation-button">
+
+                                REVIEW RESERVATION
+
+                            </button>
+
+                            <button type="submit"
+                                    id="reservationConfirmButton"
+                                    class="reservation-button reservation-primary"
+                                    disabled>
+
+                                SUBMIT RESERVATION REQUEST
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+            </fieldset>
 
         </form>
 
+        <!-- QUICK REVIEW -->
+
+        <div class="reservation-bottom-actions">
+
+            <button type="button"
+                    id="reservationQuickReview"
+                    class="reservation-button reservation-primary"
+                    disabled>
+
+                REVIEW YOUR RESERVATION →
+
+            </button>
+
+            <a href="dolls-for-rent.html"
+               class="reservation-button">
+
+                RETURN TO COLLECTION
+
+            </a>
+
+        </div>
+
+        <!-- =====================================
+             PRIVATE WISHLIST
+             INDEPENDENT REQUEST FORM
+        ====================================== -->
+
+        <section id="privateWishlist"
+                 class="reservation-wishlist-panel"
+                 hidden>
+
+            <div class="wishlist-header">
+
+                <div>
+
+                    <p class="system-label">
+                        PRIVATE SERVICE // 09.03
+                    </p>
+
+                    <h2>PERSONAL WISHLIST</h2>
+
+                    <p>
+                        Individual requests and private correspondence
+                    </p>
+
+                </div>
+
+                <button type="button"
+                        id="closeWishlistButton"
+                        class="reservation-button">
+
+                    CLOSE ×
+
+                </button>
+
+            </div>
+
+            <form id="wishlistForm">
+
+                <div class="reservation-field">
+
+                    <label for="wishlistCategory">
+                        REQUEST CATEGORY
+                    </label>
+
+                    <select id="wishlistCategory" required>
+
+                        <option value="">
+                            Select a category
+                        </option>
+
+                        <option value="clothing">
+                            Clothing
+                        </option>
+
+                        <option value="makeup">
+                            Make-up
+                        </option>
+
+                        <option value="hairstyle">
+                            Hairstyle
+                        </option>
+
+                        <option value="nails">
+                            Nails
+                        </option>
+
+                        <option value="accessories">
+                            Accessories
+                        </option>
+
+                        <option value="other">
+                            Other request
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="reservation-field">
+
+                    <label for="wishlistTitle">
+                        REQUEST TITLE
+                    </label>
+
+                    <input type="text"
+                           id="wishlistTitle"
+                           maxlength="150"
+                           placeholder="Example: Elegant black dress"
+                           required>
+
+                </div>
+
+                <div class="reservation-field">
+
+                    <label for="wishlistDescription">
+                        REQUEST DESCRIPTION
+                    </label>
+
+                    <textarea
+                        id="wishlistDescription"
+                        maxlength="3000"
+                        rows="6"
+                        placeholder="Describe your individual request in detail..."
+                        required
+                    ></textarea>
+
+                </div>
+
+                <div class="reservation-field">
+
+                    <label for="wishlistImage">
+                        REFERENCE IMAGE (OPTIONAL)
+                    </label>
+
+                    <input type="file"
+                           id="wishlistImage"
+                           accept="image/jpeg,image/png,image/webp">
+
+                    <p class="reservation-hint">
+
+                        JPG, PNG or WEBP.
+                        Maximum file size: 10 MB.
+
+                    </p>
+
+                    <img id="wishlistImagePreview"
+                         class="wishlist-image-preview"
+                         alt="Reference image preview"
+                         hidden>
+
+                </div>
+
+                <div class="reservation-private-notice">
+
+                    <strong>CONFIDENTIAL REQUEST</strong>
+
+                    <p>
+                        Your request and reference image
+                        are intended for private review
+                        by the administrator.
+                    </p>
+
+                </div>
+
+                <div id="wishlistMessage"
+                     class="reservation-message"
+                     role="status">
+                </div>
+
+                <button type="submit"
+                        id="wishlistSubmitButton"
+                        class="reservation-button reservation-primary"
+                        disabled>
+
+                    SEND PRIVATE REQUEST
+
+                </button>
+
+            </form>
+
+            <!-- MEMBER REQUEST HISTORY -->
+
+            <div class="wishlist-history">
+
+                <p class="system-label">
+                    PRIVATE CORRESPONDENCE
+                </p>
+
+                <h3>MY WISHLIST REQUESTS</h3>
+
+                <div id="wishlistRequests"
+                     class="wishlist-requests">
+
+                    <p>Loading requests...</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ADMIN WISHLIST MANAGEMENT -->
+
+        <section id="wishlistAdminPanel"
+                 class="reservation-wishlist-panel"
+                 hidden>
+
+            <p class="system-label">
+                RESTRICTED // ADMINISTRATOR ACCESS
+            </p>
+
+            <h2>WISHLIST MANAGEMENT</h2>
+
+            <p>
+                Review member requests, reference images,
+                update their status and provide private responses.
+            </p>
+
+            <div id="wishlistAdminMessage"
+                 class="reservation-message"
+                 role="status">
+            </div>
+
+            <div id="wishlistAdminRequests"
+                 class="wishlist-requests">
+            </div>
+
+        </section>
+
+        <!-- INDEPENDENT WISHLIST ACCESS -->
+
+        <section class="reservation-independent-wishlist">
+
+            <div>
+
+                <p class="system-label">
+                    PERSONAL REQUEST SERVICE
+                </p>
+
+                <h3>HAVE A SPECIAL REQUEST?</h3>
+
+                <p>
+                    You can submit a wishlist request
+                    without making a reservation.
+                </p>
+
+            </div>
+
+            <button type="button"
+                    id="independentWishlistButton"
+                    class="reservation-button">
+
+                PRIVATE WISHLIST →
+
+            </button>
+
+        </section>
+
     </main>
 
+    <footer>
+
+        THE DEN © 2026
+
+        <p>
+            PRIVATE RESERVATION & PERSONALIZATION SYSTEM
+        </p>
+
+    </footer>
+
+    <!-- SUPABASE -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src="auth-guard.js"></script>
+
+    <!-- RESERVATION SYSTEM -->
+
     <script src="js/doll-reservation.js"></script>
 
 </body>
+
 </html>
