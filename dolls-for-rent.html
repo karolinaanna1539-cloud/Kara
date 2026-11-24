@@ -27,7 +27,7 @@
             <div>
                 <p class="system-label">MODULE // 09</p>
                 <h2>DOLLS FOR RENT</h2>
-                <p class="dolls-subtitle">DOLL RENTAL DATABASE</p>
+                <p class="dolls-subtitle">PRIVATE DOLL COLLECTION</p>
             </div>
 
             <div class="online">● SYSTEM ONLINE</div>
@@ -35,11 +35,19 @@
 
         <section class="dolls-intro">
             <p class="system-label">THE DEN // COLLECTION ACCESS</p>
-            <h3>AVAILABLE DOLLS</h3>
+
+            <h3>EXPLORE THE COLLECTION</h3>
+
             <p>
-                Browse the collection, check available dates
-                and reserve your selected doll.
+                Discover the collection, explore available customization
+                options and create your personalized reservation.
             </p>
+
+            <div class="dolls-intro-tags">
+                <span>PRIVATE COLLECTION</span>
+                <span>PERSONAL CUSTOMIZATION</span>
+                <span>MEMBERS ONLY</span>
+            </div>
         </section>
 
         <div id="dollsConnection" class="dolls-message">
@@ -54,6 +62,7 @@
                     <p class="system-label">ADMINISTRATOR ACCESS</p>
                     <h3>DOLL MANAGEMENT</h3>
                 </div>
+
                 <span class="dolls-admin-label">ADMIN</span>
             </div>
 
@@ -62,6 +71,7 @@
                 <input type="hidden" id="dollEditId">
 
                 <label for="dollName">DOLL NAME</label>
+
                 <input
                     type="text"
                     id="dollName"
@@ -71,6 +81,7 @@
                 >
 
                 <label for="dollDescription">DESCRIPTION</label>
+
                 <textarea
                     id="dollDescription"
                     rows="3"
@@ -79,6 +90,7 @@
                 ></textarea>
 
                 <label for="dollDetails">ADDITIONAL DETAILS</label>
+
                 <textarea
                     id="dollDetails"
                     rows="3"
@@ -87,6 +99,7 @@
                 ></textarea>
 
                 <label for="dollImage">DOLL IMAGE</label>
+
                 <input
                     type="file"
                     id="dollImage"
@@ -95,10 +108,12 @@
 
                 <p class="dolls-hint">
                     Maximum image size: 10 MB.
-                    When editing, leave the image field empty to keep the current photo.
+                    When editing, leave the image field empty
+                    to keep the current photo.
                 </p>
 
                 <div class="dolls-form-actions">
+
                     <button type="submit" id="dollSaveButton">
                         ADD DOLL
                     </button>
@@ -111,6 +126,7 @@
                     >
                         CANCEL EDIT
                     </button>
+
                 </div>
 
                 <p id="dollAdminMessage" class="dolls-form-message"></p>
@@ -124,11 +140,13 @@
 
             <div class="dolls-section-heading">
                 <div>
-                    <p class="system-label">THE DEN // DATABASE DIRECTORY</p>
-                    <h3>COLLECTION</h3>
+                    <p class="system-label">THE DEN // PRIVATE COLLECTION</p>
+                    <h3>DISCOVER OUR DOLLS</h3>
                 </div>
 
-                <span id="dollsCount" class="dolls-count">0 DOLLS</span>
+                <span id="dollsCount" class="dolls-count">
+                    0 DOLLS
+                </span>
             </div>
 
             <div id="dollsGrid" class="dolls-grid">
@@ -154,7 +172,11 @@
         </section>
 
         <!-- ADMIN RESERVATIONS -->
-        <section id="dollsAdminReservations" class="dolls-reservations" hidden>
+        <section
+            id="dollsAdminReservations"
+            class="dolls-reservations"
+            hidden
+        >
 
             <div class="dolls-section-heading">
                 <div>
