@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="doll-details.css">
     <link rel="stylesheet" href="doll-physical-report.css">
     <link rel="stylesheet" href="doll-body-measurements.css">
+    <link rel="stylesheet" href="doll-inventory-accessories.css">
 </head>
 
 <body class="protected-page">
@@ -20,6 +21,7 @@
 
     <header>
         <h1>THE DEN</h1>
+
         <p class="subtitle">
             PRIVATE MEMBERS SPACE // CHARACTER DATABASE
         </p>
@@ -27,10 +29,15 @@
 
     <main class="terminal doll-profile-terminal">
 
+        <!-- PROFILE HEADER -->
+
         <div class="profile-topbar">
+
             <div>
                 <p class="system-label">MODULE // 09.01</p>
+
                 <h2>DOLL PROFILE</h2>
+
                 <p class="profile-subtitle">
                     PERSONAL PROFILE & CUSTOMIZATION
                 </p>
@@ -39,11 +46,16 @@
             <span class="profile-online">
                 ● DATABASE ONLINE
             </span>
+
         </div>
+
+        <!-- LOADING MESSAGE -->
 
         <p id="profileMessage" class="profile-message">
             LOADING PERSONAL RECORD...
         </p>
+
+        <!-- PROFILE CONTENT -->
 
         <section id="profileContent" hidden>
 
@@ -62,7 +74,9 @@
                         PERSONAL RECORD
                     </p>
 
-                    <h2 id="profileName">DOLL NAME</h2>
+                    <h2 id="profileName">
+                        DOLL NAME
+                    </h2>
 
                     <p id="profileDescription"></p>
 
@@ -82,17 +96,35 @@
 
             <nav class="profile-nav">
 
-                <a href="#personal">PERSONAL DATA</a>
-                <a href="#physical">APPEARANCE</a>
-                <a href="#measurements">BODY MEASUREMENTS</a>
-                <a href="#appearance">APPEARANCE & STYLE</a>
-                <a href="#medical">PHYSICAL REPORT</a>
-                <a href="#gallery">GENERAL GALLERY</a>
-                <a href="#history">ARCHIVE HISTORY</a>
+                <a href="#personal">
+                    PERSONAL DATA
+                </a>
+
+                <a href="#physical">
+                    APPEARANCE
+                </a>
+
+                <a href="#appearance">
+                    APPEARANCE & STYLE
+                </a>
+
+                <a href="#medical">
+                    PHYSICAL REPORT
+                </a>
+
+                <a href="#gallery">
+                    GENERAL GALLERY
+                </a>
+
+                <a href="#history">
+                    ARCHIVE HISTORY
+                </a>
 
             </nav>
 
-            <!-- PERSONAL DATA -->
+            <!-- =====================================
+                 PERSONAL DATA
+            ====================================== -->
 
             <section id="personal"
                      class="profile-section">
@@ -108,7 +140,9 @@
 
             </section>
 
-            <!-- APPEARANCE -->
+            <!-- =====================================
+                 APPEARANCE
+            ====================================== -->
 
             <section id="physical"
                      class="profile-section">
@@ -124,22 +158,9 @@
 
             </section>
 
-            <!-- BODY MEASUREMENTS -->
-
-            <section id="measurements"
-                     class="profile-section"
-                     hidden>
-
-                <button type="button"
-                        class="category-back-button">
-                    ↑ CLOSE CATEGORY
-                </button>
-
-                <div id="bodyMeasurements"></div>
-
-            </section>
-
-            <!-- APPEARANCE CATEGORY HUB -->
+            <!-- =====================================
+                 APPEARANCE CATEGORY HUB
+            ====================================== -->
 
             <section id="appearance"
                      class="profile-section appearance-hub">
@@ -157,11 +178,15 @@
 
                 <div class="category-hub-grid">
 
+                    <!-- CLOTHING -->
+
                     <button type="button"
                             class="category-card"
                             data-open-category="clothing">
 
-                        <span class="category-card-icon">01</span>
+                        <span class="category-card-icon">
+                            01
+                        </span>
 
                         <span class="category-card-title">
                             CLOTHING
@@ -177,11 +202,15 @@
 
                     </button>
 
+                    <!-- MAKE-UP -->
+
                     <button type="button"
                             class="category-card"
                             data-open-category="makeup">
 
-                        <span class="category-card-icon">02</span>
+                        <span class="category-card-icon">
+                            02
+                        </span>
 
                         <span class="category-card-title">
                             MAKE-UP
@@ -197,11 +226,15 @@
 
                     </button>
 
+                    <!-- HAIRSTYLE -->
+
                     <button type="button"
                             class="category-card"
                             data-open-category="hairstyle">
 
-                        <span class="category-card-icon">03</span>
+                        <span class="category-card-icon">
+                            03
+                        </span>
 
                         <span class="category-card-title">
                             HAIRSTYLE
@@ -217,11 +250,15 @@
 
                     </button>
 
+                    <!-- NAILS -->
+
                     <button type="button"
                             class="category-card"
                             data-open-category="nails">
 
-                        <span class="category-card-icon">04</span>
+                        <span class="category-card-icon">
+                            04
+                        </span>
 
                         <span class="category-card-title">
                             NAILS
@@ -237,11 +274,15 @@
 
                     </button>
 
+                    <!-- ACCESSORIES -->
+
                     <button type="button"
                             class="category-card"
                             data-open-category="accessories">
 
-                        <span class="category-card-icon">05</span>
+                        <span class="category-card-icon">
+                            05
+                        </span>
 
                         <span class="category-card-title">
                             ACCESSORIES
@@ -262,7 +303,9 @@
 
             </section>
 
-            <!-- CLOTHING -->
+            <!-- =====================================
+                 CLOTHING
+            ====================================== -->
 
             <section id="clothing"
                      class="profile-section category-section"
@@ -329,7 +372,9 @@
 
             </section>
 
-            <!-- MAKE-UP -->
+            <!-- =====================================
+                 MAKEUP
+            ====================================== -->
 
             <section id="makeup"
                      class="profile-section category-section"
@@ -344,11 +389,10 @@
                     STYLE RECORD // 02
                 </p>
 
-                <h3>MAKE-UP & COSMETICS</h3>
+                <h3>MAKE-UP</h3>
 
                 <p class="profile-note">
-                    Make-up, cosmetics, face styling
-                    and colour palettes.
+                    Cosmetics, face styling and colour palettes.
                 </p>
 
                 <div id="makeupDescription"
@@ -397,7 +441,9 @@
 
             </section>
 
-            <!-- HAIRSTYLE -->
+            <!-- =====================================
+                 HAIRSTYLE
+            ====================================== -->
 
             <section id="hairstyle"
                      class="profile-section category-section"
@@ -412,10 +458,10 @@
                     STYLE RECORD // 03
                 </p>
 
-                <h3>HAIRSTYLE & HAIR DETAILS</h3>
+                <h3>HAIRSTYLE</h3>
 
                 <p class="profile-note">
-                    Hair colour, length, hairstyle and styling.
+                    Hair colour, length and styling.
                 </p>
 
                 <div id="hairstyleDescription"
@@ -464,7 +510,9 @@
 
             </section>
 
-            <!-- NAILS -->
+            <!-- =====================================
+                 NAILS
+            ====================================== -->
 
             <section id="nails"
                      class="profile-section category-section"
@@ -532,7 +580,9 @@
 
             </section>
 
-            <!-- ACCESSORIES -->
+            <!-- =====================================
+                 ACCESSORIES
+            ====================================== -->
 
             <section id="accessories"
                      class="profile-section category-section"
@@ -598,9 +648,39 @@
 
                 </div>
 
+                <!--
+                    CONNECTED INVENTORY ACCESSORIES
+
+                    Generated automatically by:
+                    js/doll-inventory-accessories.js
+
+                    Database:
+                    public.doll_inventory_accessories
+
+                    Inventory source:
+                    public.inventory_items
+
+                    Image storage:
+                    karolina-images
+                -->
+
             </section>
 
-            <!-- PHYSICAL REPORT -->
+            <!-- =====================================
+                 BODY MEASUREMENTS
+            ====================================== -->
+
+            <section id="measurements"
+                     class="profile-section"
+                     hidden>
+
+                <div id="bodyMeasurements"></div>
+
+            </section>
+
+            <!-- =====================================
+                 PHYSICAL REPORT
+            ====================================== -->
 
             <section id="medical"
                      class="profile-section">
@@ -619,18 +699,47 @@
                     information.
                 </p>
 
-                <!-- General physical parameters are generated
-                     by js/doll-category-view.js -->
+                <!--
+                    GENERAL PHYSICAL PARAMETERS
+
+                    Generated automatically by:
+                    js/doll-category-view.js
+                -->
 
                 <div id="conditionData"
                      class="profile-report-grid"></div>
 
-                <!-- Anatomical documentation is generated
-                     by js/doll-physical-report.js -->
+                <!--
+                    ANATOMICAL DOCUMENTATION
+
+                    Generated automatically by:
+                    js/doll-physical-report.js
+
+                    Categories:
+
+                    01 FACE
+                    02 CHEST
+                    03 ABDOMEN
+                    04 BACK
+                    05 HANDS
+                    06 FEET
+                    07 ARMPITS
+                    08 ARMS
+                    09 LEGS
+                    10 SCARS
+                    11 SKIN
+                    12 OTHER
+
+                    Private administrator access.
+                    Supabase table: doll_physical_gallery
+                    Private storage: doll-physical
+                -->
 
             </section>
 
-            <!-- GENERAL PHOTO GALLERY -->
+            <!-- =====================================
+                 GENERAL PHOTO GALLERY
+            ====================================== -->
 
             <section id="gallery"
                      class="profile-section">
@@ -680,7 +789,9 @@
 
             </section>
 
-            <!-- ARCHIVE HISTORY -->
+            <!-- =====================================
+                 ARCHIVE HISTORY
+            ====================================== -->
 
             <section id="history"
                      class="profile-section">
@@ -696,7 +807,9 @@
 
             </section>
 
-            <!-- ADMINISTRATION PANEL -->
+            <!-- =====================================
+                 ADMINISTRATION PANEL
+            ====================================== -->
 
             <section id="profileAdmin"
                      class="profile-section profile-admin"
@@ -729,12 +842,18 @@
 
         </section>
 
+        <!-- RETURN TO COLLECTION -->
+
         <a href="dolls-for-rent.html"
            class="back">
+
             ← RETURN TO DOLLS FOR RENT
+
         </a>
 
     </main>
+
+    <!-- FOOTER -->
 
     <footer>
 
@@ -746,27 +865,43 @@
 
     </footer>
 
-    <!-- SUPABASE & AUTHENTICATION -->
+    <!-- =============================================
+         SUPABASE & AUTHENTICATION
+    ============================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="auth-guard.js"></script>
 
-    <!-- PROFILE DATABASE -->
+    <!-- =============================================
+         PROFILE DATABASE
+    ============================================== -->
 
     <script src="js/doll-details.js"></script>
 
-    <!-- INTERACTIVE DASHBOARD -->
+    <!-- =============================================
+         INTERACTIVE DASHBOARD
+    ============================================== -->
 
     <script src="js/doll-category-view.js"></script>
 
-    <!-- ANATOMICAL DOCUMENTATION -->
+    <!-- =============================================
+         ANATOMICAL DOCUMENTATION
+    ============================================== -->
 
     <script src="js/doll-physical-report.js"></script>
 
-    <!-- BODY MEASUREMENTS -->
+    <!-- =============================================
+         BODY MEASUREMENTS
+    ============================================== -->
 
     <script src="js/doll-body-measurements.js"></script>
+
+    <!-- =============================================
+         CONNECTED INVENTORY ACCESSORIES
+    ============================================== -->
+
+    <script src="js/doll-inventory-accessories.js"></script>
 
 </body>
 
