@@ -2,10 +2,11 @@
 /* =====================================================
    THE DEN
    DOLL DETAILS — INTERACTIVE DASHBOARD
-   Fresh Look / Expandable Categories
+   BODY MEASUREMENTS UPDATE
 ===================================================== */
 
 (function () {
+
     "use strict";
 
     const profileContent =
@@ -15,71 +16,89 @@
 
     const $ = id => document.getElementById(id);
 
-    // =================================================
-    // CATEGORY CONFIGURATION
-    // =================================================
+    /* =================================================
+       CATEGORY CONFIGURATION
+    ================================================= */
 
     const categories = [
+
         {
             id: "personal",
             title: "PERSONAL DATA",
             description: "Identity & background",
             icon: "user"
         },
+
         {
             id: "physical",
             title: "APPEARANCE",
             description: "Physical characteristics",
             icon: "appearance"
         },
+
+        {
+            id: "measurements",
+            title: "BODY MEASUREMENTS",
+            description: "Interactive mannequin & body dimensions",
+            icon: "ruler"
+        },
+
         {
             id: "medical",
             title: "PHYSICAL REPORT",
             description: "Measurements & condition",
             icon: "medical"
         },
+
         {
             id: "clothing",
             title: "CLOTHING",
             description: "Available outfits",
             icon: "shirt"
         },
+
         {
             id: "makeup",
             title: "MAKE-UP",
             description: "Cosmetics & styling",
             icon: "brush"
         },
+
         {
             id: "hairstyle",
             title: "HAIRSTYLE",
             description: "Hair styling options",
             icon: "scissors"
         },
+
         {
             id: "nails",
             title: "NAILS",
             description: "Manicure & nail styling",
             icon: "nails"
         },
+
         {
             id: "accessories",
             title: "ACCESSORIES",
             description: "Additional accessories",
             icon: "gem"
         },
+
         {
             id: "gallery",
             title: "GALLERY",
             description: "General photo collection",
             icon: "gallery"
         },
+
         {
             id: "history",
             title: "ARCHIVE HISTORY",
             description: "Historical records",
             icon: "history"
         }
+
     ];
 
     let activeCategory = null;
@@ -87,11 +106,12 @@
     const buttons = new Map();
     const sections = new Map();
 
-    // =================================================
-    // ICONS
-    // =================================================
+    /* =================================================
+       ICONS
+    ================================================= */
 
     const icons = {
+
         user: `
             <circle cx="12" cy="7" r="4"/>
             <path d="M4 22v-3a8 8 0 0 1 16 0v3"/>
@@ -104,6 +124,11 @@
             <path d="M9 10v6l-2 6"/>
             <path d="M15 10v6l2 6"/>
             <path d="M9 16h6"/>
+        `,
+
+        ruler: `
+            <rect x="2" y="7" width="20" height="10" rx="2"/>
+            <path d="M6 7v5M10 7v3M14 7v5M18 7v3"/>
         `,
 
         medical: `
@@ -162,6 +187,7 @@
         chevron: `
             <path d="M6 9l6 6 6-6"/>
         `
+
     };
 
     function createIcon(name) {
@@ -186,11 +212,12 @@
         `;
 
         return wrapper;
+
     }
 
-    // =================================================
-    // DASHBOARD STYLES
-    // =================================================
+    /* =================================================
+       DASHBOARD STYLES
+    ================================================= */
 
     const style = document.createElement("style");
 
@@ -386,6 +413,7 @@
         }
 
         @keyframes dashboardReveal {
+
             from {
                 opacity: 0;
                 transform: translateY(-8px);
@@ -395,6 +423,7 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+
         }
 
         .dashboard-panels .category-back-button {
@@ -416,9 +445,17 @@
             height: 260px;
         }
 
-        /* =========================================
-           PHYSICAL REPORT
-        ========================================= */
+        /* BODY MEASUREMENTS */
+
+        #measurements {
+            min-width: 0;
+        }
+
+        #measurements .body-measurements {
+            margin: 0;
+        }
+
+        /* PHYSICAL REPORT */
 
         #medical {
             background: #09130f;
@@ -484,9 +521,7 @@
             letter-spacing: .5px;
         }
 
-        /* =========================================
-           ADMINISTRATION
-        ========================================= */
+        /* ADMINISTRATION */
 
         .dashboard-admin-toggle {
             display: flex;
@@ -525,9 +560,7 @@
             border-radius: 4px;
         }
 
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
+        /* RESPONSIVE DESIGN */
 
         @media (max-width: 850px) {
 
@@ -545,6 +578,7 @@
             .profile-main-image img {
                 height: 340px;
             }
+
         }
 
         @media (max-width: 600px) {
@@ -584,6 +618,11 @@
             .dashboard-panels .gallery-item img {
                 height: 180px;
             }
+
+            #measurements {
+                padding: 10px;
+            }
+
         }
 
         @media (max-width: 350px) {
@@ -595,6 +634,7 @@
             .dashboard-panels .doll-gallery {
                 grid-template-columns: 1fr;
             }
+
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -608,15 +648,16 @@
             .dashboard-panels .profile-section.is-open {
                 animation: none;
             }
+
         }
 
     `;
 
     document.head.appendChild(style);
 
-    // =================================================
-    // UPDATE PAGE HEADINGS
-    // =================================================
+    /* =================================================
+       UPDATE PAGE HEADINGS
+    ================================================= */
 
     document.title =
         "DOLL PROFILE & CUSTOMIZATION // THE DEN";
@@ -625,21 +666,24 @@
         document.querySelector(".profile-topbar h2");
 
     if (pageTitle) {
-        pageTitle.textContent =
-            "DOLL PROFILE";
+
+        pageTitle.textContent = "DOLL PROFILE";
+
     }
 
     const pageSubtitle =
         document.querySelector(".profile-subtitle");
 
     if (pageSubtitle) {
+
         pageSubtitle.textContent =
             "PERSONAL PROFILE & CUSTOMIZATION";
+
     }
 
-    // =================================================
-    // REMOVE OLD NAVIGATION
-    // =================================================
+    /* =================================================
+       REMOVE OLD NAVIGATION
+    ================================================= */
 
     profileContent.classList.remove(
         "category-view-active"
@@ -649,18 +693,22 @@
         profileContent.querySelector(".profile-nav");
 
     if (oldNavigation) {
+
         oldNavigation.hidden = true;
+
     }
 
     const oldAppearanceHub = $("appearance");
 
     if (oldAppearanceHub) {
+
         oldAppearanceHub.hidden = true;
+
     }
 
-    // =================================================
-    // RESERVATION BUTTON
-    // =================================================
+    /* =================================================
+       RESERVATION BUTTON
+    ================================================= */
 
     const dollId = new URLSearchParams(
         window.location.search
@@ -682,11 +730,12 @@
             `doll-reservation.html?id=${encodeURIComponent(dollId)}`;
 
         identity.appendChild(reserve);
+
     }
 
-    // =================================================
-    // CREATE DASHBOARD
-    // =================================================
+    /* =================================================
+       CREATE DASHBOARD
+    ================================================= */
 
     const dashboard = document.createElement("div");
 
@@ -697,6 +746,7 @@
     heading.className = "dashboard-heading";
 
     heading.innerHTML = `
+
         <p class="system-label">
             THE DEN // COLLECTION ACCESS
         </p>
@@ -707,6 +757,7 @@
             Select a category to explore its content
             and available customization options.
         </p>
+
     `;
 
     const grid = document.createElement("div");
@@ -733,11 +784,12 @@
     } else {
 
         profileContent.prepend(dashboard);
+
     }
 
-    // =================================================
-    // CREATE CATEGORY TILES
-    // =================================================
+    /* =================================================
+       CREATE CATEGORY TILES
+    ================================================= */
 
     categories.forEach(category => {
 
@@ -816,6 +868,7 @@
         button.addEventListener("click", () => {
 
             toggleCategory(category.id);
+
         });
 
         buttons.set(
@@ -825,8 +878,8 @@
 
         grid.appendChild(button);
 
-        // Move existing section.
-        // All original IDs and event listeners remain.
+        // Move the original section.
+        // Existing IDs and event listeners are preserved.
 
         panels.appendChild(section);
 
@@ -848,13 +901,16 @@
                     behavior: scrollBehavior(),
                     block: "start"
                 });
+
             });
+
         }
+
     });
 
-    // =================================================
-    // APPEARANCE
-    // =================================================
+    /* =================================================
+       APPEARANCE
+    ================================================= */
 
     const appearanceSection = $("physical");
 
@@ -867,12 +923,14 @@
 
             title.textContent =
                 "APPEARANCE & CHARACTERISTICS";
+
         }
+
     }
 
-    // =================================================
-    // PHYSICAL REPORT
-    // =================================================
+    /* =================================================
+       PHYSICAL REPORT
+    ================================================= */
 
     const medicalSection = $("medical");
 
@@ -889,6 +947,7 @@
 
             title.textContent =
                 "PHYSICAL REPORT";
+
         }
 
         const reportHeader =
@@ -904,11 +963,13 @@
             document.createElement("div");
 
         reportText.innerHTML = `
+
             <strong>PHYSICAL ASSESSMENT</strong>
 
             <small>
                 THE DEN // CONDITION DOCUMENTATION
             </small>
+
         `;
 
         reportHeader.append(
@@ -960,15 +1021,14 @@
 
         medicalSection.appendChild(note);
 
-        // Reuse existing measurements without
-        // adding or changing database fields.
-
         const measurementLabels = [
+
             "HEIGHT (CM)",
             "WEIGHT (KG)",
             "BODY TYPE",
             "BODY MEASUREMENTS",
             "CONSTRUCTION MATERIAL"
+
         ];
 
         function updateClinicalParameters() {
@@ -977,15 +1037,17 @@
 
             parameters.replaceChildren();
 
-            const records = physicalData.querySelectorAll(
-                ".profile-data-item"
-            );
+            const records =
+                physicalData.querySelectorAll(
+                    ".profile-data-item"
+                );
 
             records.forEach(record => {
 
-                const label = record.querySelector(
-                    ".profile-data-label"
-                );
+                const label =
+                    record.querySelector(
+                        ".profile-data-label"
+                    );
 
                 if (
                     label &&
@@ -997,12 +1059,15 @@
                     parameters.appendChild(
                         record.cloneNode(true)
                     );
+
                 }
+
             });
 
             if (!parameters.children.length) {
 
-                const empty = document.createElement("p");
+                const empty =
+                    document.createElement("p");
 
                 empty.className = "profile-note";
 
@@ -1010,14 +1075,17 @@
                     "NO PARAMETERS RECORDED.";
 
                 parameters.appendChild(empty);
+
             }
+
         }
 
         if (physicalData) {
 
-            const observer = new MutationObserver(
-                updateClinicalParameters
-            );
+            const observer =
+                new MutationObserver(
+                    updateClinicalParameters
+                );
 
             observer.observe(
                 physicalData,
@@ -1029,12 +1097,14 @@
             );
 
             updateClinicalParameters();
+
         }
+
     }
 
-    // =================================================
-    // ADMINISTRATION PANEL
-    // =================================================
+    /* =================================================
+       ADMINISTRATION PANEL
+    ================================================= */
 
     const adminPanel = $("profileAdmin");
 
@@ -1095,13 +1165,14 @@
             adminPanel
         );
 
-        // Visibility is still controlled by
-        // the original doll-details.js.
+        // Administrator access remains controlled
+        // by the original doll-details.js.
 
         function syncAdminAccess() {
 
             adminWrapper.hidden =
                 adminPanel.hidden;
+
         }
 
         const adminObserver =
@@ -1139,12 +1210,14 @@
                 "aria-expanded",
                 String(adminExpanded)
             );
+
         });
+
     }
 
-    // =================================================
-    // ANIMATION PREFERENCES
-    // =================================================
+    /* =================================================
+       ANIMATION PREFERENCES
+    ================================================= */
 
     function scrollBehavior() {
 
@@ -1153,11 +1226,12 @@
         ).matches
             ? "auto"
             : "smooth";
+
     }
 
-    // =================================================
-    // CLOSE CATEGORIES
-    // =================================================
+    /* =================================================
+       CLOSE CATEGORIES
+    ================================================= */
 
     function closeCategories() {
 
@@ -1168,6 +1242,7 @@
             section.classList.remove(
                 "is-open"
             );
+
         });
 
         buttons.forEach(button => {
@@ -1180,14 +1255,16 @@
                 "aria-expanded",
                 "false"
             );
+
         });
 
         activeCategory = null;
+
     }
 
-    // =================================================
-    // OPEN CATEGORY
-    // =================================================
+    /* =================================================
+       OPEN CATEGORY
+    ================================================= */
 
     function toggleCategory(categoryId) {
 
@@ -1196,6 +1273,7 @@
             closeCategories();
 
             return;
+
         }
 
         const section = sections.get(categoryId);
@@ -1223,11 +1301,12 @@
             behavior: scrollBehavior(),
             block: "nearest"
         });
+
     }
 
-    // =================================================
-    // SUPPORT EXISTING CATEGORY LINKS
-    // =================================================
+    /* =================================================
+       SUPPORT EXISTING CATEGORY LINKS
+    ================================================= */
 
     const requestedCategory =
         window.location.hash
@@ -1237,6 +1316,12 @@
     if (sections.has(requestedCategory)) {
 
         toggleCategory(requestedCategory);
+
     }
 
 })();
+
+/* =====================================================
+   END OF FILE
+   THE DEN © 2026
+===================================================== */
