@@ -1,0 +1,696 @@
+
+/* =====================================================
+   THE DEN — INVENTORY ACCESSORIES
+   CONNECTED INVENTORY DESIGN SYSTEM
+===================================================== */
+
+.dia-module {
+    --dia-background: #07110b;
+    --dia-panel: #102019;
+    --dia-border: #294332;
+    --dia-accent: #8fce9c;
+    --dia-text: #d7eee0;
+    --dia-muted: #849b8c;
+
+    width: 100%;
+    margin: 30px 0;
+    padding: 25px;
+
+    background: var(--dia-background);
+    border: 1px solid var(--dia-border);
+    border-radius: 6px;
+}
+
+.dia-module *,
+.dia-module *::before,
+.dia-module *::after {
+    box-sizing: border-box;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.dia-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid var(--dia-border);
+}
+
+.dia-system-label {
+    color: var(--dia-accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 0 0 10px;
+}
+
+.dia-title {
+    color: #ffffff;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin: 0 0 10px;
+}
+
+.dia-subtitle {
+    color: var(--dia-muted);
+    font-size: 12px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.dia-counter {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 14px;
+
+    background: #14291c;
+    border: 1px solid #45664e;
+    border-radius: 4px;
+
+    color: var(--dia-accent);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   ADMINISTRATION
+===================================================== */
+
+.dia-admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.dia-module .dia-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+    padding: 12px 18px;
+
+    color: var(--dia-accent);
+    background: var(--dia-panel);
+    border: 1px solid var(--dia-border);
+    border-radius: 4px;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.5;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease;
+}
+
+.dia-module .dia-button:hover {
+    background: #203b2a;
+    border-color: var(--dia-accent);
+}
+
+.dia-module .dia-button.dia-primary {
+    background: var(--dia-accent);
+    border-color: var(--dia-accent);
+    color: #07110b;
+}
+
+.dia-module .dia-button.dia-primary:hover {
+    background: #b5e6c0;
+}
+
+.dia-module .dia-button:disabled {
+    opacity: .5;
+    cursor: wait;
+}
+
+.dia-mode-label {
+    margin: 0 0 15px;
+    padding: 12px 15px;
+
+    background: #102019;
+    border-left: 3px solid var(--dia-accent);
+
+    color: var(--dia-accent);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+/* =====================================================
+   SEARCH AND FILTERS
+===================================================== */
+
+.dia-toolbar {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.dia-module .dia-search,
+.dia-module .dia-category-select {
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+
+    color: var(--dia-text);
+    background: #08130d;
+
+    border: 1px solid var(--dia-border);
+    border-radius: 4px;
+
+    font-family: inherit;
+    font-size: 12px;
+    color-scheme: dark;
+}
+
+.dia-module .dia-search:focus,
+.dia-module .dia-category-select:focus {
+    outline: none;
+    border-color: var(--dia-accent);
+    box-shadow: 0 0 0 2px rgba(143, 206, 156, .08);
+}
+
+/* =====================================================
+   CATEGORY NAVIGATION
+===================================================== */
+
+.dia-category-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid var(--dia-border);
+}
+
+.dia-module .dia-category-button {
+    padding: 10px 14px;
+
+    background: #0e1b13;
+    color: var(--dia-muted);
+
+    border: 1px solid var(--dia-border);
+    border-radius: 4px;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: .7px;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        border-color .2s,
+        color .2s;
+}
+
+.dia-module .dia-category-button:hover {
+    color: var(--dia-accent);
+    border-color: var(--dia-accent);
+}
+
+.dia-module .dia-category-button.is-active {
+    background: #203b2a;
+    color: var(--dia-accent);
+    border-color: var(--dia-accent);
+}
+
+/* =====================================================
+   ACCESSORIES GRID
+===================================================== */
+
+.dia-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dia-card {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    background: linear-gradient(
+        145deg,
+        #13251a,
+        #09130d
+    );
+
+    border: 1px solid var(--dia-border);
+    border-radius: 6px;
+    overflow: hidden;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+.dia-card:hover {
+    border-color: #557d60;
+}
+
+.dia-card.is-linked {
+    border-color: #639b76;
+}
+
+.dia-card.is-linked:hover {
+    border-color: var(--dia-accent);
+    box-shadow: 0 0 18px rgba(143, 206, 156, .1);
+}
+
+/* =====================================================
+   ACCESSORY IMAGES
+===================================================== */
+
+.dia-image-frame {
+    position: relative;
+
+    width: 100%;
+    aspect-ratio: 4 / 3;
+
+    background: #040805;
+    border-bottom: 1px solid var(--dia-border);
+    overflow: hidden;
+}
+
+.dia-module .dia-image-button {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    background: transparent;
+    border: none;
+
+    cursor: zoom-in;
+    overflow: hidden;
+}
+
+.dia-module .dia-image-button img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: none;
+    max-height: none;
+
+    object-fit: contain;
+
+    border: none;
+    border-radius: 0;
+
+    transition: transform .3s ease;
+}
+
+.dia-image-button:hover img {
+    transform: scale(1.05);
+}
+
+.dia-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    color: var(--dia-muted);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+/* =====================================================
+   CARD CONTENT
+===================================================== */
+
+.dia-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+
+    gap: 12px;
+    padding: 18px;
+}
+
+.dia-item-category {
+    color: var(--dia-accent);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.dia-item-name {
+    color: #ffffff;
+    font-size: 17px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    margin: 0;
+}
+
+.dia-description {
+    color: #b3c7b9;
+    font-size: 12px;
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+
+    margin: 0 0 10px;
+}
+
+/* =====================================================
+   ITEM AVAILABILITY
+===================================================== */
+
+.dia-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 6px 10px;
+
+    background: #18221b;
+    border: 1px solid #3b4b40;
+    border-radius: 3px;
+
+    color: #a6b4aa;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.dia-status::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.dia-status[data-status="AVAILABLE"] {
+    color: #9de7b2;
+    background: #112d1c;
+    border-color: #315b3d;
+}
+
+.dia-status[data-status="IN USE"] {
+    color: #e5c47d;
+    background: #302718;
+    border-color: #68552c;
+}
+
+.dia-status[data-status="STORAGE"] {
+    color: #9ebbd7;
+    background: #142330;
+    border-color: #344e65;
+}
+
+.dia-status[data-status="UNAVAILABLE"] {
+    color: #e79a9a;
+    background: #301919;
+    border-color: #663737;
+}
+
+/* =====================================================
+   ASSIGNMENT BUTTONS
+===================================================== */
+
+.dia-module .dia-link-button {
+    width: 100%;
+    margin-top: auto;
+    min-height: 44px;
+}
+
+.dia-module .dia-link-button.is-linked {
+    background: #203b2a;
+    color: #a9e5b7;
+    border-color: #639b76;
+}
+
+.dia-module .dia-link-button.is-linked:hover {
+    background: #382020;
+    border-color: #a65c5c;
+    color: #efb0b0;
+}
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.dia-message {
+    padding: 13px 15px;
+    margin: 0 0 18px;
+
+    background: #102019;
+    border: 1px solid var(--dia-border);
+    border-radius: 4px;
+
+    color: var(--dia-muted);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.dia-message:empty {
+    display: none;
+}
+
+.dia-message.success {
+    color: #a9e5b7;
+    background: #112d1c;
+    border-color: #315b3d;
+}
+
+.dia-message.error {
+    color: #efb0b0;
+    background: #301919;
+    border-color: #663737;
+}
+
+.dia-empty {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 160px;
+    padding: 25px;
+    margin: 0;
+
+    background: #09130d;
+    border: 1px dashed var(--dia-border);
+    border-radius: 5px;
+
+    color: var(--dia-muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* =====================================================
+   IMAGE LIGHTBOX
+===================================================== */
+
+.dia-lightbox {
+    position: fixed;
+    inset: 0;
+
+    width: fit-content;
+    max-width: 94vw;
+    max-height: 94vh;
+
+    margin: auto;
+    padding: 18px;
+
+    background: #07110b;
+    border: 1px solid #45664e;
+    border-radius: 6px;
+
+    color: #d7eee0;
+    overflow: auto;
+}
+
+.dia-lightbox::backdrop {
+    background: rgba(0, 0, 0, .92);
+    backdrop-filter: blur(6px);
+}
+
+.dia-lightbox img {
+    display: block;
+
+    width: auto;
+    height: auto;
+
+    max-width: 100%;
+    max-height: 75vh;
+
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.dia-lightbox .dia-button {
+    display: block;
+
+    margin: 0 0 15px auto;
+    padding: 10px 15px;
+
+    background: #102019;
+    color: #8fce9c;
+
+    border: 1px solid #45664e;
+    border-radius: 4px;
+
+    font-family: inherit;
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+.dia-lightbox p {
+    color: #b3c7b9;
+    font-size: 13px;
+    text-align: center;
+    margin: 15px 0 0;
+}
+
+/* =====================================================
+   ACCESSIBILITY
+===================================================== */
+
+.dia-module button:focus-visible,
+.dia-lightbox button:focus-visible {
+    outline: 2px solid #8fce9c;
+    outline-offset: 3px;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .dia-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+
+    .dia-module {
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .dia-title {
+        font-size: 17px;
+        letter-spacing: 1px;
+    }
+
+    .dia-header {
+        gap: 12px;
+    }
+
+    .dia-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .dia-admin-actions {
+        flex-direction: column;
+    }
+
+    .dia-admin-actions .dia-button {
+        width: 100%;
+    }
+
+    .dia-category-bar {
+        gap: 6px;
+    }
+
+    .dia-module .dia-category-button {
+        padding: 9px 11px;
+        font-size: 9px;
+    }
+
+    .dia-grid {
+        gap: 10px;
+    }
+
+    .dia-card-content {
+        padding: 12px;
+        gap: 9px;
+    }
+
+    .dia-item-name {
+        font-size: 14px;
+    }
+
+    .dia-description {
+        font-size: 11px;
+    }
+
+    .dia-module .dia-link-button {
+        padding: 10px 8px;
+        font-size: 9px;
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .dia-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dia-module *,
+    .dia-lightbox * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+}
+
+/* =====================================================
+   END OF FILE
+   THE DEN © 2026
+===================================================== */
