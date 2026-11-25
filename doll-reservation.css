@@ -1379,3 +1379,368 @@
     }
 
 }
+
+/* =====================================================
+   THE DEN
+   CONNECTED INVENTORY ACCESSORIES
+===================================================== */
+
+#reservationInventorySection {
+    margin-top: 30px;
+    padding: 24px;
+    background: linear-gradient(
+        145deg,
+        #0d1911,
+        #070e09
+    );
+    border: 1px solid #294332;
+    border-radius: 6px;
+}
+
+#reservationInventorySection h3 {
+    margin: 12px 0;
+    color: #b7dfc0;
+    font-size: 21px;
+    letter-spacing: 1.5px;
+}
+
+#reservationInventorySection .system-label {
+    color: #79ad86;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+#reservationInventorySection .reservation-field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 22px 0;
+}
+
+/* SEARCH AND CATEGORY FILTER */
+
+#reservationInventorySearch,
+#reservationInventoryCategory {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px;
+    background: #07110b;
+    border: 1px solid #34523d;
+    border-radius: 4px;
+    color: #d4e8d9;
+    box-sizing: border-box;
+}
+
+#reservationInventorySearch:focus,
+#reservationInventoryCategory:focus {
+    outline: none;
+    border-color: #8fce9c;
+    box-shadow: 0 0 12px #8fce9c20;
+}
+
+/* SELECTION COUNTER */
+
+#reservationInventoryCount {
+    display: inline-block;
+    padding: 8px 14px;
+    margin: 10px 0 16px;
+    background: #152b1b;
+    border: 1px solid #34523d;
+    border-radius: 4px;
+    color: #8fce9c;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+}
+
+/* INVENTORY GRID */
+
+#reservationInventoryOptions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+/* ACCESSORY CARD */
+
+#reservationInventoryOptions .reservation-option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 12px;
+    overflow: hidden;
+    background: #0c1710;
+    border: 1px solid #294332;
+    border-radius: 5px;
+    cursor: pointer;
+    transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+#reservationInventoryOptions .reservation-option:hover {
+    transform: translateY(-3px);
+    border-color: #639b76;
+    box-shadow: 0 6px 20px #00000040;
+}
+
+/* SELECTED ACCESSORY */
+
+#reservationInventoryOptions .reservation-option.selected {
+    background: #13281a;
+    border-color: #8fce9c;
+    box-shadow:
+        inset 0 0 0 1px #8fce9c,
+        0 0 18px #8fce9c20;
+}
+
+/* ACCESSORY IMAGE */
+
+#reservationInventoryOptions .reservation-option img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background: #050a07;
+    border: 1px solid #203528;
+    border-radius: 3px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* SELECTION CHECKBOX */
+
+#reservationInventoryOptions input[type="checkbox"] {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: #8fce9c;
+    cursor: pointer;
+    z-index: 2;
+    opacity: 1;
+}
+
+#reservationInventoryOptions .reservation-option:focus-within {
+    outline: 2px solid #8fce9c;
+    outline-offset: 3px;
+}
+
+/* ACCESSORY INFORMATION */
+
+#reservationInventoryOptions .reservation-option-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+    padding: 8px 2px;
+    overflow-wrap: anywhere;
+}
+
+#reservationInventoryOptions .reservation-option-info strong {
+    color: #d5ead9;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+#reservationInventoryOptions .reservation-option-info p {
+    margin: 0;
+    color: #91a99a;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+#reservationInventoryOptions .reservation-option-info p:first-of-type {
+    color: #8fce9c;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* AVAILABILITY STATUS */
+
+#reservationInventoryOptions .reservation-option-info p:last-child {
+    margin-top: auto;
+    padding: 9px;
+    background: #152b1b;
+    border: 1px solid #294332;
+    border-radius: 3px;
+    color: #8fce9c;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* UNAVAILABLE ACCESSORIES */
+
+#reservationInventoryOptions .reservation-option:has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #101310;
+    border-color: #343d36;
+}
+
+#reservationInventoryOptions .reservation-option:has(input:disabled):hover {
+    transform: none;
+    box-shadow: none;
+}
+
+#reservationInventoryOptions .reservation-option:has(input:disabled) img {
+    filter: grayscale(80%);
+}
+
+#reservationInventoryOptions input:disabled {
+    cursor: not-allowed;
+}
+
+#reservationInventoryOptions .reservation-option:has(input:disabled)
+.reservation-option-info p:last-child {
+    color: #c4aaa0;
+    background: #281e1a;
+    border-color: #513a32;
+}
+
+/* EMPTY STATE */
+
+#reservationInventoryOptions .reservation-empty {
+    grid-column: 1 / -1;
+    padding: 35px 15px;
+    border: 1px dashed #294332;
+    color: #829889;
+    text-align: center;
+}
+
+/* =====================================================
+   RESERVATION SUMMARY
+===================================================== */
+
+.reservation-inventory-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.reservation-inventory-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    min-width: 0;
+    background: #101e15;
+    border: 1px solid #34523d;
+    border-radius: 5px;
+}
+
+.reservation-inventory-summary-card img {
+    width: 85px;
+    height: 85px;
+    flex-shrink: 0;
+    object-fit: contain;
+    background: #050a07;
+    border: 1px solid #294332;
+    border-radius: 3px;
+}
+
+.reservation-inventory-summary-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 6px;
+    overflow-wrap: anywhere;
+}
+
+.reservation-inventory-summary-info strong {
+    color: #d4e8d9;
+    font-size: 14px;
+}
+
+.reservation-inventory-summary-info p {
+    margin: 0;
+    color: #8da697;
+    font-size: 11px;
+}
+
+.reservation-inventory-summary-status {
+    align-self: flex-start;
+    padding: 4px 8px;
+    color: #8fce9c;
+    background: #183421;
+    border: 1px solid #34523d;
+    border-radius: 3px;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    #reservationInventoryOptions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    #reservationInventorySection {
+        padding: 15px;
+    }
+
+    #reservationInventorySection .reservation-field-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #reservationInventoryOptions {
+        gap: 10px;
+    }
+
+    #reservationInventoryOptions .reservation-option {
+        padding: 8px;
+    }
+
+    #reservationInventoryOptions .reservation-option img {
+        height: 150px;
+    }
+
+    .reservation-inventory-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    #reservationInventoryOptions {
+        grid-template-columns: 1fr;
+    }
+
+    #reservationInventoryOptions .reservation-option img {
+        height: 220px;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #reservationInventoryOptions .reservation-option {
+        transition: none;
+    }
+
+    #reservationInventoryOptions .reservation-option:hover {
+        transform: none;
+    }
+
+}
+
+/* END OF CONNECTED INVENTORY ACCESSORIES */
+
