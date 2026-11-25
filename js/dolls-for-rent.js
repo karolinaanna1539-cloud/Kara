@@ -1220,6 +1220,189 @@
        SAVED PERSONAL CONFIGURATION
     ================================================= */
 
+    /* =================================================
+       RESERVED INVENTORY ACCESSORIES
+    ================================================= */
+
+    function createReservedInventory(record) {
+
+        const section = makeElement(
+            "section",
+            "rm-inventory-accessories"
+        );
+
+        section.append(
+            makeElement(
+                "h4",
+                "",
+                "RESERVED INVENTORY ACCESSORIES"
+            )
+        );
+
+        const grid = makeElement(
+            "div",
+            "rm-inventory-grid"
+        );
+
+        const message = makeElement(
+            "p",
+            "rm-inventory-message",
+            "Loading reserved accessories..."
+        );
+
+        section.append(message, grid);
+
+        async function loadAccessories() {
+
+            try {
+
+                const { data, error } = await supabase
+                    .from("doll_reservation_accessories")
+                    .select(
+                        "id,inventory_item_id,item_name,item_category,image_path,booking_active"
+                    )
+                    .eq("reservation_id", record.id)
+                    .order("item_name");
+
+                if (error) throw error;
+
+                const items = data || [];
+
+                if (!items.length) {
+
+                    message.textContent =
+                        "No inventory accessories reserved.";
+
+                    return;
+
+                }
+
+                message.textContent =
+                    items.length + " RESERVED ACCESSORIES";
+
+                for (const item of items) {
+
+                    const card = makeElement(
+                        "article",
+                        "rm-inventory-card"
+                    );
+
+                    const imageFrame = makeElement(
+                        "div",
+                        "rm-inventory-image"
+                    );
+
+                    imageFrame.textContent =
+                        "NO IMAGE";
+
+                    if (item.image_path) {
+
+                        const { data: imageData } =
+                            await supabase.storage
+                                .from("karolina-images")
+                                .createSignedUrl(
+                                    item.image_path,
+                                    3600
+                                );
+
+                        if (imageData?.signedUrl) {
+
+                            const image =
+                                document.createElement("img");
+
+                            image.src =
+                                imageData.signedUrl;
+
+                            image.alt =
+                                item.item_name;
+
+                            image.loading = "lazy";
+
+                            image.addEventListener(
+                                "error",
+                                () => {
+                                    imageFrame.textContent =
+                                        "IMAGE UNAVAILABLE";
+                                }
+                            );
+
+                            imageFrame.replaceChildren(image);
+
+                        }
+
+                    }
+
+                    const info = makeElement(
+                        "div",
+                        "rm-inventory-info"
+                    );
+
+                    const status = makeElement(
+                        "span",
+                        item.booking_active
+                            ? "rm-inventory-status active"
+                            : "rm-inventory-status released",
+                        item.booking_active
+                            ? "RESERVED"
+                            : "RELEASED"
+                    );
+
+                    info.append(
+
+                        makeElement(
+                            "strong",
+                            "",
+                            item.item_name
+                        ),
+
+                        makeElement(
+                            "p",
+                            "",
+                            item.item_category || "ACCESSORY"
+                        ),
+
+                        status
+
+                    );
+
+                    if (!item.inventory_item_id) {
+
+                        info.append(
+                            makeElement(
+                                "p",
+                                "",
+                                "HISTORICAL INVENTORY RECORD"
+                            )
+                        );
+
+                    }
+
+                    card.append(imageFrame, info);
+
+                    grid.append(card);
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Reserved inventory loading failed:",
+                    error
+                );
+
+                message.textContent =
+                    "Unable to load reserved accessories.";
+
+            }
+
+        }
+
+        loadAccessories();
+
+        return section;
+
+    }
+
     function createSavedOptions(record) {
 
         const section = makeElement(
