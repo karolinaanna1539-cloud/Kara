@@ -1432,3 +1432,192 @@
    END OF FILE
    THE DEN © 2026
 ===================================================== */
+
+/* =====================================================
+   THE DEN
+   RESERVED INVENTORY ACCESSORIES
+===================================================== */
+
+.rm-inventory-accessories {
+    margin: 20px 0;
+    padding: 20px;
+    background: linear-gradient(
+        145deg,
+        #101e15,
+        #080f0b
+    );
+    border: 1px solid #294332;
+    border-radius: 5px;
+}
+
+.rm-inventory-accessories h4 {
+    margin: 0 0 15px;
+    color: #b7dfc0;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+}
+
+.rm-inventory-message {
+    margin: 0 0 15px;
+    color: #8da697;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* INVENTORY GRID */
+
+.rm-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        2,
+        minmax(0, 1fr)
+    );
+    gap: 12px;
+}
+
+/* INVENTORY CARD */
+
+.rm-inventory-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    padding: 12px;
+    background: #0b160f;
+    border: 1px solid #34523d;
+    border-radius: 4px;
+    transition:
+        border-color 180ms ease,
+        background 180ms ease;
+}
+
+.rm-inventory-card:hover {
+    background: #13231a;
+    border-color: #639b76;
+}
+
+/* INVENTORY IMAGE */
+
+.rm-inventory-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #050a07;
+    border: 1px solid #294332;
+    border-radius: 3px;
+    color: #637b6a;
+    font-size: 9px;
+    text-align: center;
+}
+
+.rm-inventory-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* INVENTORY INFORMATION */
+
+.rm-inventory-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.rm-inventory-info strong {
+    color: #d4e8d9;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.rm-inventory-info p {
+    margin: 0;
+    color: #8da697;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* BOOKING STATUS */
+
+.rm-inventory-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border: 1px solid;
+    border-radius: 3px;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.rm-inventory-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ACTIVE RESERVATION */
+
+.rm-inventory-status.active {
+    color: #8fce9c;
+    background: #183421;
+    border-color: #34523d;
+}
+
+/* RELEASED ACCESSORY */
+
+.rm-inventory-status.released {
+    color: #9ba9a0;
+    background: #1b211d;
+    border-color: #39443c;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 800px) {
+
+    .rm-inventory-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .rm-inventory-accessories {
+        padding: 12px;
+    }
+
+    .rm-inventory-card {
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .rm-inventory-image {
+        width: 80px;
+        height: 80px;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .rm-inventory-card {
+        transition: none;
+    }
+
+}
+
+/* END OF RESERVED INVENTORY ACCESSORIES */
+
