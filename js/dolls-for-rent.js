@@ -1594,11 +1594,13 @@
 
         }
 
-        content.append(
+         content.append(
 
             createLogistics(record),
 
-            createSavedOptions(record)
+            createSavedOptions(record),
+
+            createReservedInventory(record)
 
         );
 
