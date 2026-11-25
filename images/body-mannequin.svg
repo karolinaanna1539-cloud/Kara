@@ -1,0 +1,357 @@
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 360 500"
+     role="img"
+     aria-label="Anatomical body measurement mannequin">
+
+    <defs>
+
+        <pattern id="grid"
+                 width="20"
+                 height="20"
+                 patternUnits="userSpaceOnUse">
+
+            <path d="M20 0H0V20"
+                  fill="none"
+                  stroke="#193124"
+                  stroke-width=".5"/>
+
+        </pattern>
+
+        <linearGradient id="bodyGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%">
+
+            <stop offset="0%"
+                  stop-color="#14291d"/>
+
+            <stop offset="50%"
+                  stop-color="#294c39"/>
+
+            <stop offset="100%"
+                  stop-color="#14291d"/>
+
+        </linearGradient>
+
+    </defs>
+
+    <!-- BACKGROUND -->
+
+    <rect width="360"
+          height="500"
+          rx="5"
+          fill="#07110b"/>
+
+    <rect width="360"
+          height="500"
+          fill="url(#grid)"/>
+
+    <!-- CENTRAL AXIS -->
+
+    <path d="M180 10V460"
+          stroke="#294332"
+          stroke-dasharray="5 5"
+          fill="none"/>
+
+    <!-- ANATOMICAL SILHOUETTE -->
+
+    <g id="body"
+       fill="url(#bodyGradient)"
+       stroke="#83b396"
+       stroke-width="1.3"
+       stroke-linejoin="round">
+
+        <!-- HEAD -->
+
+        <ellipse cx="180"
+                 cy="45"
+                 rx="23"
+                 ry="31"/>
+
+        <!-- BODY -->
+
+        <path d="
+            M167 70
+            L165 91
+            Q151 97 135 101
+            Q121 104 117 122
+
+            L105 179
+            L94 225
+            L88 245
+            Q85 256 91 260
+            L98 252
+            L100 265
+            Q105 271 110 259
+
+            L116 237
+            L128 190
+            L139 145
+
+            Q147 168 150 185
+            Q153 202 143 221
+            Q132 242 137 268
+
+            L145 319
+            L143 357
+            L148 410
+            L142 431
+
+            Q134 440 144 445
+            L166 445
+            Q173 440 169 426
+
+            L168 403
+            L173 357
+            L170 319
+            L180 259
+
+            L190 319
+            L187 357
+            L192 403
+            L191 426
+
+            Q187 440 194 445
+            L216 445
+            Q226 440 218 431
+
+            L212 410
+            L217 357
+            L215 319
+            L223 268
+
+            Q228 242 217 221
+            Q207 202 210 185
+            Q213 168 221 145
+
+            L232 190
+            L244 237
+            L250 259
+            Q255 271 260 265
+            L262 252
+            L269 260
+            Q275 256 272 245
+
+            L266 225
+            L255 179
+            L243 122
+
+            Q239 104 225 101
+            Q209 97 195 91
+            L193 70
+
+            Z"/>
+
+    </g>
+
+    <!-- ANATOMICAL DETAILS -->
+
+    <g id="anatomical-details"
+       fill="none"
+       stroke="#68947a"
+       stroke-width="1"
+       opacity=".7">
+
+        <!-- FACE -->
+
+        <path d="M166 44H174
+                 M186 44H194
+                 M180 47L177 56H183
+                 M174 62Q180 65 186 62"/>
+
+        <!-- SHOULDERS -->
+
+        <path d="M165 96Q153 110 140 112
+                 M195 96Q207 110 220 112"/>
+
+        <!-- CHEST -->
+
+        <path d="M180 100V128
+                 M143 138Q158 153 178 142
+                 M182 142Q202 153 217 138"/>
+
+        <!-- TORSO -->
+
+        <path d="M180 171V208
+                 M177 217H183"/>
+
+        <!-- KNEES -->
+
+        <path d="M148 326Q158 332 169 326
+                 M191 326Q201 332 212 326"/>
+
+    </g>
+
+    <!-- MEASUREMENT GUIDELINES -->
+
+    <g id="measurement-guidelines"
+       stroke="#8fce9c"
+       stroke-width="1"
+       stroke-dasharray="4 3"
+       fill="none"
+       opacity=".8">
+
+        <!-- HEIGHT -->
+
+        <path id="height-line"
+              d="M40 14V445
+                 M33 14H47
+                 M33 445H47"/>
+
+        <!-- HEAD -->
+
+        <ellipse id="head-circumference-line"
+                 cx="180" cy="40"
+                 rx="23" ry="7"/>
+
+        <path id="head-width-line"
+              d="M157 49H203"/>
+
+        <!-- NECK -->
+
+        <ellipse id="neck-circumference-line"
+                 cx="180" cy="87"
+                 rx="16" ry="4"/>
+
+        <!-- SHOULDERS -->
+
+        <path id="shoulder-width-line"
+              d="M135 111H225"/>
+
+        <!-- CHEST -->
+
+        <ellipse id="chest-circumference-line"
+                 cx="180" cy="140"
+                 rx="39" ry="8"/>
+
+        <!-- UNDERBUST -->
+
+        <ellipse id="underbust-line"
+                 cx="180" cy="163"
+                 rx="33" ry="6"/>
+
+        <!-- WAIST -->
+
+        <ellipse id="waist-line"
+                 cx="180" cy="190"
+                 rx="30" ry="6"/>
+
+        <!-- HIPS -->
+
+        <ellipse id="hips-line"
+                 cx="180" cy="226"
+                 rx="39" ry="8"/>
+
+        <!-- ARMS -->
+
+        <path id="right-arm-length-line"
+              d="M116 111L87 239"/>
+
+        <path id="left-arm-length-line"
+              d="M244 111L273 239"/>
+
+        <ellipse cx="123" cy="151"
+                 rx="12" ry="4"/>
+
+        <ellipse cx="237" cy="151"
+                 rx="12" ry="4"/>
+
+        <ellipse cx="109" cy="199"
+                 rx="10" ry="4"/>
+
+        <ellipse cx="251" cy="199"
+                 rx="10" ry="4"/>
+
+        <!-- WRISTS -->
+
+        <ellipse cx="102" cy="235"
+                 rx="9" ry="3"/>
+
+        <ellipse cx="258" cy="235"
+                 rx="9" ry="3"/>
+
+        <!-- THIGHS -->
+
+        <ellipse cx="153" cy="268"
+                 rx="17" ry="5"/>
+
+        <ellipse cx="207" cy="268"
+                 rx="17" ry="5"/>
+
+        <!-- INSEAM -->
+
+        <path id="inseam-line"
+              d="M180 260V419"/>
+
+        <!-- KNEES -->
+
+        <ellipse cx="157" cy="326"
+                 rx="12" ry="4"/>
+
+        <ellipse cx="203" cy="326"
+                 rx="12" ry="4"/>
+
+        <!-- CALVES -->
+
+        <ellipse cx="157" cy="365"
+                 rx="13" ry="4"/>
+
+        <ellipse cx="203" cy="365"
+                 rx="13" ry="4"/>
+
+        <!-- ANKLES -->
+
+        <ellipse cx="158" cy="411"
+                 rx="10" ry="3"/>
+
+        <ellipse cx="202" cy="411"
+                 rx="10" ry="3"/>
+
+        <!-- FEET -->
+
+        <path d="M140 451H171
+                 M189 451H220"/>
+
+    </g>
+
+    <!-- ORIENTATION -->
+
+    <g fill="#789d85"
+       font-family="monospace"
+       font-size="11">
+
+        <text x="75"
+              y="30"
+              text-anchor="middle">R</text>
+
+        <text x="285"
+              y="30"
+              text-anchor="middle">L</text>
+
+    </g>
+
+    <!-- FOOTER -->
+
+    <g font-family="monospace"
+       text-anchor="middle">
+
+        <text x="180"
+              y="475"
+              font-size="10"
+              letter-spacing="2"
+              fill="#8fce9c">
+            ANATOMICAL MAPPING
+        </text>
+
+        <text x="180"
+              y="489"
+              font-size="7"
+              fill="#789d85">
+            THE DEN // REFERENCE MODEL
+        </text>
+
+    </g>
+
+</svg>
