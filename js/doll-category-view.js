@@ -78,11 +78,17 @@
             icon: "nails"
         },
 
-        {
+              {
             id: "accessories",
             title: "ACCESSORIES",
             description: "Additional accessories",
             icon: "gem"
+        },
+        {
+            id: "kinks",
+            title: "KINK LIST",
+            description: "Preferences & individual galleries",
+            icon: "history"
         },
 
         {
