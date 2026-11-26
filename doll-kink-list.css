@@ -1,0 +1,684 @@
+
+/* =====================================================
+   THE DEN // KINK LIST
+===================================================== */
+
+#dollKinkList {
+    --kl-background: #080f0b;
+    --kl-panel: #101e15;
+    --kl-border: #294332;
+    --kl-accent: #8fce9c;
+    --kl-text: #d4e8d9;
+    --kl-muted: #829889;
+
+    width: 100%;
+    color: var(--kl-text);
+}
+
+#dollKinkList * {
+    box-sizing: border-box;
+}
+
+#dollKinkList [hidden] {
+    display: none !important;
+}
+
+/* =====================================================
+   MODULE HEADER
+===================================================== */
+
+.kl-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 22px;
+    margin-bottom: 20px;
+    background: linear-gradient(
+        135deg,
+        #14261a,
+        #080f0b
+    );
+    border: 1px solid var(--kl-border);
+    border-radius: 5px;
+}
+
+.kl-header h3 {
+    margin: 8px 0;
+    color: var(--kl-accent);
+    font-size: 26px;
+    letter-spacing: 3px;
+}
+
+.kl-label {
+    margin: 0;
+    color: var(--kl-muted);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.kl-subtitle {
+    margin: 0;
+    color: var(--kl-muted);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+}
+
+.kl-count {
+    padding: 10px 15px;
+    background: #0a140d;
+    border: 1px solid var(--kl-border);
+    border-radius: 3px;
+    color: var(--kl-accent);
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   SEARCH AND FILTERS
+===================================================== */
+
+.kl-toolbar {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+#dollKinkList input,
+#dollKinkList select,
+#dollKinkList textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    background: #070e09;
+    border: 1px solid #34523d;
+    border-radius: 3px;
+    color: var(--kl-text);
+    font-family: inherit;
+    font-size: 13px;
+    color-scheme: dark;
+}
+
+#dollKinkList textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+#dollKinkList input:focus,
+#dollKinkList select:focus,
+#dollKinkList textarea:focus {
+    outline: none;
+    border-color: var(--kl-accent);
+    box-shadow: 0 0 0 2px #8fce9c20;
+}
+
+#dollKinkList input::placeholder {
+    color: #647d6c;
+}
+
+/* =====================================================
+   CATEGORY GROUPS
+===================================================== */
+
+.kl-category {
+    margin-bottom: 25px;
+}
+
+.kl-category-title {
+    margin: 0 0 14px;
+    padding: 0 0 10px;
+    border-bottom: 1px solid var(--kl-border);
+    color: var(--kl-accent);
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.kl-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        3,
+        minmax(0, 1fr)
+    );
+    gap: 14px;
+}
+
+/* =====================================================
+   INDIVIDUAL KINK TILES
+===================================================== */
+
+.kl-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    min-width: 0;
+    min-height: 145px;
+    padding: 18px;
+    background: linear-gradient(
+        145deg,
+        #14231a,
+        #0a130d
+    );
+    border: 1px solid var(--kl-border);
+    border-radius: 5px;
+    color: var(--kl-text);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.kl-tile:hover {
+    transform: translateY(-3px);
+    border-color: #639b76;
+    box-shadow: 0 5px 20px #00000040;
+}
+
+.kl-tile.active {
+    border-color: var(--kl-accent);
+    background: linear-gradient(
+        145deg,
+        #203b28,
+        #101e15
+    );
+    box-shadow: 0 0 15px #8fce9c15;
+}
+
+.kl-tile-name {
+    font-size: 15px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.kl-tile-action {
+    color: var(--kl-muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.kl-tile.active .kl-tile-action {
+    color: var(--kl-accent);
+}
+
+/* =====================================================
+   STATUS INDICATORS
+===================================================== */
+
+.kl-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    max-width: 100%;
+    padding: 6px 9px;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    font-size: 10px;
+    letter-spacing: 0.7px;
+    color: #929e95;
+    background: #202722;
+}
+
+.kl-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.kl-status[data-status="PREFERRED"] {
+    color: #55b77a;
+    background: #143522;
+}
+
+.kl-status[data-status="AVAILABLE"] {
+    color: #8fce9c;
+    background: #193322;
+}
+
+.kl-status[data-status="NEGOTIABLE"] {
+    color: #d5b35b;
+    background: #332b17;
+}
+
+.kl-status[data-status="LIMITED"] {
+    color: #df914f;
+    background: #352417;
+}
+
+.kl-status[data-status="HARD LIMIT"] {
+    color: #df7777;
+    background: #351919;
+}
+
+.kl-status[data-status="NOT SPECIFIED"] {
+    color: #929e95;
+    background: #202722;
+}
+
+/* =====================================================
+   EXPANDED ENTRY
+===================================================== */
+
+#kinkDetails {
+    margin-top: 25px;
+    padding: 25px;
+    background: linear-gradient(
+        145deg,
+        #101e15,
+        #080f0b
+    );
+    border: 1px solid #41684c;
+    border-radius: 5px;
+    animation: kl-expand 200ms ease;
+}
+
+@keyframes kl-expand {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.kl-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.kl-detail-header h3 {
+    margin: 0;
+    color: var(--kl-accent);
+    font-size: 24px;
+    overflow-wrap: anywhere;
+}
+
+.kl-section-title {
+    margin: 25px 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--kl-border);
+    color: var(--kl-accent);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+}
+
+.kl-description {
+    margin: 0;
+    padding: 15px;
+    background: #0a130d;
+    border-left: 2px solid #41684c;
+    color: #b7cbbd;
+    font-size: 14px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   ADMINISTRATOR BUTTONS
+===================================================== */
+
+.kl-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 16px;
+    background: #1b3825;
+    border: 1px solid #568262;
+    border-radius: 3px;
+    color: #b7dfc0;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition:
+        background 180ms ease,
+        border-color 180ms ease;
+}
+
+.kl-button:hover {
+    background: #284b32;
+    border-color: #8fce9c;
+}
+
+.kl-button.secondary {
+    background: #101913;
+    border-color: #34523d;
+    color: #a4b9aa;
+}
+
+.kl-button.danger {
+    background: #281414;
+    border-color: #704040;
+    color: #df9292;
+}
+
+.kl-button.danger:hover {
+    background: #452020;
+    border-color: #df7777;
+}
+
+.kl-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.kl-button:focus-visible,
+.kl-tile:focus-visible,
+.kl-photo-button:focus-visible {
+    outline: 2px solid #8fce9c;
+    outline-offset: 3px;
+}
+
+.kl-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* =====================================================
+   ENTRY EDITOR
+===================================================== */
+
+.kl-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 22px;
+    background: #101e15;
+    border: 1px solid var(--kl-border);
+    border-radius: 5px;
+}
+
+.kl-form h4 {
+    margin: 0 0 10px;
+    color: var(--kl-accent);
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.kl-form label {
+    margin-top: 5px;
+    color: var(--kl-muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   INDIVIDUAL PHOTO GALLERY
+===================================================== */
+
+.kl-gallery {
+    display: grid;
+    grid-template-columns: repeat(
+        3,
+        minmax(0, 1fr)
+    );
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.kl-photo-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 12px;
+    padding: 10px;
+    background: #0b160f;
+    border: 1px solid var(--kl-border);
+    border-radius: 4px;
+}
+
+.kl-photo-button {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    padding: 0;
+    overflow: hidden;
+    background: #050a07;
+    border: 1px solid var(--kl-border);
+    border-radius: 3px;
+    cursor: zoom-in;
+}
+
+.kl-photo-button img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 200ms ease;
+}
+
+.kl-photo-button:hover img {
+    transform: scale(1.04);
+}
+
+.kl-photo-caption {
+    margin: 0;
+    color: #a4b9aa;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.kl-photo-card > .kl-button {
+    width: 100%;
+    margin-top: auto;
+}
+
+/* =====================================================
+   PHOTO UPLOAD
+===================================================== */
+
+.kl-upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+    padding: 20px;
+    background: #0b160f;
+    border: 1px dashed #41684c;
+    border-radius: 4px;
+}
+
+.kl-upload-form h4 {
+    margin: 0 0 5px;
+    color: var(--kl-accent);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+}
+
+#dollKinkList input[type="file"] {
+    padding: 10px;
+}
+
+#dollKinkList input::file-selector-button {
+    padding: 8px 12px;
+    margin-right: 10px;
+    background: #1b3825;
+    border: 1px solid #568262;
+    border-radius: 3px;
+    color: #b7dfc0;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.kl-message {
+    margin: 12px 0;
+    color: var(--kl-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.kl-message:empty {
+    display: none;
+}
+
+.kl-message[data-type="success"] {
+    padding: 12px;
+    background: #14291b;
+    border: 1px solid #41684c;
+    color: #8fce9c;
+}
+
+.kl-message[data-type="error"] {
+    padding: 12px;
+    background: #291515;
+    border: 1px solid #704040;
+    color: #df9292;
+}
+
+.kl-empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 25px;
+    background: #0a130d;
+    border: 1px dashed var(--kl-border);
+    color: var(--kl-muted);
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   FULLSCREEN PHOTO LIGHTBOX
+===================================================== */
+
+.kl-lightbox {
+    position: fixed;
+    width: min(94vw, 1200px);
+    max-width: 94vw;
+    max-height: 94vh;
+    padding: 20px;
+    margin: auto;
+    background: #050a07;
+    border: 1px solid #41684c;
+    border-radius: 5px;
+    color: #d4e8d9;
+    overflow: auto;
+}
+
+.kl-lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.kl-lightbox > .kl-button {
+    display: flex;
+    margin: 0 0 15px auto;
+}
+
+.kl-lightbox img {
+    display: block;
+    max-width: 100%;
+    max-height: 78vh;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .kl-grid,
+    .kl-gallery {
+        grid-template-columns: repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .kl-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .kl-header,
+    #kinkDetails,
+    .kl-form {
+        padding: 16px;
+    }
+
+    .kl-tile {
+        min-height: 130px;
+        padding: 13px;
+    }
+
+    .kl-header h3 {
+        font-size: 22px;
+    }
+
+    .kl-tile-name {
+        font-size: 13px;
+    }
+
+    .kl-status {
+        font-size: 9px;
+        letter-spacing: 0;
+    }
+
+    .kl-actions .kl-button {
+        flex: 1 1 auto;
+    }
+
+}
+
+@media (max-width: 380px) {
+
+    .kl-grid,
+    .kl-gallery {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #kinkDetails {
+        animation: none;
+    }
+
+    .kl-tile,
+    .kl-button,
+    .kl-photo-button img {
+        transition: none;
+    }
+
+    .kl-tile:hover,
+    .kl-photo-button:hover img {
+        transform: none;
+    }
+
+}
+
+/* =====================================================
+   END OF KINK LIST
+===================================================== */
