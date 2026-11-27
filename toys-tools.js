@@ -356,15 +356,23 @@
                             document.createElement("img");
 
                         image.className =
-                            "ic-category-cover";
+    "ic-category-custom-icon";
 
-                        image.src = url;
-                        image.alt = record.name;
-                        image.loading = "lazy";
+image.src = url;
+image.alt = record.name;
+image.loading = "lazy";
 
-                        tile.appendChild(image);
+const originalIcon = top.querySelector(
+    ".inventory-category-icon"
+);
 
-                    }
+if (originalIcon) {
+
+    image.addEventListener("load", () => {
+        originalIcon.replaceWith(image);
+    }, { once: true });
+
+}
 
                 }
 
