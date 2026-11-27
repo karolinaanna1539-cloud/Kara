@@ -1,7 +1,7 @@
 
 /* =====================================================
    THE DEN // TOYS & TOOLS
-   DYNAMIC INVENTORY SYSTEM 3.0
+   DYNAMIC INVENTORY SYSTEM 3.1
 ===================================================== */
 
 (async function () {
@@ -25,6 +25,7 @@
     let categoryVersion = 0;
     let saving = false;
     let categoryAPI = null;
+    let refreshTimer = null;
 
     const $ = id => document.getElementById(id);
 
@@ -78,12 +79,12 @@
 
         const node = document.createElement(tag);
 
-        if (className) node.className = className;
+        if (className) {
+            node.className = className;
+        }
 
         if (text !== undefined) {
-
             node.textContent = text;
-
         }
 
         return node;
@@ -99,7 +100,6 @@
         );
 
         button.type = "button";
-
         button.addEventListener("click", action);
 
         return button;
@@ -221,7 +221,10 @@
             "inventory-category-icon"
         );
 
-        wrapper.setAttribute("aria-hidden", "true");
+        wrapper.setAttribute(
+            "aria-hidden",
+            "true"
+        );
 
         const icon = Object.prototype.hasOwnProperty.call(
             icons,
@@ -241,6 +244,73 @@
         `;
 
         return wrapper;
+
+    }
+
+    /* =================================================
+       CUSTOM CATEGORY ICONS
+    ================================================= */
+
+    async function applyCustomIcon(record, originalIcon) {
+
+        if (!record.image_path || !categoryAPI) {
+            return;
+        }
+
+        try {
+
+            const url = await categoryAPI.signedImage(
+                record.image_path
+            );
+
+            if (!url) return;
+
+            const image = document.createElement("img");
+
+            image.className = "ic-category-custom-icon";
+
+            image.alt = record.name;
+
+            image.width = 48;
+            image.height = 48;
+
+            image.addEventListener(
+                "load",
+                () => {
+
+                    if (originalIcon.parentNode) {
+
+                        originalIcon.replaceWith(image);
+
+                    }
+
+                },
+                { once: true }
+            );
+
+            image.addEventListener(
+                "error",
+                () => {
+
+                    console.warn(
+                        "Could not load category icon:",
+                        record.name
+                    );
+
+                },
+                { once: true }
+            );
+
+            image.src = url;
+
+        } catch (error) {
+
+            console.warn(
+                "Custom category icon error:",
+                error
+            );
+
+        }
 
     }
 
@@ -292,7 +362,9 @@
         const fragment =
             document.createDocumentFragment();
 
-        for (const [groupName, records] of groups) {
+        const customIcons = [];
+
+        for (const [groupName, categories] of groups) {
 
             const section = makeElement(
                 "section",
@@ -310,7 +382,7 @@
                 "inventory-category-grid"
             );
 
-            for (const record of records) {
+            for (const record of categories) {
 
                 const tile = makeElement(
                     "button",
@@ -318,6 +390,7 @@
                 );
 
                 tile.type = "button";
+
                 tile.dataset.category = record.name;
 
                 tile.setAttribute(
@@ -336,45 +409,16 @@
                     "0"
                 );
 
+                const originalIcon = createIcon(
+                    record.icon || "folder"
+                );
+
                 top.append(
-                    createIcon(record.icon),
+                    originalIcon,
                     count
                 );
 
                 tile.appendChild(top);
-
-                if (record.image_path) {
-
-                    const url =
-                        await categoryAPI.signedImage(
-                            record.image_path
-                        );
-
-                    if (url) {
-
-                        const image =
-                            document.createElement("img");
-
-                        image.className =
-    "ic-category-custom-icon";
-
-image.src = url;
-image.alt = record.name;
-image.loading = "lazy";
-
-const originalIcon = top.querySelector(
-    ".inventory-category-icon"
-);
-
-if (originalIcon) {
-
-    image.addEventListener("load", () => {
-        originalIcon.replaceWith(image);
-    }, { once: true });
-
-}
-
-                }
 
                 tile.appendChild(
 
@@ -410,9 +454,19 @@ if (originalIcon) {
 
                 grid.appendChild(tile);
 
+                if (record.image_path) {
+
+                    customIcons.push({
+                        record,
+                        originalIcon
+                    });
+
+                }
+
             }
 
             section.append(heading, grid);
+
             fragment.appendChild(section);
 
         }
@@ -428,7 +482,20 @@ if (originalIcon) {
         );
 
         syncCategoryOptions();
+
         updateCategoryNavigation();
+
+        /* Load custom icons independently.
+           Image errors cannot block the inventory. */
+
+        customIcons.forEach(entry => {
+
+            applyCustomIcon(
+                entry.record,
+                entry.originalIcon
+            );
+
+        });
 
         return true;
 
@@ -444,7 +511,9 @@ if (originalIcon) {
 
         const exists = Array.from(
             select.options
-        ).some(option => option.value === category);
+        ).some(
+            option => option.value === category
+        );
 
         if (!exists) {
 
@@ -452,6 +521,7 @@ if (originalIcon) {
                 document.createElement("option");
 
             option.value = category;
+
             option.textContent = category;
 
             select.appendChild(option);
@@ -491,6 +561,7 @@ if (originalIcon) {
             "SELECT CATEGORY";
 
         placeholder.disabled = true;
+
         placeholder.defaultSelected = true;
 
         elements.category.appendChild(
@@ -543,6 +614,7 @@ if (originalIcon) {
                     document.createElement("option");
 
                 option.value = record.name;
+
                 option.textContent = record.name;
 
                 groups.get(groupName).appendChild(
@@ -700,6 +772,7 @@ if (originalIcon) {
     function clearFilters() {
 
         elements.search.value = "";
+
         elements.filterStatus.value = "";
 
         selectCategory("");
@@ -868,6 +941,7 @@ if (originalIcon) {
             document.createElement("img");
 
         image.src = url;
+
         image.alt = name || "Inventory image";
 
         const caption = makeElement(
@@ -1082,8 +1156,11 @@ if (originalIcon) {
                 document.createElement("img");
 
             image.className = "inventory-image";
+
             image.src = imageUrl;
+
             image.alt = item.name || "";
+
             image.loading = "lazy";
 
             const imageButton = makeButton(
@@ -1396,6 +1473,7 @@ if (originalIcon) {
         setMessage("");
 
         let uploadedPath = null;
+
         let committed = false;
 
         try {
@@ -1716,8 +1794,6 @@ if (originalIcon) {
        REALTIME SYNCHRONIZATION
     ================================================= */
 
-    let refreshTimer = null;
-
     function subscribeToRealtime() {
 
         realtimeChannel = db
@@ -1802,6 +1878,17 @@ if (originalIcon) {
 
                 await buildCategories();
 
+            } catch (error) {
+
+                console.error(
+                    "Category synchronization error:",
+                    error
+                );
+
+            }
+
+            try {
+
                 await loadInventory();
 
             } catch (error) {
@@ -1810,7 +1897,7 @@ if (originalIcon) {
 
                 setConnection(
 
-                    "CATEGORY SYNCHRONIZATION ERROR",
+                    "INVENTORY SYNCHRONIZATION ERROR",
 
                     true
 
@@ -1933,6 +2020,22 @@ if (originalIcon) {
     try {
 
         await buildCategories();
+
+    } catch (error) {
+
+        console.error(
+            "Category initialization error:",
+            error
+        );
+
+        categoryAPI = null;
+
+        elements.categoryGroups.textContent =
+            "Could not load category database.";
+
+    }
+
+    try {
 
         await loadInventory();
 
