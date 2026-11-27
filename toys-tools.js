@@ -1,17 +1,17 @@
 
 /* =====================================================
-   THE DEN — TOYS & TOOLS
-   INVENTORY CLASSIFICATION SYSTEM 2.0
+   THE DEN // TOYS & TOOLS
+   DYNAMIC INVENTORY SYSTEM 3.0
 ===================================================== */
 
 (async function () {
 
     "use strict";
 
-    const supabaseClient = window.archiveSupabase;
+    const db = window.archiveSupabase;
     const session = await window.archiveAuthReady;
 
-    if (!session || !supabaseClient) return;
+    if (!session || !db) return;
 
     const user = session.user;
     const BUCKET = "karolina-images";
@@ -22,180 +22,11 @@
     let realtimeChannel = null;
     let renderVersion = 0;
     let loadVersion = 0;
+    let categoryVersion = 0;
     let saving = false;
+    let categoryAPI = null;
 
-    /* =================================================
-       CATEGORY CONFIGURATION
-    ================================================= */
-
-    const categoryGroups = [
-
-        {
-            name: "BDSM EQUIPMENT",
-            categories: [
-                ["Restraints", "link"],
-                ["Collars & Leashes", "circle"],
-                ["Ropes & Bondage", "rope"],
-                ["Masks & Hoods", "mask"],
-                ["Sensory Accessories", "feather"],
-                ["Impact Play", "layers"],
-                ["Toys", "box"]
-            ]
-        },
-
-        {
-            name: "CLOTHING & STYLE",
-            categories: [
-                ["Latex & Rubber", "drop"],
-                ["Leather Gear", "shield"],
-                ["Clothing & Lingerie", "shirt"],
-                ["Gloves & Stockings", "hand"],
-                ["Footwear", "foot"],
-                ["Jewellery", "gem"],
-                ["Accessories", "package"]
-            ]
-        },
-
-        {
-            name: "TECHNICAL & MAINTENANCE",
-            categories: [
-                ["Furniture", "chair"],
-                ["Tools", "tool"],
-                ["Safety Equipment", "safety"],
-                ["Cleaning & Maintenance", "clean"]
-            ]
-        },
-
-        {
-            name: "GENERAL INVENTORY",
-            categories: [
-                ["Equipment", "briefcase"],
-                ["Other", "folder"]
-            ]
-        }
-
-    ];
-
-    /* =================================================
-       CATEGORY ICONS
-    ================================================= */
-
-    const icons = {
-
-        link: `
-            <rect x="2" y="7" width="9" height="10" rx="4"/>
-            <rect x="13" y="7" width="9" height="10" rx="4"/>
-            <path d="M8 12h8"/>
-        `,
-
-        circle: `
-            <circle cx="12" cy="12" r="9"/>
-            <rect x="9" y="2" width="6" height="5" rx="1"/>
-        `,
-
-        rope: `
-            <path d="M5 5c0-4 14-4 14 0s-14 4-14 8
-            14 4 14 0S5 9 5 17s14 5 14 0"/>
-        `,
-
-        mask: `
-            <path d="M3 7c6-4 12-4 18 0v8
-            c-3 5-6 6-9 2-3 4-6 3-9-2z"/>
-            <ellipse cx="7" cy="11" rx="2" ry="1.5"/>
-            <ellipse cx="17" cy="11" rx="2" ry="1.5"/>
-        `,
-
-        feather: `
-            <path d="M4 20L19 5"/>
-            <path d="M7 17C0 7 14 1 21 3
-            c2 8-5 20-14 14z"/>
-            <path d="M12 12h6M12 12V6"/>
-        `,
-
-        layers: `
-            <path d="M12 2L2 8l10 6 10-6z"/>
-            <path d="M2 12l10 6 10-6"/>
-            <path d="M2 16l10 6 10-6"/>
-        `,
-
-        box: `
-            <rect x="3" y="3" width="18" height="18" rx="3"/>
-            <path d="M3 9h18M9 3v18"/>
-        `,
-
-        drop: `
-            <path d="M12 2C9 7 4 12 4 16
-            a8 8 0 0 0 16 0c0-4-5-9-8-14z"/>
-        `,
-
-        shield: `
-            <path d="M12 2L3 6v7
-            c0 5 9 9 9 9s9-4 9-9V6z"/>
-        `,
-
-        shirt: `
-            <path d="M8 3L2 7l3 6 3-2v10h8V11
-            l3 2 3-6-6-4"/>
-            <path d="M8 3a4 4 0 0 0 8 0"/>
-        `,
-
-        hand: `
-            <path d="M7 12V5a1.5 1.5 0 0 1 3 0v6
-            V3a1.5 1.5 0 0 1 3 0v8
-            V5a1.5 1.5 0 0 1 3 0v7
-            V8a1.5 1.5 0 0 1 3 0v8
-            c0 4-3 6-7 6s-6-2-8-5l-2-4
-            c-1-3 2-4 5-1z"/>
-        `,
-
-        foot: `
-            <ellipse cx="10" cy="15" rx="5" ry="7"/>
-            <circle cx="7" cy="4" r="2"/>
-            <circle cx="12" cy="3" r="1.5"/>
-            <circle cx="16" cy="5" r="1.5"/>
-        `,
-
-        gem: `
-            <path d="M3 8l4-5h10l4 5-9 13z"/>
-            <path d="M3 8h18M7 3l5 18 5-18"/>
-        `,
-
-        package: `
-            <path d="M3 6l9-4 9 4v12l-9 4-9-4z"/>
-            <path d="M3 6l9 4 9-4M12 10v12"/>
-        `,
-
-        chair: `
-            <rect x="5" y="3" width="14" height="11" rx="3"/>
-            <path d="M3 12v6h18v-6M5 18v4M19 18v4"/>
-        `,
-
-        tool: `
-            <path d="M14 6l4-4 4 4-4 4-4-1
-            -9 12-3-3 12-9z"/>
-        `,
-
-        safety: `
-            <path d="M12 2L3 6v7
-            c0 5 9 9 9 9s9-4 9-9V6z"/>
-            <path d="M7 12l3 3 7-7"/>
-        `,
-
-        clean: `
-            <rect x="7" y="9" width="10" height="13" rx="2"/>
-            <path d="M10 9V5h5v4M10 5V2h9M19 2v3"/>
-        `,
-
-        briefcase: `
-            <rect x="2" y="7" width="20" height="14" rx="2"/>
-            <path d="M8 7V3h8v4M2 13h20M10 13v3h4v-3"/>
-        `,
-
-        folder: `
-            <path d="M2 5h8l3 3h9v13H2z"/>
-        `
-
-    };
+    const $ = id => document.getElementById(id);
 
     /* =================================================
        DOM ELEMENTS
@@ -203,57 +34,39 @@
 
     const elements = {
 
-        form: document.getElementById("itemForm"),
-        itemId: document.getElementById("itemId"),
-        name: document.getElementById("itemName"),
-        category: document.getElementById("itemCategory"),
-        status: document.getElementById("itemStatus"),
-        location: document.getElementById("itemLocation"),
-        description: document.getElementById("itemDescription"),
-        image: document.getElementById("itemImageFile"),
-        imagePreview: document.getElementById("currentImagePreview"),
+        form: $("itemForm"),
+        itemId: $("itemId"),
+        name: $("itemName"),
+        category: $("itemCategory"),
+        status: $("itemStatus"),
+        location: $("itemLocation"),
+        description: $("itemDescription"),
+        image: $("itemImageFile"),
+        imagePreview: $("currentImagePreview"),
 
-        formTitle: document.getElementById("formTitle"),
-        formMessage: document.getElementById("formMessage"),
-        saveButton: document.getElementById("saveButton"),
-        cancelButton: document.getElementById("cancelEditButton"),
+        formTitle: $("formTitle"),
+        formMessage: $("formMessage"),
+        saveButton: $("saveButton"),
+        cancelButton: $("cancelEditButton"),
 
-        grid: document.getElementById("inventoryGrid"),
-        search: document.getElementById("searchInput"),
-        filterCategory: document.getElementById("filterCategory"),
-        filterStatus: document.getElementById("filterStatus"),
+        grid: $("inventoryGrid"),
+        search: $("searchInput"),
+        filterCategory: $("filterCategory"),
+        filterStatus: $("filterStatus"),
 
-        connection: document.getElementById("connectionStatus"),
-        total: document.getElementById("totalCount"),
-        available: document.getElementById("availableCount"),
-        inUse: document.getElementById("inUseCount"),
-        storage: document.getElementById("storageCount"),
+        connection: $("connectionStatus"),
+        total: $("totalCount"),
+        available: $("availableCount"),
+        inUse: $("inUseCount"),
+        storage: $("storageCount"),
 
-        logout: document.getElementById("logoutButton"),
-
-        categoryGroups: document.getElementById(
-            "inventoryCategoryGroups"
-        ),
-
-        showAll: document.getElementById(
-            "showAllCategories"
-        ),
-
-        activeCategory: document.getElementById(
-            "activeCategoryName"
-        ),
-
-        resultCount: document.getElementById(
-            "inventoryResultCount"
-        ),
-
-        clearFilters: document.getElementById(
-            "clearInventoryFilters"
-        ),
-
-        editor: document.getElementById(
-            "inventoryEditor"
-        )
+        logout: $("logoutButton"),
+        categoryGroups: $("inventoryCategoryGroups"),
+        showAll: $("showAllCategories"),
+        activeCategory: $("activeCategoryName"),
+        resultCount: $("inventoryResultCount"),
+        clearFilters: $("clearInventoryFilters"),
+        editor: $("inventoryEditor")
 
     };
 
@@ -263,41 +76,143 @@
 
     function makeElement(tag, className, text) {
 
-        const element = document.createElement(tag);
+        const node = document.createElement(tag);
 
-        if (className) {
-            element.className = className;
-        }
+        if (className) node.className = className;
 
         if (text !== undefined) {
-            element.textContent = text;
+
+            node.textContent = text;
+
         }
 
-        return element;
+        return node;
 
     }
 
-    function setMessage(message, isError = false) {
+    function makeButton(text, className, action) {
+
+        const button = makeElement(
+            "button",
+            className,
+            text
+        );
+
+        button.type = "button";
+
+        button.addEventListener("click", action);
+
+        return button;
+
+    }
+
+    function setMessage(message, error = false) {
 
         elements.formMessage.textContent = message;
 
         elements.formMessage.classList.toggle(
             "error",
-            isError
+            error
         );
 
     }
 
-    function setConnection(message, isError = false) {
+    function setConnection(message, error = false) {
 
         elements.connection.textContent = message;
 
         elements.connection.classList.toggle(
             "error",
-            isError
+            error
         );
 
     }
+
+    /* =================================================
+       CATEGORY ICONS
+    ================================================= */
+
+    const icons = {
+
+        folder:
+            '<path d="M2 5h8l3 3h9v13H2z"/>',
+
+        link:
+            '<rect x="2" y="7" width="9" height="10" rx="4"/>' +
+            '<rect x="13" y="7" width="9" height="10" rx="4"/>' +
+            '<path d="M8 12h8"/>',
+
+        circle:
+            '<circle cx="12" cy="12" r="9"/>' +
+            '<rect x="9" y="2" width="6" height="5" rx="1"/>',
+
+        rope:
+            '<path d="M5 5c0-4 14-4 14 0s-14 4-14 8 14 4 14 0S5 9 5 17s14 5 14 0"/>',
+
+        mask:
+            '<path d="M3 7c6-4 12-4 18 0v8c-3 5-6 6-9 2-3 4-6 3-9-2z"/>' +
+            '<ellipse cx="7" cy="11" rx="2" ry="1.5"/>' +
+            '<ellipse cx="17" cy="11" rx="2" ry="1.5"/>',
+
+        feather:
+            '<path d="M4 20L19 5"/>' +
+            '<path d="M7 17C0 7 14 1 21 3c2 8-5 20-14 14z"/>',
+
+        layers:
+            '<path d="M12 2L2 8l10 6 10-6z"/>' +
+            '<path d="M2 12l10 6 10-6M2 16l10 6 10-6"/>',
+
+        box:
+            '<rect x="3" y="3" width="18" height="18" rx="3"/>' +
+            '<path d="M3 9h18M9 3v18"/>',
+
+        drop:
+            '<path d="M12 2C9 7 4 12 4 16a8 8 0 0 0 16 0c0-4-5-9-8-14z"/>',
+
+        shield:
+            '<path d="M12 2L3 6v7c0 5 9 9 9 9s9-4 9-9V6z"/>',
+
+        shirt:
+            '<path d="M8 3L2 7l3 6 3-2v10h8V11l3 2 3-6-6-4"/>' +
+            '<path d="M8 3a4 4 0 0 0 8 0"/>',
+
+        hand:
+            '<path d="M7 12V5a1.5 1.5 0 0 1 3 0v6V3a1.5 1.5 0 0 1 3 0v8V5a1.5 1.5 0 0 1 3 0v7V8a1.5 1.5 0 0 1 3 0v8c0 4-3 6-7 6s-6-2-8-5l-2-4c-1-3 2-4 5-1z"/>',
+
+        foot:
+            '<ellipse cx="10" cy="15" rx="5" ry="7"/>' +
+            '<circle cx="7" cy="4" r="2"/>' +
+            '<circle cx="12" cy="3" r="1.5"/>' +
+            '<circle cx="16" cy="5" r="1.5"/>',
+
+        gem:
+            '<path d="M3 8l4-5h10l4 5-9 13z"/>' +
+            '<path d="M3 8h18M7 3l5 18 5-18"/>',
+
+        package:
+            '<path d="M3 6l9-4 9 4v12l-9 4-9-4z"/>' +
+            '<path d="M3 6l9 4 9-4M12 10v12"/>',
+
+        chair:
+            '<rect x="5" y="3" width="14" height="11" rx="3"/>' +
+            '<path d="M3 12v6h18v-6M5 18v4M19 18v4"/>',
+
+        tool:
+            '<path d="M14 6l4-4 4 4-4 4-4-1-9 12-3-3 12-9z"/>',
+
+        safety:
+            '<path d="M12 2L3 6v7c0 5 9 9 9 9s9-4 9-9V6z"/>' +
+            '<path d="M7 12l3 3 7-7"/>',
+
+        clean:
+            '<rect x="7" y="9" width="10" height="13" rx="2"/>' +
+            '<path d="M10 9V5h5v4M10 5V2h9M19 2v3"/>',
+
+        briefcase:
+            '<rect x="2" y="7" width="20" height="14" rx="2"/>' +
+            '<path d="M8 7V3h8v4M2 13h20M10 13v3h4v-3"/>'
+
+    };
 
     function createIcon(name) {
 
@@ -308,20 +223,21 @@
 
         wrapper.setAttribute("aria-hidden", "true");
 
+        const icon = Object.prototype.hasOwnProperty.call(
+            icons,
+            name
+        ) ? icons[name] : icons.folder;
+
         wrapper.innerHTML = `
-
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                ${icons[name] || icons.folder}
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.5"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                ${icon}
             </svg>
-
         `;
 
         return wrapper;
@@ -329,16 +245,54 @@
     }
 
     /* =================================================
-       CATEGORY NAVIGATION
+       DYNAMIC CATEGORY NAVIGATION
     ================================================= */
 
-    function buildCategories() {
+    async function buildCategories() {
 
-        if (!elements.categoryGroups) return;
+        const version = ++categoryVersion;
 
-        elements.categoryGroups.replaceChildren();
+        categoryAPI =
+            await window.inventoryCategoriesReady;
 
-        categoryGroups.forEach(group => {
+        if (!categoryAPI) {
+
+            elements.categoryGroups.textContent =
+                "Could not load category database.";
+
+            return false;
+
+        }
+
+        const records = categoryAPI.getVisible();
+        const groups = new Map();
+
+        for (const record of records) {
+
+            if (record.is_group) continue;
+
+            const parent = records.find(
+                item => item.id === record.parent_id
+            );
+
+            const groupName = parent
+                ? categoryAPI.getPath(parent)
+                : "GENERAL INVENTORY";
+
+            if (!groups.has(groupName)) {
+
+                groups.set(groupName, []);
+
+            }
+
+            groups.get(groupName).push(record);
+
+        }
+
+        const fragment =
+            document.createDocumentFragment();
+
+        for (const [groupName, records] of groups) {
 
             const section = makeElement(
                 "section",
@@ -348,7 +302,7 @@
             const heading = makeElement(
                 "h4",
                 "inventory-group-title",
-                group.name
+                groupName.toUpperCase()
             );
 
             const grid = makeElement(
@@ -356,18 +310,17 @@
                 "inventory-category-grid"
             );
 
-            group.categories.forEach(([name, icon]) => {
+            for (const record of records) {
 
-                const button = makeElement(
+                const tile = makeElement(
                     "button",
                     "inventory-category-tile"
                 );
 
-                button.type = "button";
+                tile.type = "button";
+                tile.dataset.category = record.name;
 
-                button.dataset.category = name;
-
-                button.setAttribute(
+                tile.setAttribute(
                     "aria-pressed",
                     "false"
                 );
@@ -384,104 +337,329 @@
                 );
 
                 top.append(
-                    createIcon(icon),
+                    createIcon(record.icon),
                     count
                 );
 
-                const title = makeElement(
-                    "span",
-                    "inventory-category-name",
-                    name.toUpperCase()
+                tile.appendChild(top);
+
+                if (record.image_path) {
+
+                    const url =
+                        await categoryAPI.signedImage(
+                            record.image_path
+                        );
+
+                    if (url) {
+
+                        const image =
+                            document.createElement("img");
+
+                        image.className =
+                            "ic-category-cover";
+
+                        image.src = url;
+                        image.alt = record.name;
+                        image.loading = "lazy";
+
+                        tile.appendChild(image);
+
+                    }
+
+                }
+
+                tile.appendChild(
+
+                    makeElement(
+                        "span",
+                        "inventory-category-name",
+                        record.name.toUpperCase()
+                    )
+
                 );
 
-                button.append(top, title);
+                if (record.description) {
 
-                button.addEventListener("click", () => {
+                    tile.appendChild(
 
-                    selectCategory(name, true);
+                        makeElement(
+                            "span",
+                            "ic-category-description",
+                            record.description
+                        )
 
-                });
+                    );
 
-                grid.appendChild(button);
+                }
 
-            });
+                tile.addEventListener(
+                    "click",
+                    () => selectCategory(
+                        record.name,
+                        true
+                    )
+                );
+
+                grid.appendChild(tile);
+
+            }
 
             section.append(heading, grid);
+            fragment.appendChild(section);
 
-            elements.categoryGroups.appendChild(section);
+        }
 
-        });
+        if (version !== categoryVersion) {
 
+            return false;
+
+        }
+
+        elements.categoryGroups.replaceChildren(
+            fragment
+        );
+
+        syncCategoryOptions();
         updateCategoryNavigation();
+
+        return true;
 
     }
 
+    /* =================================================
+       CATEGORY DROPDOWNS
+    ================================================= */
+
+    function ensureCategoryOption(select, category) {
+
+        if (!category) return;
+
+        const exists = Array.from(
+            select.options
+        ).some(option => option.value === category);
+
+        if (!exists) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = category;
+            option.textContent = category;
+
+            select.appendChild(option);
+
+        }
+
+    }
+
+    function syncCategoryOptions() {
+
+        const selectedItem =
+            elements.category.value;
+
+        const selectedFilter =
+            elements.filterCategory.value;
+
+        const records = categoryAPI
+            ? categoryAPI.getVisible().filter(
+                record => !record.is_group
+            )
+            : [];
+
+        const allRecords = categoryAPI
+            ? categoryAPI.getAll()
+            : [];
+
+        elements.category.replaceChildren();
+
+        elements.filterCategory.replaceChildren();
+
+        const placeholder =
+            document.createElement("option");
+
+        placeholder.value = "";
+
+        placeholder.textContent =
+            "SELECT CATEGORY";
+
+        placeholder.disabled = true;
+        placeholder.defaultSelected = true;
+
+        elements.category.appendChild(
+            placeholder
+        );
+
+        const allOption =
+            document.createElement("option");
+
+        allOption.value = "";
+
+        allOption.textContent =
+            "ALL CATEGORIES";
+
+        elements.filterCategory.appendChild(
+            allOption
+        );
+
+        for (const select of [
+            elements.category,
+            elements.filterCategory
+        ]) {
+
+            const groups = new Map();
+
+            for (const record of records) {
+
+                const parent = allRecords.find(
+                    item => item.id === record.parent_id
+                );
+
+                const groupName = parent
+                    ? categoryAPI.getPath(parent)
+                    : "GENERAL INVENTORY";
+
+                if (!groups.has(groupName)) {
+
+                    const group =
+                        document.createElement("optgroup");
+
+                    group.label = groupName;
+
+                    groups.set(groupName, group);
+
+                    select.appendChild(group);
+
+                }
+
+                const option =
+                    document.createElement("option");
+
+                option.value = record.name;
+                option.textContent = record.name;
+
+                groups.get(groupName).appendChild(
+                    option
+                );
+
+            }
+
+        }
+
+        inventory.forEach(item => {
+
+            ensureCategoryOption(
+                elements.filterCategory,
+                item.category
+            );
+
+            if (!categoryAPI) {
+
+                ensureCategoryOption(
+                    elements.category,
+                    item.category
+                );
+
+            }
+
+        });
+
+        const editingItem = inventory.find(
+            item => String(item.id) ===
+                elements.itemId.value
+        );
+
+        if (editingItem) {
+
+            ensureCategoryOption(
+                elements.category,
+                editingItem.category
+            );
+
+        }
+
+        const itemExists = Array.from(
+            elements.category.options
+        ).some(
+            option => option.value === selectedItem
+        );
+
+        elements.category.value = itemExists
+
+            ? selectedItem
+
+            : editingItem?.category || "";
+
+        const filterExists = Array.from(
+            elements.filterCategory.options
+        ).some(
+            option => option.value === selectedFilter
+        );
+
+        elements.filterCategory.value = filterExists
+
+            ? selectedFilter
+
+            : "";
+
+    }
+
+    /* =================================================
+       CATEGORY COUNTERS
+    ================================================= */
+
     function updateCategoryNavigation() {
 
-        const selected = elements.filterCategory.value;
+        const selected =
+            elements.filterCategory.value;
 
-        if (elements.categoryGroups) {
+        const tiles =
+            elements.categoryGroups.querySelectorAll(
+                ".inventory-category-tile"
+            );
 
-            const tiles =
-                elements.categoryGroups.querySelectorAll(
-                    ".inventory-category-tile"
-                );
+        tiles.forEach(tile => {
 
-            tiles.forEach(tile => {
+            const category = tile.dataset.category;
 
-                const category = tile.dataset.category;
+            const count = inventory.filter(
+                item => item.category === category
+            ).length;
 
-                const count = inventory.filter(
-                    item => item.category === category
-                ).length;
+            tile.querySelector(
+                ".inventory-category-count"
+            ).textContent = count;
 
-                const countElement = tile.querySelector(
-                    ".inventory-category-count"
-                );
-
-                countElement.textContent = count;
-
-                tile.classList.toggle(
-                    "is-active",
-                    selected === category
-                );
-
-                tile.setAttribute(
-                    "aria-pressed",
-                    String(selected === category)
-                );
-
-                tile.classList.toggle(
-                    "is-empty",
-                    count === 0
-                );
-
-            });
-
-        }
-
-        if (elements.activeCategory) {
-
-            elements.activeCategory.textContent =
-                selected
-                    ? selected.toUpperCase()
-                    : "ALL ITEMS";
-
-        }
-
-        if (elements.showAll) {
-
-            elements.showAll.classList.toggle(
+            tile.classList.toggle(
                 "is-active",
-                !selected
+                selected === category
             );
 
-            elements.showAll.setAttribute(
+            tile.classList.toggle(
+                "is-empty",
+                count === 0
+            );
+
+            tile.setAttribute(
                 "aria-pressed",
-                String(!selected)
+                String(selected === category)
             );
 
-        }
+        });
+
+        elements.activeCategory.textContent =
+            selected
+                ? selected.toUpperCase()
+                : "ALL ITEMS";
+
+        elements.showAll.classList.toggle(
+            "is-active",
+            !selected
+        );
+
+        elements.showAll.setAttribute(
+            "aria-pressed",
+            String(!selected)
+        );
 
     }
 
@@ -495,23 +673,17 @@
 
         if (scroll) {
 
-            const target = document.querySelector(
+            document.querySelector(
                 ".inventory-list-section"
-            );
+            )?.scrollIntoView({
 
-            if (target) {
+                behavior: window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                ).matches ? "auto" : "smooth",
 
-                target.scrollIntoView({
+                block: "start"
 
-                    behavior: window.matchMedia(
-                        "(prefers-reduced-motion: reduce)"
-                    ).matches ? "auto" : "smooth",
-
-                    block: "start"
-
-                });
-
-            }
+            });
 
         }
 
@@ -527,69 +699,28 @@
     }
 
     /* =================================================
-       SUPPORT EXISTING CUSTOM CATEGORIES
+       INVENTORY STATISTICS
     ================================================= */
 
-    function ensureCategoryOption(select, category) {
+    function updateStatistics() {
 
-        if (!category) return;
+        elements.total.textContent =
+            inventory.length;
 
-        const exists = Array.from(select.options).some(
-            option => option.value === category
-        );
+        elements.available.textContent =
+            inventory.filter(
+                item => item.status === "AVAILABLE"
+            ).length;
 
-        if (!exists) {
+        elements.inUse.textContent =
+            inventory.filter(
+                item => item.status === "IN USE"
+            ).length;
 
-            const option = document.createElement("option");
-
-            option.value = category;
-            option.textContent = category;
-
-            select.appendChild(option);
-
-        }
-
-    }
-
-    function syncExistingCategories() {
-
-        inventory.forEach(item => {
-
-            ensureCategoryOption(
-                elements.category,
-                item.category
-            );
-
-            ensureCategoryOption(
-                elements.filterCategory,
-                item.category
-            );
-
-        });
-
-    }
-
-    /* =================================================
-       FORM MANAGEMENT
-    ================================================= */
-
-    function resetForm() {
-
-        elements.form.reset();
-
-        elements.itemId.value = "";
-
-        editingImagePath = null;
-
-        elements.formTitle.textContent = "ADD NEW ITEM";
-
-        elements.saveButton.textContent = "SAVE ITEM";
-
-        elements.cancelButton.hidden = true;
-
-        elements.imagePreview.replaceChildren();
-
-        setMessage("");
+        elements.storage.textContent =
+            inventory.filter(
+                item => item.status === "STORAGE"
+            ).length;
 
     }
 
@@ -601,13 +732,15 @@
 
         if (!path) return null;
 
-        const { data, error } = await supabaseClient.storage
+        const { data, error } = await db.storage
+
             .from(BUCKET)
+
             .createSignedUrl(path, 3600);
 
         if (error) {
 
-            console.error("Image URL error:", error);
+            console.error(error);
 
             return null;
 
@@ -632,126 +765,73 @@
 
         if (!allowedTypes.includes(file.type)) {
 
-            throw new Error("Unsupported image format.");
+            throw new Error(
+                "Unsupported image format."
+            );
 
         }
 
         if (file.size > MAX_FILE_SIZE) {
 
-            throw new Error("Image is larger than 10 MB.");
+            throw new Error(
+                "Maximum image size is 10 MB."
+            );
 
         }
 
         const safeName = file.name
+
             .toLowerCase()
+
             .replace(/[^a-z0-9._-]/g, "-");
 
-        const imagePath =
+        const path =
+
             user.id + "/" +
+
             crypto.randomUUID() + "-" +
+
             safeName;
 
-        const { error } = await supabaseClient.storage
+        const { error } = await db.storage
+
             .from(BUCKET)
-            .upload(imagePath, file, {
+
+            .upload(path, file, {
 
                 cacheControl: "3600",
+
                 upsert: false,
+
                 contentType: file.type
 
             });
 
         if (error) throw error;
 
-        return imagePath;
+        return path;
 
     }
 
     async function removeImage(path) {
 
-        if (!path) return;
+        if (!path) return true;
 
-        const { error } = await supabaseClient.storage
+        const { error } = await db.storage
+
             .from(BUCKET)
+
             .remove([path]);
-
-        if (error) {
-
-            console.error(
-                "Could not remove image:",
-                error
-            );
-
-        }
-
-    }
-
-    /* =================================================
-       LOAD INVENTORY
-    ================================================= */
-
-    async function loadInventory() {
-
-        const version = ++loadVersion;
-
-        setConnection("SYNCHRONIZING...");
-
-        const { data, error } = await supabaseClient
-            .from("inventory_items")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
-
-        if (version !== loadVersion) return;
 
         if (error) {
 
             console.error(error);
 
-            setConnection("DATABASE ERROR", true);
-
-            elements.grid.textContent =
-                "Could not load inventory. " +
-                "Check database permissions.";
-
-            return;
+            return false;
 
         }
 
-        inventory = data || [];
-
-        syncExistingCategories();
-
-        setConnection("DATABASE ONLINE");
-
-        updateStatistics();
-
-        updateCategoryNavigation();
-
-        await renderInventory();
-
-    }
-
-    /* =================================================
-       STATISTICS
-    ================================================= */
-
-    function updateStatistics() {
-
-        elements.total.textContent = inventory.length;
-
-        elements.available.textContent = inventory.filter(
-            item => item.status === "AVAILABLE"
-        ).length;
-
-        elements.inUse.textContent = inventory.filter(
-            item => item.status === "IN USE"
-        ).length;
-
-        elements.storage.textContent = inventory.filter(
-            item => item.status === "STORAGE"
-        ).length;
+        return true;
 
     }
 
@@ -766,38 +846,35 @@
             "inventory-lightbox"
         );
 
-        const closeButton = makeElement(
-            "button",
+        const close = makeButton(
+
+            "CLOSE ×",
+
             "inventory-lightbox-close",
-            "CLOSE ×"
+
+            () => dialog.close()
+
         );
 
-        closeButton.type = "button";
-
-        const image = document.createElement("img");
+        const image =
+            document.createElement("img");
 
         image.src = url;
         image.alt = name || "Inventory image";
 
         const caption = makeElement(
+
             "p",
+
             "inventory-lightbox-caption",
+
             name || ""
+
         );
 
-        dialog.append(
-            closeButton,
-            image,
-            caption
-        );
+        dialog.append(close, image, caption);
 
         document.body.appendChild(dialog);
-
-        closeButton.addEventListener("click", () => {
-
-            dialog.close();
-
-        });
 
         dialog.addEventListener("click", event => {
 
@@ -809,32 +886,95 @@
 
         });
 
-        dialog.addEventListener("close", () => {
-
-            dialog.remove();
-
-        });
+        dialog.addEventListener(
+            "close",
+            () => dialog.remove()
+        );
 
         dialog.showModal();
 
     }
 
     /* =================================================
-       RENDER INVENTORY
+       LOAD INVENTORY
+    ================================================= */
+
+    async function loadInventory() {
+
+        const version = ++loadVersion;
+
+        setConnection("SYNCHRONIZING...");
+
+        const { data, error } = await db
+
+            .from("inventory_items")
+
+            .select("*")
+
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (version !== loadVersion) return;
+
+        if (error) {
+
+            console.error(error);
+
+            setConnection(
+                "DATABASE ERROR",
+                true
+            );
+
+            elements.grid.textContent =
+                "Could not load inventory.";
+
+            return;
+
+        }
+
+        inventory = data || [];
+
+        syncCategoryOptions();
+
+        updateStatistics();
+
+        updateCategoryNavigation();
+
+        setConnection(
+
+            categoryAPI
+
+                ? "DATABASE ONLINE"
+
+                : "CATEGORY DATABASE ERROR",
+
+            !categoryAPI
+
+        );
+
+        await renderInventory();
+
+    }
+
+    /* =================================================
+       RENDER INVENTORY CARDS
     ================================================= */
 
     async function renderInventory() {
 
         const version = ++renderVersion;
 
-        const searchTerm = elements.search.value
+        const search = elements.search.value
+
             .toLowerCase()
+
             .trim();
 
-        const categoryFilter =
+        const category =
             elements.filterCategory.value;
 
-        const statusFilter =
+        const status =
             elements.filterStatus.value;
 
         const filtered = inventory.filter(item => {
@@ -851,32 +991,25 @@
 
             return (
 
-                searchable.includes(searchTerm) &&
+                searchable.includes(search) &&
 
-                (
-                    !categoryFilter ||
-                    item.category === categoryFilter
-                ) &&
+                (!category ||
+                    item.category === category) &&
 
-                (
-                    !statusFilter ||
-                    item.status === statusFilter
-                )
+                (!status ||
+                    item.status === status)
 
             );
 
         });
 
-        if (elements.resultCount) {
+        elements.resultCount.textContent =
 
-            elements.resultCount.textContent =
-                `${filtered.length} / ${inventory.length} ITEMS`;
-
-        }
+            `${filtered.length} / ${inventory.length} ITEMS`;
 
         elements.grid.replaceChildren();
 
-        if (filtered.length === 0) {
+        if (!filtered.length) {
 
             const empty = makeElement(
                 "div",
@@ -909,211 +1042,7 @@
 
         const cards = await Promise.all(
 
-            filtered.map(async item => {
-
-                const card = makeElement(
-                    "article",
-                    "inventory-card"
-                );
-
-                /* IMAGE */
-
-                const imageFrame = makeElement(
-                    "div",
-                    "inventory-image-frame"
-                );
-
-                let imageUrl = null;
-
-                if (item.image_path) {
-
-                    imageUrl = await getSignedImage(
-                        item.image_path
-                    );
-
-                }
-
-                if (imageUrl) {
-
-                    const image = document.createElement("img");
-
-                    image.className = "inventory-image";
-
-                    image.src = imageUrl;
-
-                    image.alt = item.name || "";
-
-                    image.loading = "lazy";
-
-                    const imageButton = makeElement(
-                        "button",
-                        "inventory-image-button"
-                    );
-
-                    imageButton.type = "button";
-
-                    imageButton.setAttribute(
-                        "aria-label",
-                        "View image: " + (item.name || "")
-                    );
-
-                    imageButton.appendChild(image);
-
-                    imageButton.addEventListener("click", () => {
-
-                        openImage(imageUrl, item.name);
-
-                    });
-
-                    imageFrame.appendChild(imageButton);
-
-                } else {
-
-                    const placeholder = makeElement(
-                        "div",
-                        "inventory-image-placeholder"
-                    );
-
-                    placeholder.append(
-
-                        createIcon("package"),
-
-                        makeElement(
-                            "span",
-                            "",
-                            "NO IMAGE AVAILABLE"
-                        )
-
-                    );
-
-                    imageFrame.appendChild(placeholder);
-
-                }
-
-                card.appendChild(imageFrame);
-
-                /* CONTENT */
-
-                const content = makeElement(
-                    "div",
-                    "inventory-content"
-                );
-
-                content.appendChild(
-
-                    makeElement(
-                        "p",
-                        "inventory-category",
-                        item.category || "Other"
-                    )
-
-                );
-
-                content.appendChild(
-
-                    makeElement(
-                        "h3",
-                        "inventory-item-name",
-                        item.name || "Unnamed item"
-                    )
-
-                );
-
-                /* STATUS */
-
-                const status = makeElement(
-                    "span",
-                    "inventory-status",
-                    item.status || "UNKNOWN"
-                );
-
-                status.dataset.status = item.status || "";
-
-                content.appendChild(status);
-
-                /* LOCATION */
-
-                if (item.location) {
-
-                    content.appendChild(
-
-                        makeElement(
-                            "p",
-                            "inventory-detail",
-                            "LOCATION: " + item.location
-                        )
-
-                    );
-
-                }
-
-                /* DESCRIPTION */
-
-                if (item.description) {
-
-                    content.appendChild(
-
-                        makeElement(
-                            "p",
-                            "inventory-description",
-                            item.description
-                        )
-
-                    );
-
-                }
-
-                /* OWNER ACTIONS */
-
-                if (item.owner_id === user.id) {
-
-                    const actions = makeElement(
-                        "div",
-                        "inventory-action"
-                    );
-
-                    const editButton = makeElement(
-                        "button",
-                        "",
-                        "EDIT"
-                    );
-
-                    editButton.type = "button";
-
-                    editButton.addEventListener("click", () => {
-
-                        editItem(item);
-
-                    });
-
-                    const deleteButton = makeElement(
-                        "button",
-                        "delete-action",
-                        "DELETE"
-                    );
-
-                    deleteButton.type = "button";
-
-                    deleteButton.addEventListener("click", () => {
-
-                        deleteItem(item);
-
-                    });
-
-                    actions.append(
-                        editButton,
-                        deleteButton
-                    );
-
-                    content.appendChild(actions);
-
-                }
-
-                card.appendChild(content);
-
-                return card;
-
-            })
+            filtered.map(createInventoryCard)
 
         );
 
@@ -1123,25 +1052,248 @@
 
     }
 
+    async function createInventoryCard(item) {
+
+        const card = makeElement(
+            "article",
+            "inventory-card"
+        );
+
+        const imageFrame = makeElement(
+            "div",
+            "inventory-image-frame"
+        );
+
+        const imageUrl = await getSignedImage(
+            item.image_path
+        );
+
+        if (imageUrl) {
+
+            const image =
+                document.createElement("img");
+
+            image.className = "inventory-image";
+            image.src = imageUrl;
+            image.alt = item.name || "";
+            image.loading = "lazy";
+
+            const imageButton = makeButton(
+
+                "",
+
+                "inventory-image-button",
+
+                () => openImage(
+                    imageUrl,
+                    item.name
+                )
+
+            );
+
+            imageButton.setAttribute(
+                "aria-label",
+                "View image: " + item.name
+            );
+
+            imageButton.appendChild(image);
+
+            imageFrame.appendChild(imageButton);
+
+        } else {
+
+            const placeholder = makeElement(
+                "div",
+                "inventory-image-placeholder"
+            );
+
+            placeholder.append(
+
+                createIcon("box"),
+
+                makeElement(
+                    "span",
+                    "",
+                    "NO IMAGE"
+                )
+
+            );
+
+            imageFrame.appendChild(placeholder);
+
+        }
+
+        const content = makeElement(
+            "div",
+            "inventory-content"
+        );
+
+        const category = makeElement(
+
+            "p",
+
+            "inventory-category",
+
+            item.category || "OTHER"
+
+        );
+
+        const name = makeElement(
+
+            "h3",
+
+            "inventory-item-name",
+
+            item.name || "UNNAMED ITEM"
+
+        );
+
+        const status = makeElement(
+
+            "span",
+
+            "inventory-status",
+
+            item.status || "UNKNOWN"
+
+        );
+
+        status.dataset.status =
+            item.status || "";
+
+        content.append(category, name, status);
+
+        if (item.location) {
+
+            content.appendChild(
+
+                makeElement(
+
+                    "p",
+
+                    "inventory-detail",
+
+                    "LOCATION: " + item.location
+
+                )
+
+            );
+
+        }
+
+        if (item.description) {
+
+            content.appendChild(
+
+                makeElement(
+
+                    "p",
+
+                    "inventory-description",
+
+                    item.description
+
+                )
+
+            );
+
+        }
+
+        /* Only the item owner can edit or delete. */
+
+        if (item.owner_id === user.id) {
+
+            const actions = makeElement(
+                "div",
+                "inventory-action"
+            );
+
+            actions.append(
+
+                makeButton(
+
+                    "EDIT",
+
+                    "edit-action",
+
+                    () => editItem(item)
+
+                ),
+
+                makeButton(
+
+                    "DELETE",
+
+                    "delete-action",
+
+                    () => deleteItem(item)
+
+                )
+
+            );
+
+            content.appendChild(actions);
+
+        }
+
+        card.append(imageFrame, content);
+
+        return card;
+
+    }
+
     /* =================================================
-       EDIT ITEM
+       FORM MANAGEMENT
     ================================================= */
 
-    function editItem(item) {
+    function resetForm() {
 
-        if (item.owner_id !== user.id || saving) return;
+        elements.form.reset();
 
-        ensureCategoryOption(
-            elements.category,
-            item.category
-        );
+        elements.itemId.value = "";
+
+        editingImagePath = null;
+
+        elements.formTitle.textContent =
+            "ADD NEW ITEM";
+
+        elements.saveButton.textContent =
+            "SAVE ITEM";
+
+        elements.cancelButton.hidden = true;
+
+        elements.imagePreview.replaceChildren();
+
+        syncCategoryOptions();
+
+        elements.category.value = "";
+
+        setMessage("");
+
+    }
+
+    async function editItem(item) {
+
+        if (saving || item.owner_id !== user.id) {
+
+            return;
+
+        }
 
         elements.itemId.value = item.id;
 
         elements.name.value = item.name || "";
 
+        ensureCategoryOption(
+
+            elements.category,
+
+            item.category
+
+        );
+
         elements.category.value =
-            item.category || "Other";
+            item.category || "";
 
         elements.status.value =
             item.status || "AVAILABLE";
@@ -1154,61 +1306,70 @@
 
         elements.image.value = "";
 
-        editingImagePath = item.image_path || null;
+        editingImagePath =
+            item.image_path || null;
 
-        elements.formTitle.textContent = "EDIT ITEM";
+        elements.formTitle.textContent =
+            "EDIT ITEM";
 
-        elements.saveButton.textContent = "UPDATE ITEM";
+        elements.saveButton.textContent =
+            "UPDATE ITEM";
 
         elements.cancelButton.hidden = false;
 
         elements.imagePreview.replaceChildren();
 
-        if (elements.editor) {
+        elements.editor.open = true;
 
-            elements.editor.open = true;
+        setMessage("");
 
-        }
+        elements.editor.scrollIntoView({
 
-        if (item.image_path) {
+            behavior: window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches ? "auto" : "smooth",
 
-            getSignedImage(item.image_path).then(url => {
+            block: "start"
 
-                if (!url) return;
+        });
 
-                if (elements.itemId.value !== String(item.id)) {
-                    return;
-                }
+        if (editingImagePath) {
 
-                const image = document.createElement("img");
+            const url = await getSignedImage(
+                editingImagePath
+            );
 
-                image.src = url;
+            if (
 
-                image.alt = "Current item image";
+                url &&
+
+                elements.itemId.value ===
+                    String(item.id)
+
+            ) {
+
+                const image =
+                    document.createElement("img");
 
                 image.className =
                     "inventory-preview-image";
 
-                elements.imagePreview.replaceChildren(image);
+                image.src = url;
 
-            });
+                image.alt = item.name || "";
+
+                elements.imagePreview.appendChild(
+                    image
+                );
+
+            }
 
         }
-
-        setMessage("Editing selected record.");
-
-        elements.form.scrollIntoView({
-
-            behavior: window.matchMedia(
-                "(prefers-reduced-motion: reduce)"
-            ).matches ? "auto" : "smooth"
-
-        });
 
     }
 
     /* =================================================
-       SAVE ITEM
+       SAVE INVENTORY ITEM
     ================================================= */
 
     async function saveItem(event) {
@@ -1217,87 +1378,120 @@
 
         if (saving) return;
 
-        const name = elements.name.value.trim();
-
-        if (!name) {
-
-            setMessage("Item name is required.", true);
-
-            return;
-
-        }
-
-        const category = elements.category.value;
-
-        if (!category) {
-
-            setMessage("Select a category.", true);
-
-            return;
-
-        }
-
-        const itemId = elements.itemId.value;
-
-        const selectedFile = elements.image.files[0];
-
-        const previousImage = editingImagePath;
-
-        if (itemId) {
-
-            const existingItem = inventory.find(
-                item => String(item.id) === itemId
-            );
-
-            if (!existingItem ||
-                existingItem.owner_id !== user.id) {
-
-                setMessage("Access denied.", true);
-
-                return;
-
-            }
-
-        }
-
-        const payload = {
-
-            name,
-
-            category,
-
-            status: elements.status.value,
-
-            location:
-                elements.location.value.trim() || null,
-
-            description:
-                elements.description.value.trim() || null,
-
-            image_path: previousImage,
-
-            updated_at: new Date().toISOString()
-
-        };
-
         saving = true;
 
         elements.saveButton.disabled = true;
 
-        elements.cancelButton.disabled = true;
+        elements.saveButton.textContent =
+            "SAVING...";
 
-        elements.saveButton.textContent = "SAVING...";
+        setMessage("");
 
         let uploadedPath = null;
         let committed = false;
 
         try {
 
-            if (selectedFile) {
+            const id = elements.itemId.value;
 
-                uploadedPath = await uploadImage(
-                    selectedFile
+            const oldImage = editingImagePath;
+
+            const existing = inventory.find(
+
+                item => String(item.id) === id
+
+            );
+
+            if (
+
+                id &&
+
+                (!existing ||
+                    existing.owner_id !== user.id)
+
+            ) {
+
+                throw new Error(
+                    "You cannot edit this item."
                 );
+
+            }
+
+            const payload = {
+
+                name: elements.name.value.trim(),
+
+                category: elements.category.value,
+
+                status: elements.status.value,
+
+                location:
+                    elements.location.value.trim(),
+
+                description:
+                    elements.description.value.trim(),
+
+                image_path: oldImage,
+
+                updated_at:
+                    new Date().toISOString()
+
+            };
+
+            if (!payload.name) {
+
+                throw new Error(
+                    "Item name is required."
+                );
+
+            }
+
+            if (!payload.category) {
+
+                throw new Error(
+                    "Select a category."
+                );
+
+            }
+
+            if (!categoryAPI) {
+
+                throw new Error(
+                    "Category database is unavailable. Refresh the page."
+                );
+
+            }
+
+            const validCategory =
+                categoryAPI.getVisible().some(
+
+                    record =>
+
+                        !record.is_group &&
+
+                        record.name === payload.category
+
+                );
+
+            const unchangedCategory =
+
+                existing &&
+
+                existing.category === payload.category;
+
+            if (!validCategory && !unchangedCategory) {
+
+                throw new Error(
+                    "This category is no longer available."
+                );
+
+            }
+
+            const file = elements.image.files[0];
+
+            if (file) {
+
+                uploadedPath = await uploadImage(file);
 
                 payload.image_path = uploadedPath;
 
@@ -1305,20 +1499,28 @@
 
             let result;
 
-            if (itemId) {
+            if (id) {
 
-                result = await supabaseClient
+                result = await db
+
                     .from("inventory_items")
+
                     .update(payload)
-                    .eq("id", itemId)
+
+                    .eq("id", id)
+
                     .eq("owner_id", user.id)
-                    .select()
+
+                    .select("id")
+
                     .single();
 
             } else {
 
-                result = await supabaseClient
+                result = await db
+
                     .from("inventory_items")
+
                     .insert({
 
                         ...payload,
@@ -1326,30 +1528,56 @@
                         owner_id: user.id
 
                     })
-                    .select()
+
+                    .select("id")
+
                     .single();
 
             }
 
-            if (result.error) throw result.error;
+            if (result.error) {
+
+                throw result.error;
+
+            }
 
             committed = true;
 
-            if (uploadedPath && previousImage) {
+            let cleanupOK = true;
 
-                await removeImage(previousImage);
+            if (
+
+                uploadedPath &&
+
+                oldImage &&
+
+                oldImage !== uploadedPath
+
+            ) {
+
+                cleanupOK = await removeImage(
+                    oldImage
+                );
 
             }
 
             resetForm();
 
-            setMessage("Record saved successfully.");
-
             await loadInventory();
 
-        } catch (error) {
+            setMessage(
 
-            console.error("Save error:", error);
+                cleanupOK
+
+                    ? "Item saved successfully."
+
+                    : "Item saved. Old image cleanup failed.",
+
+                !cleanupOK
+
+            );
+
+        } catch (error) {
 
             if (uploadedPath && !committed) {
 
@@ -1357,11 +1585,15 @@
 
             }
 
+            console.error(error);
+
             setMessage(
 
                 committed
-                    ? "Record saved. Refresh the inventory."
-                    : error.message || "Could not save item.",
+
+                    ? "Item saved, but refresh failed."
+
+                    : error.message,
 
                 true
 
@@ -1373,11 +1605,12 @@
 
             elements.saveButton.disabled = false;
 
-            elements.cancelButton.disabled = false;
-
             elements.saveButton.textContent =
+
                 elements.itemId.value
+
                     ? "UPDATE ITEM"
+
                     : "SAVE ITEM";
 
         }
@@ -1385,45 +1618,54 @@
     }
 
     /* =================================================
-       DELETE ITEM
+       DELETE INVENTORY ITEM
     ================================================= */
 
     async function deleteItem(item) {
 
-        if (item.owner_id !== user.id || saving) return;
+        if (saving || item.owner_id !== user.id) {
 
-        const confirmed = window.confirm(
+            return;
 
-            'Delete "' + item.name + '" permanently?'
+        }
 
-        );
+        if (!window.confirm(
 
-        if (!confirmed) return;
+            "Delete item: " + item.name + "?"
+
+        )) return;
+
+        saving = true;
+
+        elements.saveButton.disabled = true;
 
         try {
 
-            const { data, error } = await supabaseClient
+            const { error } = await db
+
                 .from("inventory_items")
+
                 .delete()
+
                 .eq("id", item.id)
+
                 .eq("owner_id", user.id)
+
                 .select("id")
+
                 .single();
 
             if (error) throw error;
 
-            if (!data) {
-
-                throw new Error(
-                    "Record was not deleted."
-                );
-
-            }
-
-            await removeImage(item.image_path);
+            const cleanupOK = await removeImage(
+                item.image_path
+            );
 
             if (
-                elements.itemId.value === String(item.id)
+
+                elements.itemId.value ===
+                    String(item.id)
+
             ) {
 
                 resetForm();
@@ -1432,15 +1674,31 @@
 
             await loadInventory();
 
+            if (!cleanupOK) {
+
+                window.alert(
+                    "Item deleted, but image cleanup failed."
+                );
+
+            }
+
         } catch (error) {
 
-            console.error("Delete error:", error);
+            console.error(error);
 
             window.alert(
 
-                "Could not delete item: " + error.message
+                "Could not delete item: " +
+
+                error.message
 
             );
+
+        } finally {
+
+            saving = false;
+
+            elements.saveButton.disabled = false;
 
         }
 
@@ -1450,9 +1708,11 @@
        REALTIME SYNCHRONIZATION
     ================================================= */
 
+    let refreshTimer = null;
+
     function subscribeToRealtime() {
 
-        realtimeChannel = supabaseClient
+        realtimeChannel = db
 
             .channel("inventory-items-live")
 
@@ -1472,7 +1732,15 @@
 
                 () => {
 
-                    loadInventory();
+                    clearTimeout(refreshTimer);
+
+                    refreshTimer = setTimeout(
+
+                        () => loadInventory(),
+
+                        250
+
+                    );
 
                 }
 
@@ -1484,7 +1752,13 @@
 
                     setConnection(
 
-                        "DATABASE ONLINE // LIVE SYNC ACTIVE"
+                        categoryAPI
+
+                            ? "DATABASE ONLINE // LIVE SYNC ACTIVE"
+
+                            : "CATEGORY DATABASE ERROR",
+
+                        !categoryAPI
 
                     );
 
@@ -1505,6 +1779,40 @@
             });
 
     }
+
+    /* =================================================
+       CATEGORY SYNCHRONIZATION
+    ================================================= */
+
+    window.addEventListener(
+
+        "inventory-categories-changed",
+
+        async () => {
+
+            try {
+
+                await buildCategories();
+
+                await loadInventory();
+
+            } catch (error) {
+
+                console.error(error);
+
+                setConnection(
+
+                    "CATEGORY SYNCHRONIZATION ERROR",
+
+                    true
+
+                );
+
+            }
+
+        }
+
+    );
 
     /* =================================================
        EVENT LISTENERS
@@ -1560,84 +1868,99 @@
 
     );
 
-    if (elements.showAll) {
+    elements.showAll.addEventListener(
 
-        elements.showAll.addEventListener(
+        "click",
 
-            "click",
+        () => selectCategory("")
 
-            () => selectCategory("")
+    );
 
-        );
+    elements.clearFilters.addEventListener(
 
-    }
+        "click",
 
-    if (elements.clearFilters) {
+        clearFilters
 
-        elements.clearFilters.addEventListener(
-
-            "click",
-
-            clearFilters
-
-        );
-
-    }
+    );
 
     /* =================================================
        LOGOUT
     ================================================= */
 
-    elements.logout.addEventListener("click", async () => {
+    elements.logout.addEventListener(
 
-        const { error } =
-            await supabaseClient.auth.signOut();
+        "click",
 
-        if (error) {
+        async () => {
 
-            window.alert(
+            const { error } = await db.auth.signOut();
 
-                "Could not log out: " + error.message
+            if (error) {
 
-            );
+                window.alert(
 
-            return;
+                    "Could not log out: " +
+
+                    error.message
+
+                );
+
+                return;
+
+            }
+
+            window.location.replace("index.html");
 
         }
 
-        window.location.replace("index.html");
-
-    });
+    );
 
     /* =================================================
        INITIALIZATION
     ================================================= */
 
-    if (elements.editor) {
+    elements.editor.open = false;
 
-        elements.editor.open = false;
+    try {
+
+        await buildCategories();
+
+        await loadInventory();
+
+        subscribeToRealtime();
+
+    } catch (error) {
+
+        console.error(error);
+
+        setConnection(
+
+            "INVENTORY INITIALIZATION ERROR",
+
+            true
+
+        );
 
     }
 
-    buildCategories();
+    window.addEventListener(
 
-    await loadInventory();
+        "beforeunload",
 
-    subscribeToRealtime();
+        () => {
 
-    window.addEventListener("beforeunload", () => {
+            clearTimeout(refreshTimer);
 
-        if (realtimeChannel) {
+            if (realtimeChannel) {
 
-            supabaseClient.removeChannel(
+                db.removeChannel(realtimeChannel);
 
-                realtimeChannel
-
-            );
+            }
 
         }
 
-    });
+    );
 
 })();
 
