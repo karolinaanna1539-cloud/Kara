@@ -1,0 +1,470 @@
+
+/* =====================================================
+   THE DEN
+   INVENTORY CATEGORY MANAGEMENT
+===================================================== */
+
+.ic-manager {
+    --ic-bg: #07110b;
+    --ic-panel: #102019;
+    --ic-border: #294332;
+    --ic-accent: #8fce9c;
+    --ic-text: #d7eee0;
+    --ic-muted: #849b8c;
+
+    margin: 0 0 30px;
+    background: var(--ic-bg);
+    border: 1px solid var(--ic-border);
+    border-radius: 6px;
+    color: var(--ic-text);
+}
+
+.ic-manager * {
+    box-sizing: border-box;
+}
+
+.ic-manager [hidden] {
+    display: none !important;
+}
+
+/* =====================================================
+   COLLAPSIBLE HEADER
+===================================================== */
+
+.ic-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .2s ease;
+}
+
+.ic-summary::-webkit-details-marker {
+    display: none;
+}
+
+.ic-summary:hover {
+    background: #13251a;
+}
+
+.ic-summary h3 {
+    margin: 8px 0 0;
+    color: var(--ic-text);
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.ic-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--ic-border);
+    border-radius: 4px;
+    color: var(--ic-accent);
+    font-size: 24px;
+    transition: transform .2s ease;
+}
+
+.ic-manager[open] .ic-arrow {
+    transform: rotate(45deg);
+}
+
+.ic-manager[open] .ic-summary {
+    border-bottom: 1px solid var(--ic-border);
+}
+
+.ic-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px;
+}
+
+/* =====================================================
+   BUTTONS & TOOLBAR
+===================================================== */
+
+.ic-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ic-manager .ic-button {
+    padding: 12px 18px;
+    background: #14281b;
+    border: 1px solid #345443;
+    border-radius: 4px;
+    color: var(--ic-accent);
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.ic-manager .ic-button:hover {
+    background: #203b2a;
+    border-color: var(--ic-accent);
+}
+
+.ic-manager .ic-button.primary {
+    background: var(--ic-accent);
+    border-color: var(--ic-accent);
+    color: #07110b;
+}
+
+.ic-manager .ic-button.primary:hover {
+    background: #b7e8c1;
+}
+
+.ic-manager .ic-button.danger {
+    background: #251616;
+    border-color: #583333;
+    color: #e79a9a;
+}
+
+.ic-manager .ic-button.danger:hover {
+    background: #3c1b1b;
+    border-color: #a65c5c;
+}
+
+.ic-manager .ic-button:disabled {
+    opacity: .5;
+    cursor: wait;
+}
+
+/* =====================================================
+   CATEGORY EDITOR
+===================================================== */
+
+.ic-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px;
+    background: linear-gradient(
+        145deg,
+        #13251a,
+        #09130d
+    );
+    border: 1px solid var(--ic-border);
+    border-radius: 5px;
+}
+
+.ic-form h4 {
+    margin: 0 0 12px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--ic-border);
+    color: var(--ic-accent);
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.ic-form label {
+    color: var(--ic-accent);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.ic-manager input:not([type="checkbox"]),
+.ic-manager select,
+.ic-manager textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+    background: #08130d;
+    border: 1px solid var(--ic-border);
+    border-radius: 4px;
+    color: var(--ic-text);
+    font-family: inherit;
+    font-size: 12px;
+    color-scheme: dark;
+}
+
+.ic-manager input:focus,
+.ic-manager select:focus,
+.ic-manager textarea:focus {
+    outline: none;
+    border-color: var(--ic-accent);
+    box-shadow: 0 0 0 2px
+        rgba(143, 206, 156, .08);
+}
+
+.ic-manager textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.ic-manager .ic-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.ic-checkbox input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: var(--ic-accent);
+}
+
+.ic-help {
+    margin: 0;
+    color: var(--ic-muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+#icPreview:empty {
+    display: none;
+}
+
+.ic-preview-image {
+    display: block;
+    width: 220px;
+    max-width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+    background: #040805;
+    border: 1px solid var(--ic-border);
+    border-radius: 5px;
+}
+
+/* =====================================================
+   CATEGORY RECORDS
+===================================================== */
+
+#icList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ic-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px;
+    background: linear-gradient(
+        145deg,
+        #13241a,
+        #0a140e
+    );
+    border: 1px solid var(--ic-border);
+    border-radius: 5px;
+    transition: border-color .2s ease;
+}
+
+.ic-card:hover {
+    border-color: #557d60;
+}
+
+.ic-card-image {
+    display: block;
+    flex-shrink: 0;
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    background: #040805;
+    border: 1px solid var(--ic-border);
+    border-radius: 4px;
+}
+
+.ic-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ic-card-name {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ic-text);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.ic-card-path {
+    margin: 0 0 10px;
+    color: var(--ic-muted);
+    font-size: 10px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.ic-card-type,
+.ic-card-status {
+    display: inline-block;
+    margin: 3px 6px 3px 0;
+    padding: 5px 8px;
+    border: 1px solid var(--ic-border);
+    border-radius: 3px;
+    background: #08130d;
+    color: var(--ic-muted);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ic-card-status {
+    color: var(--ic-accent);
+}
+
+.ic-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.ic-message {
+    margin: 0;
+    padding: 12px 15px;
+    background: #10291a;
+    border: 1px solid #315b3d;
+    border-radius: 4px;
+    color: #9de7b2;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.ic-message:empty {
+    display: none;
+}
+
+.ic-message.error {
+    background: #301919;
+    border-color: #663737;
+    color: #e79a9a;
+}
+
+.ic-empty {
+    padding: 30px;
+    border: 1px dashed var(--ic-border);
+    border-radius: 5px;
+    color: var(--ic-muted);
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* =====================================================
+   CATEGORY COVER IMAGES
+   Used by the inventory integration
+===================================================== */
+
+.inventory-main .ic-category-cover {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: contain;
+    background: #040805;
+    border: 1px solid #294332;
+    border-radius: 4px;
+}
+
+.inventory-main .ic-category-description {
+    color: #849b8c;
+    font-size: 10px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.ic-manager button:focus-visible,
+.ic-summary:focus-visible {
+    outline: 2px solid var(--ic-accent);
+    outline-offset: 3px;
+}
+
+/* =====================================================
+   MOBILE DEVICES
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .ic-summary {
+        padding: 18px;
+    }
+
+    .ic-content {
+        padding: 15px;
+    }
+
+    .ic-form {
+        padding: 15px;
+    }
+
+    .ic-card {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .ic-card-image {
+        width: 65px;
+        height: 65px;
+    }
+
+    .ic-card-actions {
+        width: 100%;
+    }
+
+    .ic-card-actions .ic-button {
+        flex: 1;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .ic-toolbar .ic-button {
+        flex: 1;
+    }
+
+    .ic-summary h3 {
+        font-size: 12px;
+    }
+
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .ic-manager *,
+    .ic-manager *::before,
+    .ic-manager *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+
+}
+
+/* =====================================================
+   END OF CATEGORY MANAGEMENT DESIGN
+===================================================== */
